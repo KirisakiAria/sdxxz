@@ -10,7 +10,7 @@ let state = {
 		},
 		level: {
 			decs: '等级',
-			value: 0
+			value: 1
 		},
 		exp: {
 			decs: '经验',
@@ -155,7 +155,8 @@ let state = {
 			sid: 6,
 			name: '+1'
 		}],
-		buffSkills: []
+		buffSkills: [],
+		passiveSkills:[]
 	}
 }
 

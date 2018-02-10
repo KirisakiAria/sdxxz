@@ -136,7 +136,7 @@
 			},
 			getSkillsArr: function(origin) {
 				let arr = [];
-				let skills = this.$store.state.skills[origin];
+				let skills = this.$store.state.playerSkills[origin];
 				Object.values(skills).forEach(e => {
 					arr.push(e);
 				});

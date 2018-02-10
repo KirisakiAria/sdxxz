@@ -44,7 +44,7 @@ let state = {
 		},
 		res: {
 			decs: '魔防',
-			value: 75
+			value: 40
 		},
 		crt: {
 			decs: '暴击',
@@ -62,75 +62,45 @@ let state = {
 	elements: {
 		fire: {
 			decs: '火属性',
-			value: 20
+			value: 35
 		},
 		ice: {
 			decs: '冰属性',
-			value: 20
+			value: 35
 		},
 		toxic: {
 			decs: '毒属性',
-			value: 20
+			value: 35
 		},
 		wind: {
 			decs: '风属性',
-			value: 20
+			value: 35
 		},
 		earth: {
 			decs: '土属性',
-			value: 20
-		}
-	},
-	equipments: {
-		weapon: {
-			decs: '武器',
-			value: ''
-		},
-		armor: {
-			decs: '防具',
-			value: ''
-		},
-		shoes: {
-			decs: '鞋',
-			value: ''
-		},
-		necklace: {
-			decs: '项链',
-			value: ''
-		},
-		ring: {
-			decs: '戒指',
-			value: ''
-		},
-		arcana: {
-			decs: '秘宝',
-			value: ''
+			value: 35
 		}
 	},
 	buff: [],
-	battleSkills: [{
-		name: '天生傻屌',
-		description: '天生傻屌之力，被动提升暴击系数到三',
-		type: 2,
-	}, {
-		name: '我系渣渣辉',
-		description: '召唤渣渣辉附身，攻击提升55，暴击提升15，火属性增加10，回血速度增加20',
-		consume: 450,
-		type: 1,
-	}]
+	battleSkills: {
+		damageSkills: null,
+		cureSkills: null,
+		buffSkills: [{
+			sid: 1,
+			name: '我系渣渣辉',
+			desc: '召唤渣渣辉附身，物攻提升%55，暴击提升%15，火属性增加%15，回血速度增加20，持续三回合'
+		}],
+		passiveSkills: [{
+			sid: 1
+			name: '天生傻屌',
+			desc: '天生傻屌之力，被动提升所有抗性，降低魔防。',
+		}]
+	}
 }
 
 const mutations = {
-	change(state, payload) {
-		state[payload.property] = payload.value;
-	},
-	increase(state, payload) {
-		state[payload.property] += payload.amount;
-	},
-	arrayPush(state, payload) {
-		state[payload.property].push(payload.item);
-	}
-};
+	
+}
 
 export default {
 	state,

@@ -57,12 +57,12 @@
 					fontClass: 'iconfont icon-mission',
 					show:'mission'
 				}, {
-					isActive: false,
+					isActive: true,
 					title: '修炼场',
 					fontClass: 'iconfont icon-practice',
 					show:'practice'
 				}, {
-					isActive: true,
+					isActive: false,
 					title: '技能',
 					fontClass: 'iconfont icon-skill',
 					show:'skill'
