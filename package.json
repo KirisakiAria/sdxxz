@@ -1,0 +1,40 @@
+{
+  "name": "sdxxz",
+  "version": "0.0.1",
+  "description": "傻屌们的最爱",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "webpack-dev-server --open --inline --config build/webpack.dev.config.js",
+    "build": "node build/build.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "animejs": "^2.2.0",
+    "axios": "^0.17.1",
+    "chai": "^4.1.2",
+    "chalk": "^2.3.0",
+    "clean-webpack-plugin": "^0.1.18",
+    "css-loader": "^0.28.9",
+    "echarts": "^4.0.2",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "^1.1.6",
+    "friendly-errors-webpack-plugin": "^1.6.1",
+    "html-webpack-plugin": "^2.30.1",
+    "less": "^2.7.3",
+    "less-loader": "^4.0.5",
+    "mocha": "^5.0.0",
+    "style-loader": "^0.20.1",
+    "uglifyjs-webpack-plugin": "^1.1.8",
+    "url-loader": "^0.6.2",
+    "vue": "^2.5.13",
+    "vue-loader": "^14.1.1",
+    "vue-router": "^3.0.1",
+    "vue-template-compiler": "^2.5.13",
+    "vuex": "^3.0.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.1",
+    "webpack-merge": "^4.1.1"
+  }
+}
