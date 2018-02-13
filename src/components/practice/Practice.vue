@@ -1,80 +1,135 @@
 <template>
 	<section class="practice mainSection">
-		<div class="item">
-			<div class="head">0~5级</div>
-			<div class="content">
-				<ul>
-					<li>
-						<div class="top">
-							<span>傻屌村小傻屌</span>
-							<span>等级：5</span>
-						</div>
-						<div class="bottom">
-							<p>最垃圾的傻屌，最垃圾的傻屌，最垃圾的傻屌，最垃圾的傻屌</p>
-							<button>挑战</button>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<transition name="slide-fade">
+			<section v-if="show.list" class="list">
+				<div class="item" v-for='item in enemyList'>
+					<div class="head">{{item.level}}</div>
+					<div class="content">
+						<ul>
+							<li v-for="key in item.list">
+								<div class="ib">
+									<div class="top">
+										<span>{{key.baseAttributes.name.value}}</span>
+										<span>等级：{{key.baseAttributes.level.value}}</span>
+									</div>
+									<div class="bottom">
+										<p>{{key.baseAttributes.description.value}}</p>
+									</div>
+								</div>
+								<button @click="battle(key)">挑战</button>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</section>
+			<Battle enemy="enemy" v-if="show.battle"></Battle>
+		</transition>
 	</section>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../../less/style';
 
-	.practice {
-		.head {
-			padding: .15rem;
-			background:#a5b1c2;
-			.cw;
-		}
+	.practice
+	{
+	    .head
+	    {
+	        padding: .15rem;
 
-		.content {
-			li {
-				padding:.15rem;
-				border-bottom: 1px solid #a5b1c2;
-				
-				.top {
-					margin-bottom: .15rem;
-					span {
-						margin-right: .15rem;
-					}
-				}
-				
-				p {
-					line-height: 1.5;
-					.ib;
-					width: calc(~'100% - 1.05rem');
-					padding-right: .1rem;
-					text-align:justify;
-				}
-				button {
-					.ib;
-					.br(8px);
-				}
-			}
-		}
-	}	
+	        background: #a5b1c2;
+
+	        .cw;
+	    }
+
+	    .content
+	    {
+	        li
+	        {
+	            padding: .15rem;
+
+	            border-bottom: 1px solid #a5b1c2;
+
+	            div.ib
+	            {
+	                width: calc(~'100% - 1.05rem');
+	                padding-right: .1rem;
+
+	                .top
+	                {
+	                    margin-bottom: .15rem;
+	                    span
+	                    {
+	                        margin-right: .15rem;
+	                    }
+	                }
+
+	                p
+	                {
+	                    line-height: 1.5;
+
+	                    text-align: justify;
+	                }
+	            }
+	            button
+	            {
+	                .ib;
+	                .br(8px);
+	            }
+	        }
+	    }
+	}
 
 </style>
 
 <script>
-	export default {
-		name: 'Practice',
-		computed: {
-			level0_5EnemyList: function() {
-				let arr = [];
-				let state = this.$store.state;
-				arr.push(state.villageC, state.villageB, state.villageA);
-				return arr;
-			},
-			level6_105EnemyList: function() {
-				let arr = [];
-				let state = this.$store.state;
-				arr.push(state.villageS);
-				return arr;
-			}
-		}
-	}
+    import Battle from '../battle/Battle';
+
+    export default {
+    	name: 'Practice',
+    	data() {
+    		return {
+    			show: {
+    				list: false,
+    				battle: true
+    			},
+    			enemy:null
+    		}
+    	},
+    	methods: {
+    		pushArr: function(target) {
+    			let [arr, state] = [
+    				[], this.$store.state.enemy
+    			];
+    			Array.from(arguments).forEach(e => {
+    				arr.push(state[e]);
+    			});
+    			return arr;
+    		},
+    		battle:function(enemy){
+    			this.list = false;
+    			this.battle = true;
+    			this.enemy = enemy
+    		}
+    	},
+    	computed: {
+    		level0_5EnemyList: function() {
+    			return this.pushArr('villageC', 'villageB', 'villageA');
+    		},
+    		level6_10EnemyList: function() {
+    			return this.pushArr('villageS');
+    		},
+    		enemyList: function() {
+    			return [{
+    				level: '0~5级',
+    				list: this.level0_5EnemyList
+    			}, {
+    				level: '6~10级',
+    				list: this.level6_10EnemyList
+    			}]
+    		}
+    	},
+    	components: {
+    		Battle
+    	}
+    }
 </script>

@@ -54,8 +54,8 @@ let state = {
 			decs: '命中',
 			value: 80
 		},
-		dodge: {
-			decs: '闪避',
+		spd: {
+			decs: '速度',
 			value: 15
 		}
 	},

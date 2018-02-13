@@ -1,12 +1,13 @@
-let state = {
+export default {
 	baseAttributes: {
+		eid:3,
 		name: {
 			decs: '姓名',
 			value: '傻屌村精英傻屌'
 		},
 		description: {
 			decs: '描述',
-			value: '稍微有点实力的傻屌，不过讲道理打不过让你退群不过分'
+			value: '稍微有点实力的傻屌，不过讲道理打不过你退群也不过分'
 		},
 		level: {
 			decs: '等级',
@@ -14,7 +15,7 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 570
+			value: 520
 		},
 		mp: {
 			decs: '魔法',
@@ -54,8 +55,8 @@ let state = {
 			decs: '命中',
 			value: 46
 		},
-		dodge: {
-			decs: '闪避',
+		spd: {
+			decs: '速度',
 			value: 4
 		}
 	},
@@ -88,14 +89,4 @@ let state = {
 		buffSkills: null,
 		passiveSkills: null
 	}
-}
-
-const mutations = {
-
-}
-
-export default {
-	state,
-	mutations,
-	namespaced: true
 }

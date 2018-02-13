@@ -30,10 +30,11 @@
 	export default {
 		name: 'Game',
 		computed: {
-			showList:function(){
-				let arr = [];
-				let list = this.$store.state.global.show;
-				Object.values(list).forEach(e=>{
+			showList: function() {
+				let [arr, list] = [
+					[], this.$store.state.global.show
+				];
+				Object.values(list).forEach(e => {
 					arr.push(e);
 				});
 				return arr;

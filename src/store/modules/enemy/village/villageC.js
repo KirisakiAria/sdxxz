@@ -1,5 +1,6 @@
-let state = {
+export default {
 	baseAttributes: {
+		eid:0,
 		name: {
 			decs: '姓名',
 			value: '傻屌村小傻屌'
@@ -14,11 +15,15 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 200
+			value: 120
 		},
 		mp: {
 			decs: '魔法',
 			value: 0
+		},
+		exp: {
+			desc: '击杀经验',
+			value: 50
 		}
 	},
 	extraAttributes: {
@@ -54,8 +59,8 @@ let state = {
 			decs: '命中',
 			value: 25
 		},
-		dodge: {
-			decs: '闪避',
+		spd: {
+			decs: '速度',
 			value: 0
 		}
 	},
@@ -88,14 +93,4 @@ let state = {
 		buffSkills: null,
 		passiveSkills: null
 	}
-}
-
-const mutations = {
-
-}
-
-export default {
-	state,
-	mutations,
-	namespaced: true
 }

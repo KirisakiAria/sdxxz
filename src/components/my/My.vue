@@ -56,6 +56,7 @@
 	        padding: .2rem 0;
 
 	        background-image: url(../../assets/images/bg.png);
+	        background-size: cover;
 	    }
 
 	    .avatar
@@ -102,8 +103,6 @@
 
 	            width: 28%;
 	            padding: .15rem;
-
-	            background: #70a1ff;
 
 	            .br(15px);
 	            .cw;
@@ -169,15 +168,11 @@
 <script>
 	export default {
 		name: 'My',
-		data() {
-			return {
-
-			}
-		},
-		methods:{
-			getPlayerArr:function(origin){
-				let arr = [];
-				let attribute = this.$store.state.player[origin];
+		methods: {
+			getPlayerArr: function(origin) {
+				let [arr, attribute] = [
+					[], this.$store.state.player[origin]
+				];
 				Object.values(attribute).forEach(e => {
 					arr.push(e);
 				});
@@ -188,16 +183,16 @@
 			baseAttributes: function() {
 				return this.getPlayerArr('baseAttributes');
 			},
-			extraAttributes:function(){
+			extraAttributes: function() {
 				return this.getPlayerArr('extraAttributes');
 			},
-			equipments:function(){
+			equipments: function() {
 				return this.getPlayerArr('equipments');
 			},
-			elements:function(){
+			elements: function() {
 				return this.getPlayerArr('elements');
 			},
-			buff:function(){
+			buff: function() {
 				return this.$store.state.player.buff;
 			}
 		}
