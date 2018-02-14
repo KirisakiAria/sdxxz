@@ -1,6 +1,6 @@
 <template>
 	<section class="practice mainSection">
-		<transition name="slide-fade">
+		<transition name="slide-fade" mode="out-in">
 			<section v-if="show.list" class="list">
 				<div class="item" v-for='item in enemyList'>
 					<div class="head">{{item.level}}</div>
@@ -22,7 +22,7 @@
 					</div>
 				</div>
 			</section>
-			<Battle enemy="enemy" v-if="show.battle"></Battle>
+			<Battle  enemy="enemy" v-if="show.battle"></Battle>
 		</transition>
 	</section>
 </template>
@@ -106,9 +106,15 @@
     			return arr;
     		},
     		battle:function(enemy){
-    			this.list = false;
-    			this.battle = true;
-    			this.enemy = enemy
+    			this.show.list = false;
+    			this.show.battle = true;
+    			this.enemy = enemy;
+    		},
+    		close:function(){
+    			console.log('1')
+    			this.show.list = true;
+    			this.show.battle = false;
+    			this.enemy = null;
     		}
     	},
     	computed: {

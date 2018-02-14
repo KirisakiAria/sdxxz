@@ -23,7 +23,7 @@ export default {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 50
+			value: 500
 		}
 	},
 	extraAttributes: {

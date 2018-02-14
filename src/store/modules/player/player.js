@@ -44,7 +44,7 @@ let state = {
 		},
 		atk: {
 			decs: '物攻',
-			value: 25
+			value: 2500
 		},
 		mga: {
 			decs: '魔攻',
@@ -139,6 +139,7 @@ let state = {
 			value: ''
 		}
 	},
+	levelUpExp: [0, 0, 100, 140, 196, 274, 384, 537, 752, 1054, 1475, 2066, 2892, 4049, 5669, 7937, 11112, 15556, 21779, 30491, 42687, 59763, 83668],
 	items: [],
 	buff: [],
 	debuff: {
@@ -156,7 +157,7 @@ let state = {
 			name: '+1'
 		}],
 		buffSkills: [],
-		passiveSkills:[]
+		passiveSkills: []
 	}
 }
 
@@ -167,6 +168,12 @@ const mutations = {
 	chooseSpeciality(state, payload) {
 		state.baseAttributes.speciality.value = payload.speciality;
 		state.baseAttributes.spid.value = payload.spid;
+	},
+	changeExp(state,payload){
+		state.baseAttributes.exp.value = payload.value;
+	},
+	changeLevel(state,payload){
+		state.baseAttributes.level.value = payload.value;
 	}
 }
 

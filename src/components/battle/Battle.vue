@@ -215,7 +215,7 @@
 				this.roundCount();
 			},
 			suicide: function() {
-
+				this.roundCount();
 			},
 			escape: function() {
 				this.roundCount();
@@ -277,12 +277,30 @@
 			round: {
 				handler(newValue, oldValue) {
 					let [pHp, eHp] = [this.playerPanel.hp, this.enemyPanel.hp];
-					if(!pHp)
-					{
+					if (!pHp) {
 						alert('失败！');
-					}
-					else if (!eHp) {
+						this.$emit('close');
+					} else if (!eHp) {
 						alert('获胜');
+						//经验获取、升级
+						let [ownedExp, gotExp, levelUpExp] = [this.player.baseAttributes.exp.value, this.enemy.baseAttributes.exp.value, this.player.levelUpExp];
+
+						this.$store.commit('player/changeExp', {
+							value: ownedExp + gotExp
+						});
+						let [nowExp, upExp] = [this.player.baseAttributes.exp.value, 0];
+						levelUpExp.forEach(e => {
+							if (nowExp > e) {
+								upExp = e;
+							}
+						});
+						let level = levelUpExp.findIndex((value) => {
+							return value == upExp;
+						});
+						this.$store.commit('player/changeLevel', {
+							value: level
+						});
+						this.$emit('close');
 					}　
 					else if (newValue.enemy) {
 						this.enemyAction();

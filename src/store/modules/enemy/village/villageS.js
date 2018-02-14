@@ -20,6 +20,10 @@ export default {
 		mp: {
 			decs: '魔法',
 			value: 0
+		},
+		exp: {
+			desc: '击杀经验',
+			value: 150
 		}
 	},
 	extraAttributes: {
