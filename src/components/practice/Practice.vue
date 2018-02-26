@@ -22,7 +22,8 @@
 					</div>
 				</div>
 			</section>
-			<Battle  enemy="enemy" v-if="show.battle"></Battle>
+			<!-- 传入点击挑战按钮对应的敌人的数据 -->
+			<Battle enemy="enemy" v-if="show.battle"></Battle>
 		</transition>
 	</section>
 </template>
@@ -118,6 +119,7 @@
     		}
     	},
     	computed: {
+    		/*获取敌人列表*/
     		level0_5EnemyList: function() {
     			return this.pushArr('villageC', 'villageB', 'villageA');
     		},

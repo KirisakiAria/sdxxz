@@ -142,6 +142,7 @@
 				});
 				return arr;
 			},
+			//比较技能的sid，检查技能是否已学习，标记为不同颜色
 			checkSkills: function(list1, list2) {
 				list1.forEach(e => {
 					list2.forEach(he => {

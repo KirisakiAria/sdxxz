@@ -173,7 +173,7 @@
 			}
 		},
 		methods: {
-			//判断谁先发动攻击
+			//比较战斗开始时的双方速度（谁先发动攻击）
 			battleStart: function() {
 				let [pSpd, mSpd] = [this.getValue('player', 'extraAttributes', 'spd'), this.getValue('enemy', 'extraAttributes', 'spd')];
 				if (mSpd > pSpd) {
@@ -187,6 +187,7 @@
 				this.round.enemy = !this.round.enemy;
 				this.round.player = !this.round.player;
 			},
+			//物理攻击逻辑
 			attack: function(flag) {
 				let [atkCache, defCache, panel] = [0, 0, null];
 				if (flag) {
@@ -223,6 +224,7 @@
 			auto: function() {
 				this.roundCount();
 			},
+			//获取vuex中的值
 			getValue: function(target, type, property) {
 				let targetCache = this[target];
 				let typeCache = targetCache[type];
@@ -235,6 +237,7 @@
 					that.attack(0);
 				}, 1000);
 			},
+			//随机数
 			randomNum: function(minNum, maxNum) {
 				switch (arguments.length) {
 					case 1:
@@ -259,12 +262,15 @@
 			enemy: function() {
 				return this.$store.state.enemy.villageC
 			},
+			//战斗的生命、魔法皆从面板中计算，战斗结束统一提交
+			//玩家面板
 			playerPanel: function() {
 				return {
 					hp: this.getValue('player', 'baseAttributes', 'hp'),
 					mp: this.getValue('player', 'baseAttributes', 'mp')
 				}
 			},
+			//敌人面板
 			enemyPanel: function() {
 				return {
 					hp: this.getValue('enemy', 'baseAttributes', 'hp'),
@@ -277,14 +283,16 @@
 			round: {
 				handler(newValue, oldValue) {
 					let [pHp, eHp] = [this.playerPanel.hp, this.enemyPanel.hp];
+					//死亡
 					if (!pHp) {
 						alert('失败！');
 						this.$emit('close');
+					//获胜
 					} else if (!eHp) {
 						alert('获胜');
+						
 						//经验获取、升级
 						let [ownedExp, gotExp, levelUpExp] = [this.player.baseAttributes.exp.value, this.enemy.baseAttributes.exp.value, this.player.levelUpExp];
-
 						this.$store.commit('player/changeExp', {
 							value: ownedExp + gotExp
 						});
