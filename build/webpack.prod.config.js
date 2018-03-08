@@ -13,7 +13,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		filename: 'js/[name].[hash].js'
+		filename: 'static/js/[name].[hash].js',
+		publicPath: './'
 	},
 
 	module: {
@@ -50,7 +51,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 			root: path.resolve(__dirname, '../')
 		}),
 		new ExtractTextPlugin({
-			filename: 'css/styles.[hash].css',
+			filename: 'static/css/styles.[hash].css',
 		}),
 		new UglifyJSPlugin({
 			test: /\.js$/,

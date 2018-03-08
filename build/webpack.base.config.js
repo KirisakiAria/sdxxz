@@ -32,7 +32,7 @@ module.exports = {
 			loader: 'url-loader',
 			options: {
 				limit: 10000,
-				name: 'media/[name].[hash].[ext]'
+				name: 'static/media/[name].[hash].[ext]'
 			}
 		}, {
 			test: /\.(png|gif|jpg|svg|jpeg)$/i,
@@ -40,7 +40,7 @@ module.exports = {
 				loader: 'url-loader',
 				options: {
 					limit: 8192,
-					name: 'images/[name].[hash].[ext]'
+					name: 'static/images/[name].[hash].[ext]'
 				}
 			}]
 		}, {
@@ -51,7 +51,7 @@ module.exports = {
 					limit: 8192,
 					mimetype: 'application/font-woff',
 					filename: '[name].[hash].[ext]',
-					outputPath: 'fonts/',
+					outputPath: 'static/fonts/',
 					publicPath: '../'
 				}
 			}]
