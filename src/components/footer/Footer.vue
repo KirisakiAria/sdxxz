@@ -25,7 +25,7 @@
 				text-align: center;
 				padding: .12rem 0;
 				flex-grow:1;
-
+				cursor: pointer;
 				&.active {
 					color: #ff6b81;
 				}

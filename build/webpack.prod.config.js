@@ -13,8 +13,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		filename: 'static/js/[name].[hash].js',
-		publicPath: './'
+		filename: 'static/js/[name].[hash].js'
 	},
 
 	module: {
@@ -28,7 +27,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 					}
 				}, 'less-loader'],
 				fallback: 'style-loader'
-			}),
+			})
 		}]
 	},
 

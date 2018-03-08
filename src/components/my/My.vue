@@ -2,7 +2,7 @@
 	<section class="my mainSection">
 		<section class="top cw">
 			<div class="avatar">
-				<img src="../../assets/images/avatar.jpg"></div>
+				<img :src="img.avatar"></div>
 			<h4 class="tac">{{baseAttributes[0].value}}</h4>
 			<h6 class="tac">称号:{{baseAttributes[1].value}}</h6>
 		</section>
@@ -166,8 +166,19 @@
 </style>
 
 <script>
+	import avatarImg from '../../assets/images/avatar.jpg'
+	import bgImg from '../../assets/images/bg.png'
+
 	export default {
 		name: 'My',
+		data() {
+			return {
+				img: {
+					avatar: avatarImg,
+					bg:bgImg
+				}
+			}
+		},
 		methods: {
 			getPlayerArr: function(origin) {
 				let [arr, attribute] = [

@@ -31,7 +31,7 @@ module.exports = {
 			test: /\.mp3(\?.*)?$/,
 			loader: 'url-loader',
 			options: {
-				limit: 10000,
+				limit: 1000000,
 				name: 'static/media/[name].[hash].[ext]'
 			}
 		}, {
@@ -39,8 +39,8 @@ module.exports = {
 			use: [{
 				loader: 'url-loader',
 				options: {
-					limit: 8192,
-					name: 'static/images/[name].[hash].[ext]'
+					limit: 1000000,
+					name: './static/images/[name].[hash].[ext]'
 				}
 			}]
 		}, {
@@ -48,7 +48,7 @@ module.exports = {
 			use: [{
 				loader: 'url-loader',
 				options: {
-					limit: 8192,
+					limit: 1000000,
 					mimetype: 'application/font-woff',
 					filename: '[name].[hash].[ext]',
 					outputPath: 'static/fonts/',
