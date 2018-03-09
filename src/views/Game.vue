@@ -13,10 +13,7 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../less/style';
-	.game
-	{
-
-	}
+	.game {}
 </style>
 
 <script>
@@ -30,7 +27,7 @@
 	export default {
 		name: 'Game',
 		computed: {
-			showList: function() {
+			showList: function () {
 				let [arr, list] = [
 					[], this.$store.state.global.show
 				];

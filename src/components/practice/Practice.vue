@@ -31,113 +31,103 @@
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../../less/style';
 
-	.practice
-	{
-	    .head
-	    {
-	        padding: .15rem;
+	.practice {
+		.head {
+			padding: .15rem;
 
-	        background: #a5b1c2;
+			background: #a5b1c2;
 
-	        .cw;
-	    }
+			.cw;
+		}
 
-	    .content
-	    {
-	        li
-	        {
-	            padding: .15rem;
+		.content {
+			li {
+				padding: .15rem;
 
-	            border-bottom: 1px solid #a5b1c2;
+				border-bottom: 1px solid #a5b1c2;
 
-	            div.ib
-	            {
-	                width: calc(~'100% - 1.05rem');
-	                padding-right: .1rem;
+				div.ib {
+					width: calc(~'100% - 1.05rem');
+					padding-right: .1rem;
 
-	                .top
-	                {
-	                    margin-bottom: .15rem;
-	                    span
-	                    {
-	                        margin-right: .15rem;
-	                    }
-	                }
+					.top {
+						margin-bottom: .15rem;
+						span {
+							margin-right: .15rem;
+						}
+					}
 
-	                p
-	                {
-	                    line-height: 1.5;
+					p {
+						line-height: 1.5;
 
-	                    text-align: justify;
-	                }
-	            }
-	            button
-	            {
-	                .ib;
-	                .br(8px);
-	            }
-	        }
-	    }
+						text-align: justify;
+					}
+				}
+				button {
+					.ib;
+					.br(8px);
+				}
+			}
+		}
 	}
-
 </style>
 
 <script>
-    import Battle from '../battle/Battle';
+	import Battle from '../battle/Battle';
 
-    export default {
-    	name: 'Practice',
-    	data() {
-    		return {
-    			show: {
-    				list: false,
-    				battle: true
-    			},
-    			enemy:null
-    		}
-    	},
-    	methods: {
-    		pushArr: function(target) {
-    			let [arr, state] = [
-    				[], this.$store.state.enemy
-    			];
-    			Array.from(arguments).forEach(e => {
-    				arr.push(state[e]);
-    			});
-    			return arr;
-    		},
-    		battle:function(enemy){
-    			this.show.list = false;
-    			this.show.battle = true;
-    			this.enemy = enemy;
-    		},
-    		close:function(){
-    			console.log('1')
-    			this.show.list = true;
-    			this.show.battle = false;
-    			this.enemy = null;
-    		}
-    	},
-    	computed: {
-    		/*获取敌人列表*/
-    		level0_5EnemyList: function() {
-    			return this.pushArr('villageC', 'villageB', 'villageA');
-    		},
-    		level6_10EnemyList: function() {
-    			return this.pushArr('villageS');
-    		},
-    		enemyList: function() {
-    			return [{
-    				level: '0~5级',
-    				list: this.level0_5EnemyList
-    			}, {
-    				level: '6~10级',
-    				list: this.level6_10EnemyList
-    			}]
-    		}
-    	},
-    	components: {
-    		Battle
-    	}
-    }
+	export default {
+		name: 'Practice',
+		data() {
+			return {
+				show: {
+					list: false,
+					battle: true
+				},
+				enemy: null
+			}
+		},
+		methods: {
+			pushArr: function (target) {
+				let [arr, state] = [
+					[], this.$store.state.enemy
+				];
+				Array.from(arguments).forEach(e => {
+					arr.push(state[e]);
+				});
+				return arr;
+			},
+			battle: function (enemy) {
+				this.show.list = false;
+				this.show.battle = true;
+				this.enemy = enemy;
+			},
+			close: function () {
+				console.log('1')
+				this.show.list = true;
+				this.show.battle = false;
+				this.enemy = null;
+			}
+		},
+		computed: {
+			/*获取敌人列表*/
+			level0_5EnemyList: function () {
+				return this.pushArr('villageC', 'villageB', 'villageA');
+			},
+			level6_10EnemyList: function () {
+				return this.pushArr('villageS');
+			},
+			enemyList: function () {
+				return [{
+					level: '0~5级',
+					list: this.level0_5EnemyList
+				}, {
+					level: '6~10级',
+					list: this.level6_10EnemyList
+				}]
+			}
+		},
+		components: {
+			Battle
+		}
+	}
 </script>

@@ -26,57 +26,71 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 200
+			value: 200,
+			grow: 35
 		},
 		mp: {
 			decs: '魔法',
-			value: 80
+			value: 150,
+			grow: 25
 		}
 	},
 	extraAttributes: {
 		hps: {
 			decs: '回血',
-			value: 3
+			value: 3,
+			grow: .6
 		},
 		mps: {
 			decs: '回蓝',
-			value: 2
+			value: 2,
+			grow: .35
 		},
 		atk: {
 			decs: '物攻',
-			value: 2500
+			value: 25,
+			grow: 7
 		},
 		mga: {
 			decs: '魔攻',
-			value: 20
+			value: 20,
+			grow: 5
 		},
 		def: {
 			decs: '物防',
-			value: 15
+			value: 15,
+			grow: 4.6
 		},
 		res: {
 			decs: '魔防',
-			value: 15
+			value: 15,
+			grow: 2.8
 		},
+		//暴击系数默认1.5
 		crt: {
 			decs: '暴击',
-			value: 5
+			value: 5,
+			grow: 1.2
 		},
 		hit: {
 			decs: '命中',
-			value: 20
+			value: 40,
+			grow: 2.5
 		},
 		spd: {
 			decs: '速度',
-			value: 2
+			value: 5,
+			grow: 0.4
 		},
 		chr: {
 			decs: '魅力',
-			value: 10
+			value: 10,
+			grow: 3
 		},
 		luk: {
 			decs: '幸运',
-			value: 10
+			value: 10,
+			grow: 5
 		},
 		gold: {
 			decs: '金钱',
@@ -88,29 +102,35 @@ let state = {
 		},
 		sp: {
 			decs: '技能点',
-			value: 1
+			value: 1,
+			grow: 1
 		}
 	},
 	elements: {
 		fire: {
 			decs: '火属性',
-			value: 5
+			value: 5,
+			grow: 1.5
 		},
 		ice: {
 			decs: '冰属性',
-			value: 5
+			value: 5,
+			grow: 1.5
 		},
 		toxic: {
 			decs: '毒属性',
-			value: 5
+			value: 5,
+			grow: 1.5
 		},
 		wind: {
 			decs: '风属性',
-			value: 5
+			value: 5,
+			grow: 1.5
 		},
 		earth: {
 			decs: '土属性',
-			value: 5
+			value: 5,
+			grow: 1.5
 		}
 	},
 	equipments: {
@@ -169,10 +189,10 @@ const mutations = {
 		state.baseAttributes.speciality.value = payload.speciality;
 		state.baseAttributes.spid.value = payload.spid;
 	},
-	changeExp(state,payload){
+	changeExp(state, payload) {
 		state.baseAttributes.exp.value = payload.value;
 	},
-	changeLevel(state,payload){
+	changeLevel(state, payload) {
 		state.baseAttributes.level.value = payload.value;
 	}
 }

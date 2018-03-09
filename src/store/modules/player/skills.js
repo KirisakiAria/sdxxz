@@ -2,7 +2,7 @@ let state = {
 	damageSkills: {
 		sand: {
 			sid: 0,
-			learned:false,
+			learned: false,
 			name: '扬沙',
 			desc: '抓起一把沙子扬过去，对敌方造成40点风属性伤害，并减少对方5点命中。',
 			consume: 60,
@@ -14,11 +14,11 @@ let state = {
 			effect: {
 				damage: {
 					type: {
-						value: 6,
+						value: 5,
 						name: '风'
 					},
 					ignoring: false,
-					value: 20
+					value: 30
 				},
 				debuff: {
 					hit: 5
@@ -27,7 +27,7 @@ let state = {
 		},
 		cnm: {
 			sid: 1,
-			learned:false,
+			learned: false,
 			name: '素质对话',
 			desc: '与敌方单体进行文明交流，敌方十分感动然后受到80点物理伤害。',
 			consume: 50,
@@ -48,7 +48,7 @@ let state = {
 		},
 		cnmnmbngsb: {
 			sid: 2,
-			learned:false,
+			learned: false,
 			name: '素质三连',
 			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到300点无视防御的物理伤害，物防降低20%，持续三回合。',
 			consume: 180,
@@ -74,7 +74,7 @@ let state = {
 		},
 		sputum: {
 			sid: 3,
-			learned:false,
+			learned: false,
 			name: '飞痰术',
 			desc: '发射飞痰，对敌方单体造成100点冰属性伤害。',
 			consume: 90,
@@ -85,7 +85,7 @@ let state = {
 			effect: {
 				damage: {
 					type: {
-						value: 4,
+						value: 3,
 						name: '冰'
 					},
 					ignoring: false,
@@ -95,7 +95,7 @@ let state = {
 		},
 		cumming: {
 			sid: 4,
-			learned:false,
+			learned: false,
 			name: '蝌蚪术',
 			desc: '喷射出大量白色蝌蚪，对敌方全体造成200点毒属性伤害。',
 			consume: 120,
@@ -106,7 +106,7 @@ let state = {
 			effect: {
 				damage: {
 					type: {
-						value: 5,
+						value: 4,
 						name: '毒'
 					},
 					ignoring: false,
@@ -116,7 +116,7 @@ let state = {
 		},
 		arson: {
 			sid: 5,
-			learned:false,
+			learned: false,
 			name: '纵火',
 			desc: '使用打火机点燃对方的jj，敌方受到250点火焰伤害并附加20点灼伤效果，持续三回合。',
 			consume: 165,
@@ -128,7 +128,7 @@ let state = {
 			effect: {
 				damage: {
 					type: {
-						value: 3,
+						value: 2,
 						name: '火'
 					},
 					ignoring: false,
@@ -145,7 +145,7 @@ let state = {
 	cureSkills: {
 		buy: {
 			sid: 6,
-			learned:false,
+			learned: false,
 			name: '+1',
 			desc: '+1使我神清气爽，恢复60点生命。',
 			consume: 80,
@@ -159,7 +159,7 @@ let state = {
 		},
 		cut: {
 			sid: 7,
-			learned:false,
+			learned: false,
 			name: '剁手',
 			desc: '没钱了但又控制不住欲望，只能把手剁了，失去100点生命恢复120点魔法。',
 			consume: 100,
@@ -175,7 +175,7 @@ let state = {
 	buffSkills: {
 		login: {
 			sid: 8,
-			learned:false,
+			learned: false,
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%17，物防、魔防提升%10，命中提升%40，暴击、闪避提升%10，持续两回合',
 			consume: 60,
@@ -199,7 +199,7 @@ let state = {
 		},
 		moralityUp: {
 			sid: 9,
-			learned:false,
+			learned: false,
 			name: '素质提升',
 			desc: '提升自己素质，使物攻、魔攻、暴击提升40%，毒属性攻击提升20%，并使素质系技能伤害提高30%，持续3回合',
 			consume: 100,
@@ -222,7 +222,7 @@ let state = {
 		},
 		JJ: {
 			sid: 10,
-			learned:false,
+			learned: false,
 			name: '林俊杰',
 			desc: '使对方群体沉默，持续5回合',
 			consume: 200,
@@ -239,7 +239,7 @@ let state = {
 		},
 		gabe: {
 			sid: 11,
-			learned:false,
+			learned: false,
 			name: 'g胖',
 			desc: '召唤g胖附体，每秒额外恢复100点魔法，使+1技能恢复效果提升三倍，持续4回合',
 			consume: 300,
@@ -256,8 +256,8 @@ let state = {
 			}
 		}
 	},
-	passiveSkills:{
-		
+	passiveSkills: {
+
 	}
 }
 

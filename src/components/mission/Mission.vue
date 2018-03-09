@@ -4,7 +4,6 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../../less/style';
-
 </style>
 
 <script>

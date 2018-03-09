@@ -6,10 +6,17 @@
   "scripts": {
     "test": "mocha",
     "dev": "webpack-dev-server --open --inline --config build/webpack.dev.config.js",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "start":"electron ."
   },
+  "repository": "https://github.com/kirisakiaria/sdxxz",
   "author": "",
   "license": "ISC",
+  "keywords": [
+    "vue",
+    "Electron",
+    "sd"
+  ],
   "devDependencies": {
     "animejs": "^2.2.0",
     "axios": "^0.17.1",
@@ -18,6 +25,7 @@
     "clean-webpack-plugin": "^0.1.18",
     "css-loader": "^0.28.9",
     "echarts": "^4.0.2",
+    "electron": "^1.8.3",
     "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.6",
     "friendly-errors-webpack-plugin": "^1.6.1",

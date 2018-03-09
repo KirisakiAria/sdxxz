@@ -52,11 +52,11 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 80
+			value: 100
 		},
 		spd: {
 			decs: '速度',
-			value: 15
+			value: 18
 		}
 	},
 	elements: {

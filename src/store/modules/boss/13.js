@@ -52,11 +52,11 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 70
+			value: 110
 		},
 		spd: {
 			decs: '速度',
-			value: 20
+			value: 24
 		}
 	},
 	elements: {
@@ -99,7 +99,7 @@ let state = {
 }
 
 const mutations = {
-	
+
 }
 
 export default {

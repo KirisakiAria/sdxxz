@@ -1,7 +1,8 @@
 <template>
 	<footer class="footer">
 		<ul>
-			<li :class="{active:item.isActive}" v-for="item in footerDate" @click="changeClass(item)"> <i :class="item.fontClass"></i>
+			<li :class="{active:item.isActive}" v-for="item in footerDate" @click="changeClass(item)">
+				<i :class="item.fontClass"></i>
 				<span>{{item.title}}</span>
 			</li>
 		</ul>
@@ -24,13 +25,14 @@
 				.transition;
 				text-align: center;
 				padding: .12rem 0;
-				flex-grow:1;
+				flex-grow: 1;
 				cursor: pointer;
 				&.active {
 					color: #ff6b81;
 				}
 
-				i,span {
+				i,
+				span {
 					display: block;
 					margin: auto;
 				}
@@ -43,7 +45,6 @@
 			}
 		}
 	}
-
 </style>
 
 <script>
@@ -55,39 +56,39 @@
 					isActive: false,
 					title: '任务',
 					fontClass: 'iconfont icon-mission',
-					show:'mission'
+					show: 'mission'
 				}, {
 					isActive: true,
 					title: '修炼场',
 					fontClass: 'iconfont icon-practice',
-					show:'practice'
+					show: 'practice'
 				}, {
 					isActive: false,
 					title: '技能',
 					fontClass: 'iconfont icon-skill',
-					show:'skill'
+					show: 'skill'
 				}, {
 					isActive: false,
 					title: '背包',
 					fontClass: 'iconfont icon-backpack',
-					show:'backpack'
+					show: 'backpack'
 				}, {
 					isActive: false,
 					title: '个人',
 					fontClass: 'iconfont icon-my',
-					show:'my'
+					show: 'my'
 				}]
 			}
 		},
 		methods: {
-			changeClass: function(item) {
+			changeClass: function (item) {
 				this.footerDate.forEach(e => {
 					e.isActive = false;
 				});
 				item.isActive = true;
 				//显示页面
-				this.$store.commit('global/show',{
-					property:item.show
+				this.$store.commit('global/show', {
+					property: item.show
 				})
 			}
 		}

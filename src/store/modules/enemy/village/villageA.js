@@ -57,11 +57,11 @@ export default {
 		},
 		hit: {
 			decs: '命中',
-			value: 32
+			value: 50
 		},
 		spd: {
 			decs: '速度',
-			value: 0
+			value: 8
 		}
 	},
 	elements: {

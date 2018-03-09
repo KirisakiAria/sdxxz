@@ -21,47 +21,40 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../less/style';
-	.start
-	{
-	    .col;
+	.start {
+		.col;
 
-	    .username
-	    {
-	    	input {
-	    		display: block;
-	    		width: 100%;
-	    		.bor(#a4b0be);
-	    		height: .4rem;
-	    		padding: .15rem;
-	    	}
-	    	padding-bottom: .5rem;
-	    }
+		.username {
+			input {
+				display: block;
+				width: 100%;
+				.bor(#a4b0be);
+				height: .4rem;
+				padding: .15rem;
+			}
+			padding-bottom: .5rem;
+		}
 
-	    .speciality
-	    {
+		.speciality {
 
-	        li
-	        {
-	            margin: .15rem 0;
-	            
-	            button
-	            {
-	                display: inline-block;
+			li {
+				margin: .15rem 0;
 
-	                margin: 0;
-	            }
-	        }
-	    }
-	    p
-	    {
-	        font-size: .18rem;
+				button {
+					display: inline-block;
 
-	        margin-bottom: .2rem;
-	    }
-	    button
-	    {
-	        margin: 0 .15rem;
-	    }
+					margin: 0;
+				}
+			}
+		}
+		p {
+			font-size: .18rem;
+
+			margin-bottom: .2rem;
+		}
+		button {
+			margin: 0 .15rem;
+		}
 	}
 </style>
 
@@ -70,7 +63,7 @@
 		name: 'Start',
 		data() {
 			return {
-				username:'',
+				username: '',
 				specialitArray: [{
 					speciality: '吹逼',
 					spid: 1
@@ -90,26 +83,26 @@
 			}
 		},
 		methods: {
-			changeUsername(){
-				this.$store.commit('player/changeUsername',{
-					value:this.username
+			changeUsername() {
+				this.$store.commit('player/changeUsername', {
+					value: this.username
 				});
 			},
-			setSpeciality: function(speciality, spid) {
+			setSpeciality: function (speciality, spid) {
 				this.$store.commit('player/chooseSpeciality', {
 					speciality: speciality,
 					spid: spid
 				});
-				if(this.username!='')
-				{
+				if (this.username != '') {
 					this.goStart();
-				}
-				else {
+				} else {
 					alert('请输入角色名');
 				}
-			}, 
-			goStart: function() {
-				this.$router.push({ path: 'game' });
+			},
+			goStart: function () {
+				this.$router.push({
+					path: 'game'
+				});
 			}
 		}
 	}

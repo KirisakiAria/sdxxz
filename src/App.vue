@@ -1,7 +1,7 @@
 <template>
 	<main class="main">
 		<transition name="slide-fade" mode="out-in">
-			<section v-if="show.main" class="menu mainSection">
+			<!-- <section v-if="show.main" class="menu mainSection">
 				<h1>傻屌修仙传</h1>
 				<ul>
 					<li>
@@ -14,7 +14,7 @@
 						<router-link to="/setting">设置</router-link>
 					</li>
 				</ul>
-			</section>
+			</section> -->
 			<router-view></router-view>
 		</transition>
 	</main>

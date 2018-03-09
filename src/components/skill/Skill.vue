@@ -174,6 +174,7 @@
 			}
 		},
 		created() {
+			//检查技能是否已经学习
 			this.checkSkills(this.damageSkillsList, this.haveLearnedDamageSkillsList);
 			this.checkSkills(this.cureSkillsList, this.haveLearnedCureSkillsList);
 			this.checkSkills(this.buffSkillsList, this.haveLearnedBuffSkillsList);
