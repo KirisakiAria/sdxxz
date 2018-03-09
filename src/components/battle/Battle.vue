@@ -302,7 +302,7 @@
             };
         },
         methods: {
-            //比较战斗开始时的双方速度（谁先发动攻击）
+            //初始化战斗
             battleStart: function () {
                 this.initSpeed();
                 this.initBuff();
@@ -328,7 +328,7 @@
                 this.round.player = !this.round.player;
             },
             //计算伤害
-            //四个参数分别为攻击类型、发起攻击者、被攻击这、技能
+            //四个参数分别为攻击类型、发起攻击者、被攻击者、技能
             calculateDamage: function (type, attacker, target, skill) {
                 let panel = this[`${target}Panel`];
                 let losingHp = 0;
@@ -360,7 +360,6 @@
                     }
                     let panel = this[`${attacker}Panel`];
                     //首先计算是否能发动技能
-
                     if (skill.consumeType.value == 1) {
                         if (panel.mp - skill.consume >= 0) {
                             panel.mp -= skill.consume
@@ -381,6 +380,7 @@
                     let ifIgnoring = skill.effect.damage.ignoring;
                     let elementsDamage = mgaCache * 0.5;
                     if (!ifIgnoring) {
+                        //判断元素类型，结算元素伤害
                         switch (damageTypeValue) {
                             case 1:
                                 elementsDamage -= defCache * 0.2;
@@ -406,7 +406,7 @@
                                     0.4;
                                 break;
                         }
-
+                        //实际造成的魔法伤害
                         let mgaValue = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
                             elementsDamage);
                         let resValue = parseInt(resCache * 0.3);
@@ -426,7 +426,7 @@
             calculateCure: function () {
 
             },
-            //回复
+            //每回合回复
             recover: function () {
                 let playerHpsCache = this.getValue('player', 'extraAttributes', 'hps');
                 let playerMpsCache = this.getValue('player', 'extraAttributes', 'mps');
@@ -436,7 +436,6 @@
                 this.playerPanel.mp += playerMpsCache;
                 this.enemyPanel.hp += enemyHpsCache;
                 this.enemyPanel.mp += enemyMpsCache;
-
             },
             //物理攻击
             attack: function (attacker, target) {
@@ -512,6 +511,7 @@
                 });
                 return arr;
             },
+            //检查已学会的技能
             checkSkills: function (list1, list2) {
                 list1.forEach(e => {
                     list2.forEach(he => {
@@ -521,7 +521,7 @@
                     });
                 });
             },
-            //获取vuex中的值
+            //获取vuex中的数据
             getValue: function (target, type, property) {
                 return this[target][type][property].value;
             },
