@@ -24,29 +24,29 @@
 			</div>
 			<div class="attributes">
 				<ul>
-					<li v-for="items in extraAttributes">{{items.decs}}：{{items.value}}</li>
+					<li :key="items.decs" v-for="items in extraAttributes">{{items.decs}}：{{items.value}}</li>
 				</ul>
 			</div>
 			<div class="equipments">
 				<ul>
-					<li v-for="items in equipments">{{items.decs}}：{{items.value}}</li>
+					<li :key="items.decs" v-for="items in equipments">{{items.decs}}：{{items.value}}</li>
 				</ul>
 			</div>
 			<div class="elements">
 				<ul>
-					<li v-for="items in elements">{{items.decs}}：{{items.value}}</li>
+					<li :key="items.decs" v-for="items in elements">{{items.decs}}：{{items.value}}</li>
 				</ul>
 			</div>
 			<div class="buff">
 				<span>状态：</span>
-				<span v-for="items in buff">{{items}}、</span>
+				<span :key="items.decs" v-for="items in buff">{{items}}、</span>
 			</div>
 		</section>
 	</section>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
-	@import '../../less/style';
+	@import '../../style/style';
 
 	.my {
 		padding-bottom: .7rem;
@@ -88,15 +88,15 @@
 
 		.card {
 			margin-top: .15rem;
-			font-size: .16rem;
 
 			justify-content: space-around;
 
 			div {
 				position: relative;
 
-				width: 31%;
+				width: 28.5%;
 				padding: .12rem;
+				max-width: 175px;
 
 				.br(15px);
 				.cw;

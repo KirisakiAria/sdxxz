@@ -10,7 +10,7 @@
 			<p>请选择特长</p>
 			<div class="group">
 				<ul>
-					<li v-for="item in specialitArray">
+					<li :key="speciality" v-for="item in specialitArray">
 						<button @click="setSpeciality(item.speciality,item.spid)">{{ item.speciality }}</button>
 					</li>
 				</ul>
@@ -20,7 +20,7 @@
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
-	@import '../less/style';
+	@import '../style/style';
 	.start {
 		.col;
 

@@ -10,7 +10,7 @@
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
-	@import '../../less/style';
+	@import "../../style/style";
 
 	.footer {
 

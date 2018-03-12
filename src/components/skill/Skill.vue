@@ -9,9 +9,9 @@
 		<section class="content">
 			<p class="tips">tips：深色背景为尚未学习的技能，点击学习</p>
 			<transition name="slide2-fade" mode="out-in">
-				<div :key="damage" v-if="show.damage" class="damageSkillsList">
+				<div v-if="show.damage" class="damageSkillsList">
 					<ul>
-						<li :class="{no:!item.learned}" v-for="item in damageSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList">
 							<div class="top">
 								<span>{{item.name}}</span>
 								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -23,9 +23,9 @@
 						</li>
 					</ul>
 				</div>
-				<div :key="cure" v-if="show.cure" class="cureSkillsList">
+				<div v-if="show.cure" class="cureSkillsList">
 					<ul>
-						<li :class="{no:!item.learned}" v-for="item in cureSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList">
 							<div class="top">
 								<span>{{item.name}}</span>
 								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -37,9 +37,9 @@
 						</li>
 					</ul>
 				</div>
-				<div :key="buff" v-if="show.buff" class="buffSkillsList">
+				<div v-if="show.buff" class="buffSkillsList">
 					<ul>
-						<li :class="{no:!item.learned}" v-for="item in buffSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList">
 							<div class="top">
 								<span>{{item.name}}</span>
 								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -51,9 +51,9 @@
 						</li>
 					</ul>
 				</div>
-				<div :key="passive" v-if="show.passive" class="passiveSkillsList">
+				<div v-if="show.passive" class="passiveSkillsList">
 					<ul>
-						<li :class="{no:!item.learned}" v-for="item in passiveSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList">
 							<div class="top">
 								<span>{{item.name}}</span>
 							</div>
@@ -69,7 +69,7 @@
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
-	@import '../../less/style';
+	@import "../../style/style";
 
 	.skill {
 

@@ -93,9 +93,9 @@
                     <section class="content">
                         <p>点击使用技能</p>
                         <transition name="slide2-fade" mode="out-in">
-                            <div :key="damage" v-if="show.skillPanleList.damage" class="damageSkillsList">
+                            <div v-if="show.skillPanleList.damage" class="damageSkillsList">
                                 <ul>
-                                    <li v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy',item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy',item.sid)">
                                         <div class="top">
                                             <span>{{item.name}}</span>
                                             <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -107,9 +107,9 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div :key="cure" v-if="show.skillPanleList.cure" class="cureSkillsList">
+                            <div v-if="show.skillPanleList.cure" class="cureSkillsList">
                                 <ul>
-                                    <li v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player',item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player',item.sid)">
                                         <div class="top">
                                             <span>{{item.name}}</span>
                                             <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -121,9 +121,9 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div :key="buff" v-if="show.skillPanleList.buff" class="buffSkillsList">
+                            <div v-if="show.skillPanleList.buff" class="buffSkillsList">
                                 <ul>
-                                    <li v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid(item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid(item.sid)">
                                         <div class="top">
                                             <span>{{item.name}}</span>
                                             <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -135,9 +135,9 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div :key="passive" v-if="show.skillPanleList.passive" class="passiveSkillsList">
+                            <div v-if="show.skillPanleList.passive" class="passiveSkillsList">
                                 <ul>
-                                    <li v-if="item.learned" v-for="item in passiveSkillsList">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in passiveSkillsList">
                                         <div class="top">
                                             <span>{{item.name}}</span>
                                         </div>
@@ -156,7 +156,7 @@
     </section>
 </template>
 <style scoped lang="less" rel="stylesheet/less">
-    @import "../../less/style";
+    @import "../../style/style";
 
     .skillPanel {
         position: fixed;
@@ -282,6 +282,7 @@
             .card div {
                 position: relative;
                 width: 40%;
+                max-width: 150px;
                 padding: 0.15rem;
                 background: #70a1ff;
                 border-radius: 15px;

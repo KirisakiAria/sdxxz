@@ -6,7 +6,7 @@
 					<div class="head">{{item.level}}</div>
 					<div class="content">
 						<ul>
-							<li v-for="key in item.list">
+							<li :key="list" v-for="key in item.list">
 								<div class="ib">
 									<div class="top">
 										<span>{{key.baseAttributes.name.value}}</span>
@@ -29,7 +29,7 @@
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
-	@import '../../less/style';
+	@import "../../style/style";
 
 	.practice {
 		.head {
