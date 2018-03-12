@@ -2,7 +2,7 @@ let state = {
 	damageSkills: {
 		sand: {
 			sid: 0,
-			learned: false,
+			learned: true,
 			name: '扬沙',
 			desc: '抓起一把沙子扬过去，对敌方造成40点风属性伤害，并减少对方5点命中。',
 			consume: 60,
@@ -145,7 +145,7 @@ let state = {
 	cureSkills: {
 		buy: {
 			sid: 6,
-			learned: false,
+			learned: true,
 			name: '+1',
 			desc: '+1使我神清气爽，恢复60点生命。',
 			consume: 80,
@@ -175,7 +175,7 @@ let state = {
 	buffSkills: {
 		login: {
 			sid: 8,
-			learned: false,
+			learned: true,
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%17，物防、魔防提升%10，命中提升%40，暴击、闪避提升%10，持续两回合',
 			consume: 60,

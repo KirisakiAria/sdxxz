@@ -141,16 +141,6 @@
 					arr.push(e);
 				});
 				return arr;
-			},
-			//比较技能的sid，检查技能是否已学习，标记为不同颜色
-			checkSkills: function(list1, list2) {
-				list1.forEach(e => {
-					list2.forEach(he => {
-						if (e.sid == he.sid) {
-							e.learned = true;
-						}
-					});
-				});
 			}
 		},
 		computed: {
@@ -162,22 +152,7 @@
 			},
 			buffSkillsList: function() {
 				return this.getSkillsArr('buffSkills');
-			},
-			haveLearnedDamageSkillsList: function() {
-				return this.$store.state.player.battleSkills.damageSkills;
-			},
-			haveLearnedCureSkillsList: function() {
-				return this.$store.state.player.battleSkills.cureSkills;
-			},
-			haveLearnedBuffSkillsList: function() {
-				return this.$store.state.player.battleSkills.buffSkills;
 			}
-		},
-		created() {
-			//检查技能是否已经学习
-			this.checkSkills(this.damageSkillsList, this.haveLearnedDamageSkillsList);
-			this.checkSkills(this.cureSkillsList, this.haveLearnedCureSkillsList);
-			this.checkSkills(this.buffSkillsList, this.haveLearnedBuffSkillsList);
 		}
 	}
 	</script>

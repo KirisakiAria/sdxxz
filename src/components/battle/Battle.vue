@@ -106,7 +106,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div key="cure" v-if="show.skillPanleList.cure" class="cureSkillsList" @click="useCureSkill('target',item.sid)">
+                            <div key="cure" v-if="show.skillPanleList.cure" class="cureSkillsList" @click="useCureSkill('player',item.sid)">
                                 <ul>
                                     <li v-if="item.learned" v-for="item in cureSkillsList">
                                         <div class="top">
@@ -327,8 +327,23 @@
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
             },
+            consume: function (skill, panel) {
+                if (skill.consumeType.value == 1) {
+                    if (panel.mp - skill.consume >= 0) {
+                        panel.mp -= skill.consume
+                    } else {
+                        return alert('发动技能失败，魔法不足')
+                    }
+                } else {
+                    if (panel.hp - skill.consume >= 0) {
+                        panel.hp -= skill.consume
+                    } else {
+                        return alert('发动技能失败，血量不足')
+                    }
+                }
+            },
             //计算伤害
-            //四个参数分别为攻击类型、发起攻击者、被攻击者、技能
+            //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
             calculateDamage: function (type, attacker, target, skill) {
                 let panel = this[`${target}Panel`];
                 let losingHp = 0;
@@ -341,6 +356,9 @@
                         0.4);
                     losingHp = atkValue - defValue;
                 } else {
+                    //首先计算是否能发动技能
+                    let panel = this[`${attacker}Panel`];
+                    this.consume(skill, panel);
                     let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
                     let resCache = this.getValue(target, 'extraAttributes', 'res');
                     let attackerElements = {
@@ -357,21 +375,6 @@
                         wind: this.getValue(target, 'elements', 'wind'),
                         earth: this.getValue(target,
                             'elements', 'earth'),
-                    }
-                    let panel = this[`${attacker}Panel`];
-                    //首先计算是否能发动技能
-                    if (skill.consumeType.value == 1) {
-                        if (panel.mp - skill.consume >= 0) {
-                            panel.mp -= skill.consume
-                        } else {
-                            return alert('发动技能失败，魔法不足')
-                        }
-                    } else {
-                        if (panel.hp - skill.consume >= 0) {
-                            panel.hp -= skill.consume
-                        } else {
-                            return alert('发动技能失败，血量不足')
-                        }
                     }
                     //伤害数值、伤害元素类型、是否无视魔防
                     //元素伤害固定为魔攻的50%
@@ -423,8 +426,10 @@
                 }
             },
             //计算治疗量
-            calculateCure: function () {
-
+            //参数为发动技能者，技能
+            calculateCure: function (target, skill) {
+                let panel = this[`${target}Panel`];
+                this.consume(skill);
             },
             //每回合回复
             recover: function () {
@@ -462,13 +467,20 @@
                         skill = e;
                     }
                 });
-                this.calculateDamage(2, attacker, target, skill);
                 this.toggleSkillsPanel();
+                this.calculateDamage(2, attacker, target, skill);
+                this.roundCount();
             },
             //发动治疗技能
-            useCureSkill: function (sid) {
-
+            useCureSkill: function (target, sid) {
+                let skill = null;
+                this.cureSkillsList.forEach(e => {
+                    if (e.sid == sid) {
+                        skill = e;
+                    }
+                });
                 this.toggleSkillsPanel();
+                this.calculateCure(target, skill);
             },
             //发动增/减益技能
             useBuffSkill: function (sid) {
@@ -510,16 +522,6 @@
                     arr.push(e);
                 });
                 return arr;
-            },
-            //检查已学会的技能
-            checkSkills: function (list1, list2) {
-                list1.forEach(e => {
-                    list2.forEach(he => {
-                        if (e.sid == he.sid) {
-                            e.learned = true;
-                        }
-                    });
-                });
             },
             //获取vuex中的数据
             getValue: function (target, type, property) {
@@ -580,15 +582,6 @@
             },
             buffSkillsList: function () {
                 return this.getSkillsArr('buffSkills');
-            },
-            haveLearnedDamageSkillsList: function () {
-                return this.$store.state.player.battleSkills.damageSkills;
-            },
-            haveLearnedCureSkillsList: function () {
-                return this.$store.state.player.battleSkills.cureSkills;
-            },
-            haveLearnedBuffSkillsList: function () {
-                return this.$store.state.player.battleSkills.buffSkills;
             }
         },
         watch: {
@@ -632,12 +625,6 @@
                 },
                 deep: true
             }
-        },
-        created() {
-            //检查技能是否已经学习
-            this.checkSkills(this.damageSkillsList, this.haveLearnedDamageSkillsList);
-            this.checkSkills(this.cureSkillsList, this.haveLearnedCureSkillsList);
-            this.checkSkills(this.buffSkillsList, this.haveLearnedBuffSkillsList);
         },
         mounted() {
             this.battleStart();

@@ -165,19 +165,6 @@ let state = {
 	debuff: {
 		slience: false,
 		disarm: false
-	},
-	survivalSkills: [],
-	battleSkills: {
-		damageSkills: [{
-			sid: 0,
-			name: '扬沙'
-		}],
-		cureSkills: [{
-			sid: 6,
-			name: '+1'
-		}],
-		buffSkills: [],
-		passiveSkills: []
 	}
 }
 
