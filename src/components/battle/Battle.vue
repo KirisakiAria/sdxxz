@@ -307,7 +307,6 @@
     }
 </style>
 <script>
-    
     export default {
         name: 'Battle',
         data() {
