@@ -307,8 +307,7 @@
     }
 </style>
 <script>
-    import anime from 'animejs'
-
+    
     export default {
         name: 'Battle',
         data() {
@@ -328,12 +327,6 @@
                     skillPanel: false
                 }
             };
-        },
-        created() {
-            this.$store.commit(`enemy/changeBaseValue`, {
-                propety: 'hp',
-                value: 10
-            });
         },
         methods: {
             //初始化战斗
@@ -447,7 +440,8 @@
                     }
                 }
                 let hpCache = this.changeValue(0, tarPanel.hp, losingHp);
-                this.$store.commit(`${target}/changeBaseValue`, {
+                let namespace = this[`${target}Namespace`];
+                this.$store.commit(`${namespace}/changeBaseValue`, {
                     propety: 'hp',
                     value: hpCache
                 });
@@ -595,7 +589,7 @@
                 });
                 return arr;
             },
-            //获取vuex中的数据
+            //获取数据
             getValue: function (target, type, property) {
                 return this[target][type][property].value;
             },
@@ -624,11 +618,18 @@
         // 	'enemy'
         // ],
         computed: {
+            //用来获取不同命名空间的同名方法以便提交
+            playerNamespace: function () {
+                return this.$store.state.player.baseAttributes.namespace;
+            },
+            enemyNamespace: function () {
+                return this.$store.state.villageC.baseAttributes.namespace;
+            },
             player: function () {
                 return this.$store.state.player;
             },
             enemy: function () {
-                return this.$store.state.enemy.villageC.state;
+                return this.$store.state.villageC;
             },
             //战斗的生命、魔法皆从面板中计算，战斗结束统一提交
             //玩家面板
@@ -664,15 +665,6 @@
             }
         },
         watch: {
-            'enemyPanel.hp': function (newValue, oldValue) {
-                console.log(1)
-                // let JSobjectProp = anime({
-                //     targets: playerPanel,
-                //     hp: newValue,
-                //     easing: 'linear',
-                //     round: 1
-                // });
-            },
             //监听回合
             round: {
                 handler(newValue, oldValue) {

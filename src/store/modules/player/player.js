@@ -39,7 +39,8 @@ let state = {
 		maxmp: {
 			decs: '魔法总量',
 			value: 150,
-		}
+		},
+		namespace:'player'
 	},
 	extraAttributes: {
 		hps: {

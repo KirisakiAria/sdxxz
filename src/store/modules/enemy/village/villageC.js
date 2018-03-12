@@ -1,6 +1,7 @@
 let state = {
 	baseAttributes: {
 		eid: 0,
+		namespace:'villageC',
 		name: {
 			decs: '姓名',
 			value: '傻屌村小傻屌'
