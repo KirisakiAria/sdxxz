@@ -2,11 +2,11 @@ let state = {
 	baseAttributes: {
 		name: {
 			decs: '姓名',
-			value: '奶子！'
+			value: '测试'
 		},
 		title: {
 			decs: '称号',
-			value: '绅士'
+			value: '测试'
 		},
 		level: {
 			decs: '等级',
@@ -25,14 +25,20 @@ let state = {
 			value: 0
 		},
 		hp: {
-			decs: '生命',
+			decs: '当前生命',
 			value: 200,
-			grow: 35
 		},
 		mp: {
-			decs: '魔法',
+			decs: '当前魔法',
 			value: 150,
-			grow: 25
+		},
+		maxhp: {
+			decs: '生命总量',
+			value: 200,
+		},
+		maxmp: {
+			decs: '魔法总量',
+			value: 150,
 		}
 	},
 	extraAttributes: {
@@ -79,7 +85,7 @@ let state = {
 		},
 		spd: {
 			decs: '速度',
-			value: 5,
+			value: 3,
 			grow: 0.4
 		},
 		chr: {
@@ -169,18 +175,11 @@ let state = {
 }
 
 const mutations = {
-	changeUsername(state, payload) {
-		state.baseAttributes.name.value = payload.value;
+	changeBaseValue(state, payload) {
+		state.baseAttributes[payload.propety]['value'] = payload.value;
 	},
-	chooseSpeciality(state, payload) {
-		state.baseAttributes.speciality.value = payload.speciality;
-		state.baseAttributes.spid.value = payload.spid;
-	},
-	changeExp(state, payload) {
-		state.baseAttributes.exp.value = payload.value;
-	},
-	changeLevel(state, payload) {
-		state.baseAttributes.level.value = payload.value;
+	changeExtValue(state, payload) {
+		state.extraAttributes[payload.propety]['value'] = payload.value;
 	}
 }
 

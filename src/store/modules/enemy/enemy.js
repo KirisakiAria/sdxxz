@@ -10,10 +10,6 @@ let state = {
 	villageS
 }
 
-const mutations = {
-
-}
-
 export default {
 	state
 }

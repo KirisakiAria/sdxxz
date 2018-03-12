@@ -84,14 +84,19 @@
 		},
 		methods: {
 			changeUsername() {
-				this.$store.commit('player/changeUsername', {
+				this.$store.commit('player/changeBaseValue', {
+					propety: 'name',
 					value: this.username
 				});
 			},
 			setSpeciality: function (speciality, spid) {
-				this.$store.commit('player/chooseSpeciality', {
-					speciality: speciality,
-					spid: spid
+				this.$store.commit('player/changeBaseValue', {
+					propety: 'spid',
+					value: spid
+				});
+				this.$store.commit('player/changeBaseValue', {
+					propety: 'speciality',
+					value: speciality
 				});
 				if (this.username != '') {
 					this.goStart();

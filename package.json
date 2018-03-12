@@ -7,7 +7,7 @@
     "test": "mocha",
     "dev": "webpack-dev-server --open --inline --config build/webpack.dev.config.js",
     "build": "node build/build.js",
-    "start":"electron ."
+    "start": "electron ."
   },
   "repository": "https://github.com/kirisakiaria/sdxxz",
   "author": "",

@@ -2,7 +2,8 @@
 	<section class="my mainSection">
 		<section class="top cw">
 			<div class="avatar">
-				<img :src="img.avatar"></div>
+				<img :src="img.avatar">
+			</div>
 			<h4 class="tac">{{baseAttributes[0].value}}</h4>
 			<h6 class="tac">称号:{{baseAttributes[1].value}}</h6>
 		</section>
@@ -14,11 +15,11 @@
 				</div>
 				<div class="hp">
 					<span>生命</span>
-					<span>{{baseAttributes[6].value}}</span>
+					<span>{{baseAttributes[6].value}}/{{baseAttributes[8].value}}</span>
 				</div>
 				<div class="mp">
 					<span>魔法</span>
-					<span>{{baseAttributes[7].value}}</span>
+					<span>{{baseAttributes[7].value}}/{{baseAttributes[9].value}}</span>
 				</div>
 			</div>
 			<div class="attributes">
@@ -47,122 +48,106 @@
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../../less/style';
 
-	.my
-	{
-	    padding-bottom: .7rem;
+	.my {
+		padding-bottom: .7rem;
 
-	    .top
-	    {
-	        padding: .2rem 0;
+		.top {
+			padding: .2rem 0;
 
-	        background-image: url(../../assets/images/bg.png);
-	        background-size: cover;
-	    }
+			background-image: url(../../assets/images/bg.png);
+			background-size: cover;
+		}
 
-	    .avatar
-	    {
-	        width: .8rem;
-	        height: .8rem;
-	        margin: auto;
-	        overflow:hidden;
+		.avatar {
+			width: .8rem;
+			height: .8rem;
+			margin: auto;
+			overflow: hidden;
 
-	        background: #fff;
+			background: #fff;
 
-	        .br(50%);
-	    }
+			.br(50%);
+		}
 
-	    h4,
-	    h5
-	    {
-	        margin-top: .15rem;
-	        margin-bottom: .15rem;
-	    }
+		h4,
+		h5 {
+			margin-top: .15rem;
+			margin-bottom: .15rem;
+		}
 
-	    .card,
-	    .attributes,
-	    .equipments,
-	    .elements,
-	    .buff
-	    {
-	        display: flex;
-			
-	        text-align: center;
-	        padding: .1rem .15rem;
-	    }
+		.card,
+		.attributes,
+		.equipments,
+		.elements,
+		.buff {
+			display: flex;
 
-	    .card
-	    {
-	        margin-top: .15rem;
-	        font-size: .16rem;
+			text-align: center;
+			padding: .1rem .12rem;
+		}
 
-	        justify-content: space-around;
+		.card {
+			margin-top: .15rem;
+			font-size: .16rem;
 
-	        div
-	        {
-	            position: relative;
+			justify-content: space-around;
 
-	            width: 28%;
-	            padding: .15rem;
+			div {
+				position: relative;
 
-	            .br(15px);
-	            .cw;
+				width: 31%;
+				padding: .12rem;
 
-	            span
-	            {
-	                display: block;
+				.br(15px);
+				.cw;
 
-	                text-align: center;
+				span {
+					display: block;
 
-	                &:last-of-type
-	                {
-	                    font-weight: bold;
+					text-align: center;
 
-	                    margin-top: .15rem;
-	                }
-	            }
+					&:last-of-type {
+						font-weight: bold;
 
-	            &.level
-	            {
-	                background: #a4b0be;
-	            }
+						margin-top: .15rem;
+					}
+				}
 
-	            &.hp
-	            {
-	                background: #ff6b81;
-	            }
+				&.level {
+					background: #a4b0be;
+				}
 
-	            &.mp
-	            {
-	                background: #70a1ff;
-	            }
-	        }
-	    }
+				&.hp {
+					background: #ff6b81;
+				}
 
-	    ul
-	    {
-			width:100%;
-	        box-shadow: 4px 4px 12px rgba(164, 176, 190,.4);
-	        display: flex;
-	        flex-wrap:wrap;
+				&.mp {
+					background: #70a1ff;
+				}
+			}
+		}
 
-	        .br;
-	        li
-	        {
-	        	text-align: left;
-	            color: #747d8c;
-	            width: 50%;
-	            padding: .12rem;
-	            padding-left: .3rem;
-	        }
-	    }
+		ul {
+			width: 100%;
+			box-shadow: 4px 4px 12px rgba(164, 176, 190, .4);
+			display: flex;
+			flex-wrap: wrap;
 
-	    .buff
-	    {
-	        color: #ff6348;
-	        justify-content: center;
-	    }
+			.br;
+			li {
+				text-align: left;
+				color: #747d8c;
+				width: 50%;
+				padding: .12rem;
+				padding-left: .3rem;
+			}
+		}
+
+		.buff {
+			color: #ff6348;
+			justify-content: center;
+		}
 	}
-
 </style>
 
 <script>
@@ -175,12 +160,12 @@
 			return {
 				img: {
 					avatar: avatarImg,
-					bg:bgImg
+					bg: bgImg
 				}
 			}
 		},
 		methods: {
-			getPlayerArr: function(origin) {
+			getPlayerArr: function (origin) {
 				let [arr, attribute] = [
 					[], this.$store.state.player[origin]
 				];
@@ -191,19 +176,19 @@
 			}
 		},
 		computed: {
-			baseAttributes: function() {
+			baseAttributes: function () {
 				return this.getPlayerArr('baseAttributes');
 			},
-			extraAttributes: function() {
+			extraAttributes: function () {
 				return this.getPlayerArr('extraAttributes');
 			},
-			equipments: function() {
+			equipments: function () {
 				return this.getPlayerArr('equipments');
 			},
-			elements: function() {
+			elements: function () {
 				return this.getPlayerArr('elements');
 			},
-			buff: function() {
+			buff: function () {
 				return this.$store.state.player.buff;
 			}
 		}

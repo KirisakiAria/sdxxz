@@ -1,6 +1,6 @@
-export default {
+let state = {
 	baseAttributes: {
-		eid:0,
+		eid: 0,
 		name: {
 			decs: '姓名',
 			value: '傻屌村小傻屌'
@@ -19,6 +19,14 @@ export default {
 		},
 		mp: {
 			decs: '魔法',
+			value: 0
+		},
+		maxhp: {
+			decs: '生命总量',
+			value: 120
+		},
+		maxmp: {
+			decs: '魔法总量',
 			value: 0
 		},
 		exp: {
@@ -57,7 +65,7 @@ export default {
 		},
 		hit: {
 			decs: '命中',
-			value: 30
+			value: 35
 		},
 		spd: {
 			decs: '速度',
@@ -86,11 +94,20 @@ export default {
 			value: 0
 		}
 	},
-	buff: [],
-	battleSkills: {
-		damageSkills: null,
-		cureSkills: null,
-		buffSkills: null,
-		passiveSkills: null
+	buff: []
+}
+
+const mutations = {
+	changeBaseValue(state, payload) {
+		state.baseAttributes[payload.propety]['value'] = payload.value;
+	},
+	changeExtValue(state, payload) {
+		state.extraAttributes[payload.propety]['value'] = payload.value;
 	}
+}
+
+export default {
+	state,
+	mutations,
+	namespaced: true
 }
