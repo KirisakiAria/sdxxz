@@ -36,14 +36,6 @@ let state = {
 		}
 	},
 	extraAttributes: {
-		hps: {
-			decs: '回血',
-			value: 4
-		},
-		mps: {
-			decs: '回蓝',
-			value: 0
-		},
 		atk: {
 			decs: '物攻',
 			value: 30

@@ -17,15 +17,15 @@
                     <div class="con card tac">
                         <div class="hp">
                             <span class="title">生命</span>
-                            <span>{{enemyPanel.hp}}</span>
+                            <span>{{enemyRegularData.hp}}</span>
                             <span>/</span>
-                            <span>{{enemyPanel.maxhp}}</span>
+                            <span>{{enemyRegularData.maxhp}}</span>
                         </div>
                         <div class="mp">
                             <span class="title">魔法</span>
-                            <span>{{enemyPanel.mp}}</span>
+                            <span>{{enemyRegularData.mp}}</span>
                             <span>/</span>
-                            <span>{{enemyPanel.maxmp}}</span>
+                            <span>{{enemyRegularData.maxmp}}</span>
                         </div>
                     </div>
                 </div>
@@ -50,15 +50,15 @@
                     <div class="con card tac">
                         <div class="hp">
                             <span class="title">生命</span>
-                            <span>{{playerPanel.hp}}</span>
+                            <span>{{playerRegularData.hp}}</span>
                             <span>/</span>
-                            <span>{{playerPanel.maxhp}}</span>
+                            <span>{{playerRegularData.maxhp}}</span>
                         </div>
                         <div class="mp">
                             <span class="title">魔法</span>
-                            <span>{{playerPanel.mp}}</span>
+                            <span>{{playerRegularData.mp}}</span>
                             <span>/</span>
-                            <span>{{playerPanel.maxmp}}</span>
+                            <span>{{playerRegularData.maxmp}}</span>
                         </div>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                     <section class="content">
                         <p>点击使用技能</p>
                         <transition name="slide2-fade" mode="out-in">
-                            <div v-if="show.skillPanleList.damage" class="damageSkillsList">
+                            <div key="damageSkillsList" v-if="show.skillPanleList.damage" class="damageSkillsList">
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy',item.sid)">
                                         <div class="top">
@@ -107,7 +107,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div v-if="show.skillPanleList.cure" class="cureSkillsList">
+                            <div key="cureSkillsList" v-if="show.skillPanleList.cure" class="cureSkillsList">
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player',item.sid)">
                                         <div class="top">
@@ -121,7 +121,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div v-if="show.skillPanleList.buff" class="buffSkillsList">
+                            <div key="buffSkillsList" v-if="show.skillPanleList.buff" class="buffSkillsList">
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid(item.sid)">
                                         <div class="top">
@@ -135,7 +135,7 @@
                                     </li>
                                 </ul>
                             </div>
-                            <div v-if="show.skillPanleList.passive" class="passiveSkillsList">
+                            <div key="passiveSkillsList" v-if="show.skillPanleList.passive" class="passiveSkillsList">
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in passiveSkillsList">
                                         <div class="top">
@@ -148,10 +148,13 @@
                                 </ul>
                             </div>
                         </transition>
-                        <button @click="toggleSkillsPanel()">返回</button>
+                        <button @click="toggleSkillsPanel">返回</button>
                     </section>
                 </div>
             </section>
+        </transition>
+        <transition name="scale-fade" mode="out-in">
+            <Tips :content="tipsData" v-if="show.tips" @closeTips="closeTips"></Tips>
         </transition>
     </section>
 </template>
@@ -308,6 +311,8 @@
     }
 </style>
 <script>
+    import Tips from '../tips/Tips';
+
     export default {
         name: 'Battle',
         data() {
@@ -324,8 +329,10 @@
                         buff: false,
                         passive: false
                     },
-                    skillPanel: false
-                }
+                    skillPanel: false,
+                    tips: false
+                },
+                tipsData: ''
             };
         },
         methods: {
@@ -352,14 +359,11 @@
                 this.round.num++;
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
-                if (this.round.num % 2 == 0) {
-                    this.recover();
-                }
             },
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
             calculateDamage: function (type, attacker, target, skill) {
-                let tarPanel = this[`${target}Panel`];
+                let tarPanel = this[`${target}RegularData`];
                 let losingHp = 0;
                 let defCache = this.getValue(target, 'extraAttributes', 'def');
                 if (type === 1) {
@@ -370,9 +374,10 @@
                     losingHp = atkValue - defValue;
                 } else {
                     //首先计算是否有足够血量/魔法能发动技能
-                    let atkPanel = this[`${attacker}Panel`];
-                    let ifEnough = this.consume(skill, atkPanel);
-                    if (ifEnough === 1) {
+                    let atkPanel = this[`${attacker}RegularData`];
+                    let atkNamespace = this[`${attacker}Namespace`];
+                    let ifEnough = this.consume(skill, atkPanel, atkNamespace);
+                    if (ifEnough) {
                         let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
                         let resCache = this.getValue(target, 'extraAttributes', 'res');
                         let attackerElements = {
@@ -436,12 +441,12 @@
                         }
                         this.toggleSkillsPanel();
                     } else {
-                        return alert(ifEnough);
+                        return false;
                     }
                 }
                 let hpCache = this.changeValue(0, tarPanel.hp, losingHp);
-                let namespace = this[`${target}Namespace`];
-                this.$store.commit(`${namespace}/changeBaseValue`, {
+                let tarNamespace = this[`${target}Namespace`];
+                this.$store.commit(`${tarNamespace}/changeBaseValue`, {
                     propety: 'hp',
                     value: hpCache
                 });
@@ -450,47 +455,57 @@
             //计算治疗量
             //参数为发动技能者，技能
             calculateCure: function (target, skill) {
-                let panel = this[`${target}Panel`];
-                let ifEnough = this.consume(skill, panel);
-                if (ifEnough === 1) {
+                let regularData = this[`${target}RegularData`];
+                let namespace = this[`${target}Namespace`];
+                let ifEnough = this.consume(skill, regularData, namespace);
+                let cache = 0;
+                let property = '';
+                if (ifEnough) {
+                    //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
                     if (skill.consumeType.value === 1) {
-                        panel.hp = this.changeValue(1, panel.hp, skill.effect.cure, panel.maxhp)
+                        property = 'hp';
+                        let cache = this.changeValue(1, regularData.hp, skill.effect.cure, regularData.maxhp)
                     } else {
-                        panel.mp = this.changeValue(1, panel.mp, skill.effect.cure, panel.maxmp)
+                        property = 'mp';
+                        let cache = this.changeValue(1, regularData.mp, skill.effect.cure, regularData.maxmp)
                     }
+                    this.$store.commit(`${namespace}/changeBaseValue`, {
+                        propety: property,
+                        value: cache
+                    });
                 } else {
-                    return alert(ifEnough);
+                    return false;
                 }
                 this.toggleSkillsPanel();
                 this.roundCount();
             },
-            //每回合回复
-            recover: function () {
-                let playerHpsCache = this.getValue('player', 'extraAttributes', 'hps');
-                let playerMpsCache = this.getValue('player', 'extraAttributes', 'mps');
-                let enemyHpsCache = this.getValue('enemy', 'extraAttributes', 'hps');
-                let enemyMpsCache = this.getValue('enemy', 'extraAttributes', 'mps');
-                //玩家
-                this.playerPanel.hp = this.changeValue(1, this.playerPanel.hp, playerHpsCache, this.playerPanel.maxhp);
-                this.playerPanel.mp = this.changeValue(1, this.playerPanel.mp, playerMpsCache, this.playerPanel.maxmp);
-                //敌方
-                this.enemyPanel.hp = this.changeValue(1, this.enemyPanel.hp, playerHpsCache, this.enemyPanel.maxhp);
-                this.enemyPanel.mp = this.changeValue(1, this.enemyPanel.mp, playerMpsCache, this.enemyPanel.maxmp);
-            },
-            consume: function (skill, panel) {
+            //施放技能后的魔法/生命消耗操作
+            consume: function (skill, regularData, namespace) {
                 if (skill.consumeType.value == 1) {
-                    if (panel.mp - skill.consume >= 0) {
-                        panel.mp -= skill.consume;
-                        return 1;
+                    if (regularData.mp - skill.consume >= 0) {
+                        let consumeValue = regularData.mp - skill.consume;
+                        this.$store.commit(`${namespace}/changeBaseValue`, {
+                            propety: 'mp',
+                            value: consumeValue
+                        });
+                        return true;
                     } else {
-                        return '发动技能失败，魔法不足';
+                        this.tipsData = '魔法不足';
+                        this.show.tips = true;
+                        return false;
                     }
                 } else {
-                    if (panel.hp - skill.consume >= 0) {
-                        panel.hp -= skill.consume;
-                        return 1;
+                    if (regularData.hp - skill.consume >= 0) {
+                        let consumeValue = regularData.hp - skill.consume;
+                        this.$store.commit(`${namespace}/changeBaseValue`, {
+                            propety: 'hp',
+                            value: consumeValue
+                        });
+                        return true;
                     } else {
-                        return '发动技能失败，血量不足';
+                        this.tipsData = '生命不足';
+                        this.show.tips = true;
+                        return false;
                     }
                 }
             },
@@ -563,7 +578,7 @@
                 if (random > escapeRate) {
                     alert('逃跑失败！');
                 } else {
-                    this.$emit('close');
+                    this.$emit('closeBattle');
                 }
             },
             auto: function () {
@@ -612,6 +627,9 @@
                         return 0;
                         break;
                 }
+            },
+            closeTips: function () {
+                this.show.tips = false;
             }
         },
         // props: [
@@ -631,9 +649,8 @@
             enemy: function () {
                 return this.$store.state.villageC;
             },
-            //战斗的生命、魔法皆从面板中计算，战斗结束统一提交
-            //玩家面板
-            playerPanel: function () {
+            //玩家生命、魔法信息,几个量比较常用，设置此对象用来快速获取
+            playerRegularData: function () {
                 return {
                     hp: this.getValue('player', 'baseAttributes', 'hp'),
                     mp: this.getValue('player', 'baseAttributes', 'mp'),
@@ -641,8 +658,8 @@
                     maxmp: this.getValue('player', 'baseAttributes', 'maxmp')
                 };
             },
-            //敌人面板
-            enemyPanel: function () {
+            //敌人生命、魔法信息
+            enemyRegularData: function () {
                 return {
                     hp: this.getValue('enemy', 'baseAttributes', 'hp'),
                     mp: this.getValue('enemy', 'baseAttributes', 'mp'),
@@ -668,14 +685,13 @@
             //监听回合
             round: {
                 handler(newValue, oldValue) {
-                    let [pHp, eHp] = [this.playerPanel.hp, this.enemyPanel.hp];
+                    let [pHp, eHp] = [this.playerRegularData.hp, this.enemyRegularData.hp];
                     //死亡
                     if (!pHp) {
-                        alert('失败！');
-                        this.$emit('close');
+                        this.tipsData = 'gg';
+                        this.$emit('closeBattle');
                         //获胜
                     } else if (!eHp) {
-                        alert('获胜');
                         //经验获取、升级
                         let [ownedExp, gotExp, levelUpExp] = [
                             this.player.baseAttributes.exp.value,
@@ -697,13 +713,16 @@
                         this.$store.commit('player/changeLevel', {
                             value: level
                         });
-                        this.$emit('close');
+                        this.$emit('closeBattle');
                     } else if (newValue.enemy) {
                         this.enemyAction();
                     }
                 },
                 deep: true
             }
+        },
+        components: {
+            Tips
         },
         mounted() {
             this.battleStart();

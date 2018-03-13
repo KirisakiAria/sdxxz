@@ -9,7 +9,7 @@
 		<section class="content">
 			<p class="tips">tips：深色背景为尚未学习的技能，点击学习</p>
 			<transition name="slide2-fade" mode="out-in">
-				<div v-if="show.damage" class="damageSkillsList">
+				<div key="damageSkillsList" v-if="show.damage" class="damageSkillsList">
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList">
 							<div class="top">
@@ -23,7 +23,7 @@
 						</li>
 					</ul>
 				</div>
-				<div v-if="show.cure" class="cureSkillsList">
+				<div key="cureSkillsList" v-if="show.cure" class="cureSkillsList">
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList">
 							<div class="top">
@@ -37,7 +37,7 @@
 						</li>
 					</ul>
 				</div>
-				<div v-if="show.buff" class="buffSkillsList">
+				<div key="buffSkillsList" v-if="show.buff" class="buffSkillsList">
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList">
 							<div class="top">
@@ -51,7 +51,7 @@
 						</li>
 					</ul>
 				</div>
-				<div v-if="show.passive" class="passiveSkillsList">
+				<div key="passiveSkillsList" v-if="show.passive" class="passiveSkillsList">
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList">
 							<div class="top">

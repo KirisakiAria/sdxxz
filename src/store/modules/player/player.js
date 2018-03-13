@@ -30,7 +30,7 @@ let state = {
 		},
 		mp: {
 			decs: '当前魔法',
-			value: 150,
+			value: 50,
 		},
 		maxhp: {
 			decs: '生命总量',
@@ -43,16 +43,6 @@ let state = {
 		namespace:'player'
 	},
 	extraAttributes: {
-		hps: {
-			decs: '回血',
-			value: 3,
-			grow: .6
-		},
-		mps: {
-			decs: '回蓝',
-			value: 2,
-			grow: .35
-		},
 		atk: {
 			decs: '物攻',
 			value: 25,

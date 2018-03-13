@@ -1,5 +1,7 @@
 <template>
-	<section class="backpack mainSection"></section>
+	<section class="backpack mainSection">
+		
+	</section>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
@@ -7,7 +9,14 @@
 </style>
 
 <script>
+
 	export default {
-		name: 'Backpack'
+		name: 'Backpack',
+		computed: {
+			
+		},
+		components: {
+			
+		}
 	}
 </script>

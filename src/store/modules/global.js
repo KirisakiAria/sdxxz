@@ -9,7 +9,7 @@ const state = {
 }
 
 const mutations = {
-	show: function(state, payload) {
+	show: function (state, payload) {
 		Object.keys(state.show).forEach(e => {
 			if (e !== payload.property) {
 				state.show[e] = false;
