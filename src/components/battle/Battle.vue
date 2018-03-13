@@ -363,7 +363,8 @@
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
             calculateDamage: function (type, attacker, target, skill) {
-                let tarPanel = this[`${target}RegularData`];
+                let tarRegularData = this[`${target}RegularData`];
+                let tarNamespace = this[`${target}Namespace`];
                 let losingHp = 0;
                 let defCache = this.getValue(target, 'extraAttributes', 'def');
                 if (type === 1) {
@@ -374,9 +375,9 @@
                     losingHp = atkValue - defValue;
                 } else {
                     //首先计算是否有足够血量/魔法能发动技能
-                    let atkPanel = this[`${attacker}RegularData`];
+                    let atkRegularData = this[`${attacker}RegularData`];
                     let atkNamespace = this[`${attacker}Namespace`];
-                    let ifEnough = this.consume(skill, atkPanel, atkNamespace);
+                    let ifEnough = this.consume(skill, atkRegularData, atkNamespace);
                     if (ifEnough) {
                         let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
                         let resCache = this.getValue(target, 'extraAttributes', 'res');
@@ -444,8 +445,7 @@
                         return false;
                     }
                 }
-                let hpCache = this.changeValue(0, tarPanel.hp, losingHp);
-                let tarNamespace = this[`${target}Namespace`];
+                let hpCache = this.changeValue(0, tarRegularData.hp, losingHp);
                 this.$store.commit(`${tarNamespace}/changeBaseValue`, {
                     propety: 'hp',
                     value: hpCache
