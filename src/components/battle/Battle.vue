@@ -636,7 +636,7 @@
         // 	'enemy'
         // ],
         computed: {
-            //用来获取不同命名空间的同名方法以便提交
+            //取得命名空间用来commit
             playerNamespace: function () {
                 return this.$store.state.player.baseAttributes.namespace;
             },
@@ -649,7 +649,7 @@
             enemy: function () {
                 return this.$store.state.villageC;
             },
-            //玩家生命、魔法信息,几个量比较常用，设置此对象用来快速获取
+            //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
                 return {
                     hp: this.getValue('player', 'baseAttributes', 'hp'),
