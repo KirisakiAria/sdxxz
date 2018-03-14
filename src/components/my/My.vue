@@ -39,7 +39,6 @@
 			</div>
 			<div class="buff">
 				<span>状态：</span>
-				<span :key="items.decs" v-for="items in buff">{{items}}、</span>
 			</div>
 		</section>
 	</section>
@@ -187,9 +186,6 @@
 			},
 			elements: function () {
 				return this.getPlayerArr('elements');
-			},
-			buff: function () {
-				return this.$store.state.player.buff;
 			}
 		}
 	}
