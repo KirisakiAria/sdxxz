@@ -13,9 +13,10 @@
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList">
 							<div class="top">
-								<span>{{item.name}}</span>
-								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-								<span>伤害类型：{{item.effect.damage.type.name}}</span>
+								<span class="name">{{item.name}}</span>
+								<span class="i1">伤害量：{{item.effect.damage.value}}</span>
+								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
+								<span class="i3">伤害类型：{{item.effect.damage.type.name}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>
@@ -27,9 +28,9 @@
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList">
 							<div class="top">
-								<span>{{item.name}}</span>
-								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-								<span>治疗量：{{item.effect.cure}}</span>
+								<span class="name">{{item.name}}</span>
+								<span class="i1">治疗量：{{item.effect.cure}}</span>
+								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>
@@ -41,9 +42,9 @@
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList">
 							<div class="top">
-								<span>{{item.name}}</span>
-								<span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-								<span>持续回合数：{{item.effect.round}}</span>
+								<span class="name">{{item.name}}</span>
+								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
+								<span class="i3">持续回合数：{{item.effect.round}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>
@@ -55,7 +56,7 @@
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList">
 							<div class="top">
-								<span>{{item.name}}</span>
+								<span class="name">{{item.name}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>
@@ -110,16 +111,32 @@
 				border-top: 1px solid #a5b1c2;
 				border-bottom: 1px solid #a5b1c2;
 
+				.name {
+					display: block;
+					margin-bottom: .1rem;
+					font-weight: bold;
+				}
+				.i1 {
+					color: #ff6b81;
+				}
+				.i2 {
+					color: #1e90ff;
+				}
+				.i3 {
+					color: #487eb0;
+				}
 				&.no {
 					.cw;
 					background: #747d8c;
 					border-color: #747d8c;
+					.i1,
+					.i2,
+					.i3 {
+						color: #fff;
+					}
 				}
-
 				.top {
-
-					margin-bottom: .15rem;
-
+					margin-bottom: .1rem;
 					span {
 						margin-right: .1rem;
 					}

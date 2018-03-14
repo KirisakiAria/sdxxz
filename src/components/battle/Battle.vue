@@ -32,7 +32,7 @@
                 <div class="buff">
                     <h6 class="tac">状态</h6>
                     <div class="con">
-                        <div>无</div>
+
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                 <div class="buff">
                     <h6 class="tac">状态</h6>
                     <div class="con">
-                        <div>无</div>
+                        <span :key="item.name" v-for="item in playerBuffList">{{item.name}}</span>
                     </div>
                 </div>
                 <div class="operation">
@@ -74,7 +74,7 @@
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="attack('player','enemy')">攻击</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="toggleSkillsPanel()">技能</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="items(1)">道具</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="suicide(1)">自杀</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn">占位</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape(1)">逃跑</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="auto(1)">自动</button>
                     </div>
@@ -97,9 +97,10 @@
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy',item.sid)">
                                         <div class="top">
-                                            <span>{{item.name}}</span>
-                                            <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span>伤害类型：{{item.effect.damage.type.name}}</span>
+                                            <span class="name">{{item.name}}</span>
+                                            <span class="i1">伤害量：{{item.effect.damage.value}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
+                                            <span class="i3">伤害类型：{{item.effect.damage.type.name}}</span>
                                         </div>
                                         <div class="bottom">
                                             <p>技能介绍：{{item.desc}}</p>
@@ -111,9 +112,9 @@
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player',item.sid)">
                                         <div class="top">
-                                            <span>{{item.name}}</span>
-                                            <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span>治疗量：{{item.effect.cure}}</span>
+                                            <span class="name">{{item.name}}</span>
+                                            <span class="i1">治疗量：{{item.effect.cure}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
                                         </div>
                                         <div class="bottom">
                                             <p>技能介绍：{{item.desc}}</p>
@@ -123,11 +124,11 @@
                             </div>
                             <div key="buffSkillsList" v-if="show.skillPanleList.buff" class="buffSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid(item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid('player',item.sid)">
                                         <div class="top">
-                                            <span>{{item.name}}</span>
-                                            <span>{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span>持续回合数：{{item.effect.round}}</span>
+                                            <span class="name">{{item.name}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
+                                            <span class="i3">持续回合数：{{item.effect.round}}</span>
                                         </div>
                                         <div class="bottom">
                                             <p>技能介绍：{{item.desc}}</p>
@@ -139,7 +140,7 @@
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in passiveSkillsList">
                                         <div class="top">
-                                            <span>{{item.name}}</span>
+                                            <span class="name">{{item.name}}</span>
                                         </div>
                                         <div class="bottom">
                                             <p>技能介绍：{{item.desc}}</p>
@@ -154,7 +155,7 @@
             </section>
         </transition>
         <transition name="scale-fade">
-            <Tips :content="tipsData" v-if="show.tips" @closeTips="closeTips"></Tips>
+            <Tips :content="tipsData" v-show="show.tips" @closeTips="closeTips"></Tips>
         </transition>
     </section>
 </template>
@@ -216,8 +217,22 @@
                 padding: .12rem;
                 border-top: 1px solid #a5b1c2;
                 border-bottom: 1px solid #a5b1c2;
+                .name {
+                    display: block;
+                    margin-bottom: .1rem;
+                    font-weight: bold;
+                }
+                .i1 {
+                    color: #ff6b81;
+                }
+                .i2 {
+                    color: #1e90ff;
+                }
+                .i3 {
+                    color: #487eb0;
+                }
                 .top {
-                    margin-bottom: .15rem;
+                    margin-bottom: .1rem;
                     span {
                         margin-right: .1rem;
                     }
@@ -233,6 +248,7 @@
 
     .battle {
         padding-bottom: 0.71rem;
+
         .control {
             font-size: 0.12rem;
             padding: 0.1rem;
@@ -244,7 +260,9 @@
         .section {
             border-bottom: 1px solid #666;
             position: relative;
-
+            &.player {
+                border-bottom: none;
+            }
             &:last-child {
                 border-bottom: 0;
             }
@@ -308,6 +326,19 @@
                 }
             }
         }
+        .buff {
+            .con {
+                min-height: .25rem;
+            }
+            span {
+                font-size: 0.1rem;
+            }
+        }
+        .operation {
+            h6 {
+                padding-top: 0;
+            }
+        }
     }
 </style>
 <script>
@@ -318,7 +349,7 @@
         data() {
             return {
                 round: {
-                    num: 0,
+                    num: 0, //这里的回合数为小回合
                     enemy: false,
                     player: true
                 },
@@ -359,6 +390,11 @@
                 this.round.num++;
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
+                //正常情况下的一回合
+                if (!(this.round.num % 2)) {
+                    //this.$store.commit('player/round');
+                    this.$store.dispatch('player/changeRound');
+                }
             },
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
@@ -464,10 +500,10 @@
                     //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
                     if (skill.consumeType.value === 1) {
                         property = 'hp';
-                        let cache = this.changeValue(1, regularData.hp, skill.effect.cure, regularData.maxhp)
+                        cache = this.changeValue(1, regularData.hp, skill.effect.cure, regularData.maxhp)
                     } else {
                         property = 'mp';
-                        let cache = this.changeValue(1, regularData.mp, skill.effect.cure, regularData.maxmp)
+                        cache = this.changeValue(1, regularData.mp, skill.effect.cure, regularData.maxmp)
                     }
                     this.$store.commit(`${namespace}/changeBaseValue`, {
                         propety: property,
@@ -478,6 +514,53 @@
                 }
                 this.toggleSkillsPanel();
                 this.roundCount();
+            },
+            //buff的相关逻辑
+            calculateBuff: function (user, skill) {
+                let type = skill.effect.type;
+                let buff = skill.effect.buff;
+                let target = '';
+                if (skill.effect.target === 1) {
+                    target = user;
+                } else {
+                    if (user == 'enemy') {
+                        target = 'player';
+                    } else {
+                        target = 'enemy';
+                    }
+                }
+                let namespace = this[`${target}Namespace`];
+                //百分比
+                if (type === 'percentage') {
+                    buff.forEach(e => {
+                        if (e.type === 1) {
+                            this.$store.commit(`player/change${e.position[0]}Value`, {
+                                propety: e.position[1],
+                                value: e.value
+                            })
+                            this.pushBuff('player/pushBuff', {
+                                buff: 1
+                            })
+                        } else if (e.type === 2) {
+
+                        } else {
+
+                        }
+                    });
+                    //固定数值
+                } else {
+
+                }
+            },
+            findSkill: function (sid) {
+                let skill = null;
+                this.cureSkillsList.forEach(e => {
+                    if (e.sid === sid) {
+                        skill = e;
+                        return;
+                    }
+                });
+                return skill;
             },
             //施放技能后的魔法/生命消耗操作
             consume: function (skill, regularData, namespace) {
@@ -490,8 +573,7 @@
                         });
                         return true;
                     } else {
-                        this.tipsData = '魔法不足';
-                        this.show.tips = true;
+                        this.openTips('魔法不足');
                         return false;
                     }
                 } else {
@@ -503,8 +585,7 @@
                         });
                         return true;
                     } else {
-                        this.tipsData = '生命不足';
-                        this.show.tips = true;
+                        this.openTips('生命不足');
                         return false;
                     }
                 }
@@ -530,10 +611,10 @@
             attack: function (attacker, target) {
                 let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
                 let spdCache = this.getValue(target, 'extraAttributes', 'spd');
-                let hitRate = (hitCache + 100) / (spdCache + 100) * .75;
+                let hitRate = (hitCache + 100) / (spdCache + 100) * .7;
                 let random = Math.random();
                 if (random > hitRate) {
-                    console.log('攻击落空！');
+                    console.log('攻击落空');
                     this.roundCount();
                 } else {
                     this.calculateDamage(1, attacker, target);
@@ -541,33 +622,20 @@
             },
             //发动伤害技能
             useDamageSkill: function (attacker, target, sid) {
-                let skill = null;
-                this.damageSkillsList.forEach(e => {
-                    if (e.sid === sid) {
-                        skill = e;
-                    }
-                });
+                this.findSkill(sid);
                 this.calculateDamage(2, attacker, target, skill);
             },
             //发动治疗技能
             useCureSkill: function (target, sid) {
-                let skill = null;
-                this.cureSkillsList.forEach(e => {
-                    if (e.sid === sid) {
-                        skill = e;
-                    }
-                });
+                this.findSkill(sid);
                 this.calculateCure(target, skill);
             },
             //发动增/减益技能
-            useBuffSkill: function (sid) {
+            useBuffSkill: function (user, sid) {
+                this.findSkill(sid);
 
-                this.toggleSkillsPanel();
             },
             items: function () {
-                this.roundCount();
-            },
-            suicide: function () {
                 this.roundCount();
             },
             escape: function () {
@@ -609,9 +677,9 @@
                 return this[target][type][property].value;
             },
             enemyAction: function () {
-                let that = this;
+                let vm = this;
                 setTimeout(function () {
-                    that.attack('enemy', 'player');
+                    vm.attack('enemy', 'player');
                 }, 1000);
             },
             //随机数
@@ -627,6 +695,10 @@
                         return 0;
                         break;
                 }
+            },
+            openTips: function (content) {
+                this.tipsData = content;
+                this.show.tips = true;
             },
             closeTips: function () {
                 this.show.tips = false;
@@ -679,6 +751,12 @@
             },
             passiveSkillsList: function () {
                 return this.getSkillsArr('passiveSkills');
+            },
+            playerBuffList: function () {
+                return this.player.buff;
+            },
+            enemyBuffList: function () {
+                return this.enemy.buff;
             }
         },
         watch: {
@@ -688,7 +766,7 @@
                     let [pHp, eHp] = [this.playerRegularData.hp, this.enemyRegularData.hp];
                     //死亡
                     if (!pHp) {
-                        this.tipsData = 'gg';
+                        this.openTips('gg');
                         this.$emit('closeBattle');
                         //获胜
                     } else if (!eHp) {

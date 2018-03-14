@@ -4,7 +4,7 @@ let state = {
 			sid: '0000',
 			learned: true,
 			name: '扬沙',
-			desc: '抓起一把沙子扬过去，对敌方造成40点风属性伤害，并减少对方5点命中。',
+			desc: '抓起一把沙子扬过去，对敌方造成40点风属性伤害，并减少对方15%命中。',
 			consume: 60,
 			consumeType: {
 				name: '魔法',
@@ -18,11 +18,13 @@ let state = {
 						name: '风'
 					},
 					ignoring: false,
-					value: 30
+					value: 40
 				},
-				debuff: {
-					hit: 5
-				}
+				buff: [{
+					type: 1,
+					position: ['hit'],
+					value: 0.85
+				}]
 			}
 		},
 		cnm: {
@@ -48,7 +50,7 @@ let state = {
 		},
 		cnmnmbngsb: {
 			sid: '0002',
-			learned: false,
+			learned: true,
 			name: '素质三连',
 			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到300点无视防御的物理伤害，物防降低20%，持续三回合。',
 			consume: 180,
@@ -64,12 +66,13 @@ let state = {
 						name: '物理'
 					},
 					ignoring: true,
-					value: 300
+					value: 390
 				},
-				debuff: {
-					def: 0.8,
-					round: 3
-				}
+				buff: [{
+					type: 1,
+					position: ['def'],
+					value: 0.8
+				}]
 			}
 		},
 		sputum: {
@@ -134,7 +137,7 @@ let state = {
 					ignoring: false,
 					value: 250
 				},
-				debuff: {
+				buff: {
 					damage: 20,
 					type: 'fire',
 					round: 3
@@ -172,12 +175,14 @@ let state = {
 			}
 		},
 	},
+	//target 1为己方，2为敌方
+	//buff类技能的type：1为增加自身属性，2为增加技能的值，3为沉默、缴械等debuff
 	buffSkills: {
 		login: {
 			sid: '2000',
 			learned: true,
 			name: 'Steam，登录！',
-			desc: '登录steam，准备+1，物攻、魔攻提升%17，物防、魔防提升%10，命中提升%40，暴击、闪避提升%10，持续两回合。',
+			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12，持续两回合。',
 			consume: 60,
 			consumeType: {
 				name: '魔法',
@@ -185,23 +190,51 @@ let state = {
 			},
 			type: 'percentage',
 			effect: {
-				buff: {
-					atk: 1.17,
-					mga: 1.17,
-					def: 1.1,
-					res: 1.1,
-					hit: 1.4,
-					crt: 1.1,
-					dodge: 1.1
-				},
-				round: 2
+				target: 1,
+				buff: [{
+						type: 1,
+						position: ['Ext', 'atk'],
+						value: 1.18
+					},
+					{
+						type: 1,
+						position: ['Ext', 'mga'],
+						value: 1.18
+					},
+					{
+						type: 1,
+						position: ['Ext', 'def'],
+						value: 1.1
+					},
+					{
+						type: 1,
+						position: ['Ext', 'res'],
+						value: 1.1
+					},
+					{
+						type: 1,
+						position: ['Ext', 'def'],
+						value: 1.4
+					},
+					{
+						type: 1,
+						position: ['Ext', 'crt'],
+						value: 1.12
+					},
+					{
+						type: 1,
+						position: ['Ext', 'spd'],
+						value: 1.12
+					}
+				],
+				round: 3
 			}
 		},
 		moralityUp: {
 			sid: '2001',
 			learned: false,
 			name: '素质提升',
-			desc: '提升自己素质，使物攻、魔攻、暴击提升40%，毒属性攻击提升20%，并使素质系技能伤害提高30%，持续3回合。',
+			desc: '提升自己素质，使物攻、魔攻、暴击提升20%，毒属性提升15%，并使素质三连伤害提高30%，持续3回合。',
 			consume: 100,
 			consumeType: {
 				name: '魔法',
@@ -209,31 +242,58 @@ let state = {
 			},
 			type: 'percentage',
 			effect: {
-				buff: {
-					atk: 1.4,
-					mga: 1.4,
-					crt: 1.4,
-					elements: {
-						toxic: 1.2
+				target: 1,
+				buff: [{
+						type: 1,
+						position: ['Ext', 'atk'],
+						value: 1.12
 					},
-				},
+					{
+						type: 1,
+						position: ['Ext', 'mga'],
+						value: 1.12
+					},
+					{
+						type: 1,
+						position: ['Ext', 'crt'],
+						value: 1.12
+					},
+					{
+						type: 1,
+						position: ['El', 'toxic'],
+						value: 1.5
+					},
+					{
+						type: 1,
+						position: ['El', 'toxic'],
+						value: 1.5
+					},
+					{
+						type: 2,
+						position: ['damageSkills', 'cnmnmbngsb', 'effect', 'damage'],
+						value: 1.3
+					}
+				],
 				round: 3
 			}
 		},
 		JJ: {
 			sid: '2002',
 			learned: false,
-			name: '林俊杰',
-			desc: '使对方群体沉默，持续5回合。',
+			name: '可惜没如果',
+			desc: '召唤沉默术士，使对方群体沉默，持续5回合。',
 			consume: 200,
 			consumeType: {
 				name: '魔法',
 				value: 1
 			},
 			effect: {
-				debuff: {
-					slience: true
-				},
+				target: 2,
+				buff: [{
+					type: 3,
+					position: ['debuff', 'slient'],
+					round: 5
+				}],
 				round: 5
 			}
 		},
@@ -241,7 +301,7 @@ let state = {
 			sid: '2003',
 			learned: false,
 			name: 'g胖',
-			desc: '召唤g胖附体，每秒额外恢复100点魔法，使+1技能恢复效果提升三倍，持续4回合。',
+			desc: '召唤g胖附体，使+1技能恢复效果提升三倍，持续4回合。',
 			consume: 300,
 			consumeType: {
 				name: '魔法',
@@ -249,9 +309,13 @@ let state = {
 			},
 			type: 'static',
 			effect: {
-				buff: {
-					mps: 100
-				},
+				target: 1,
+
+				buff: [{
+					type: 2,
+					position: ['cureSkills', 'buy'],
+					value: 3
+				}],
 				round: 4
 			}
 		}
@@ -261,16 +325,24 @@ let state = {
 			sid: '3000',
 			learned: true,
 			name: 'Steamer',
-			desc: '你是一名steam玩家，不过这个被动好像没什么用。',
-			effect: {
-				buff: {
-				}
-			}
+			desc: '你是一名steam玩家，不过这个被动现在好像没什么用。',
+			effect: {}
 		},
 	}
 }
 
-const mutations = {}
+const mutations = {
+	changeDamageSkillsValue(state, payload) {
+		state.damageSkills.effect.damage.value = payload.value;
+	},
+	changeCureSkillsValue(state, payload) {
+		state.cureSkills.effect.damage.value = payload.value;
+	},
+}
+
+const action = {
+
+}
 
 export default {
 	state,
