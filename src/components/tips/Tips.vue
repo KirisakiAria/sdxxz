@@ -29,7 +29,7 @@
 		button {
 			height: .25rem;
 			margin-top: 0.2rem;
-			border-color: #fff;
+			border:none;
 		}
 	}
 </style>

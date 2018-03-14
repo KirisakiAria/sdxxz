@@ -153,7 +153,7 @@
                 </div>
             </section>
         </transition>
-        <transition name="scale-fade" mode="out-in">
+        <transition name="scale-fade">
             <Tips :content="tipsData" v-if="show.tips" @closeTips="closeTips"></Tips>
         </transition>
     </section>
