@@ -386,13 +386,15 @@
 
             },
             //回合变化
-            roundCount: function (namespace) {
+            roundCount: function () {
                 this.round.num++;
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
                 //正常情况下的一回合
                 if (!(this.round.num % 2)) {
-                    this.$store.dispatch(`${namespace}/changeRound`);
+                    let enemy = this.enemyNamespace;
+                    this.$store.dispatch('player/changeRound');
+                    this.$store.dispatch(`${enemy}/changeRound`);
                 }
             },
             //计算伤害
@@ -412,7 +414,7 @@
                     let random = Math.random();
                     if (random > hitRate) {
                         console.log('攻击落空');
-                        this.roundCount(tkNamespace);
+                        this.roundCount();
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
                         let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
@@ -495,7 +497,7 @@
                     propety: 'hp',
                     value: hpCache
                 });
-                this.roundCount(atkNamespace);
+                this.roundCount();
             },
             //计算治疗量
             //参数为发动技能者，技能
@@ -522,11 +524,10 @@
                     return false;
                 }
                 this.toggleSkillsPanel();
-                this.roundCount(namespace);
+                this.roundCount();
             },
             //buff的相关逻辑
             calculateBuff: function (user, skill) {
-                let namespace = this[`${user,}Namespace`];
                 let type = skill.effect.type;
                 let buff = skill.effect.buff;
                 let target = '';

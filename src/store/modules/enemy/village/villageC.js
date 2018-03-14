@@ -1,7 +1,7 @@
 let state = {
 	baseAttributes: {
 		eid: 0,
-		namespace:'villageC',
+		namespace: 'villageC',
 		name: {
 			decs: '姓名',
 			value: '傻屌村小傻屌'
@@ -96,11 +96,54 @@ const mutations = {
 	},
 	changeExtValue(state, payload) {
 		state.extraAttributes[payload.propety]['value'] = payload.value;
+	},
+	changeExtValue(state, payload) {
+		state.extraAttributes[payload.propety]['value'] = payload.value;
+	},
+	pushBuff(state, payload) {
+		state.buff.push(payload.buff);
+	},
+	removeDesignatedBuff(state, payload) {
+		state.buff.splice(state.buff.findIndex(e => {
+			return e.sid === payload.sid;
+		}), 1);
+	}
+}
+
+const actions = {
+	changeRound(context) {
+		let [buff, length] = [context.state.buff, context.state.buff.length];
+		if (length) {
+			buff.forEach(e => {
+				e.round--;
+				if (!e.round) {
+					//buff剩余回合为0了就把原始值再赋回去
+					e.originalValue.forEach(item => {
+						let [p1, p2] = [item.position[0], item.position[1]];
+						if (item.type === 1) {
+							context.state[p1][p2]['value'] = item.value;
+						} else if (item.type === 2) {
+							let [p3, p4] = [item.position[2], item.position[3]];
+							context.rootState.enemySkills[p1][p2][p3][p4]['value'] = item.value;
+						}
+					});
+				}
+			});
+			for (let i = 0; i < length; i++) {
+				let position = buff.findIndex(e => {
+					return e.round === 0;
+				});
+				if (position >= 0) {
+					buff.splice(position, 1);
+				}
+			}
+		}
 	}
 }
 
 export default {
 	state,
 	mutations,
+	actions,
 	namespaced: true
 }
