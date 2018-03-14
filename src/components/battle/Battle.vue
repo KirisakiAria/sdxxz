@@ -386,33 +386,42 @@
 
             },
             //回合变化
-            roundCount: function () {
+            roundCount: function (namespace) {
                 this.round.num++;
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
                 //正常情况下的一回合
                 if (!(this.round.num % 2)) {
-                    //this.$store.commit('player/round');
-                    this.$store.dispatch('player/changeRound');
+                    this.$store.dispatch(`${namespace}/changeRound`);
                 }
             },
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
             calculateDamage: function (type, attacker, target, skill) {
+                let atkRegularData = this[`${attacker}RegularData`];
+                let atkNamespace = this[`${attacker}Namespace`];
                 let tarRegularData = this[`${target}RegularData`];
                 let tarNamespace = this[`${target}Namespace`];
-                let losingHp = 0;
+                let losingValue = 0;
                 let defCache = this.getValue(target, 'extraAttributes', 'def');
                 if (type === 1) {
-                    let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
-                    let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
-                    let defValue = parseInt(defCache *
-                        0.4);
-                    losingHp = atkValue - defValue;
+                    let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
+                    let spdCache = this.getValue(target, 'extraAttributes',
+                        'spd');
+                    let hitRate = (hitCache + 100) / (spdCache + 100) * .7;
+                    let random = Math.random();
+                    if (random > hitRate) {
+                        console.log('攻击落空');
+                        this.roundCount(tkNamespace);
+                    } else {
+                        let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
+                        let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
+                        let defValue = parseInt(defCache *
+                            0.4);
+                        losingValue = atkValue - defValue;
+                    }
                 } else {
                     //首先计算是否有足够血量/魔法能发动技能
-                    let atkRegularData = this[`${attacker}RegularData`];
-                    let atkNamespace = this[`${attacker}Namespace`];
                     let ifEnough = this.consume(skill, atkRegularData, atkNamespace);
                     if (ifEnough) {
                         let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
@@ -471,9 +480,9 @@
                             let mgaValue = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
                                 elementsDamage);
                             let resValue = parseInt(resCache * 0.3);
-                            losingHp = mgaValue - resValue;
+                            losingValue = mgaValue - resValue;
                         } else {
-                            losingHp = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
+                            losingValue = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
                                 elementsDamage);
                         }
                         this.toggleSkillsPanel();
@@ -481,12 +490,12 @@
                         return false;
                     }
                 }
-                let hpCache = this.changeValue(0, tarRegularData.hp, losingHp);
+                let hpCache = this.changeValue(0, tarRegularData.hp, losingValue);
                 this.$store.commit(`${tarNamespace}/changeBaseValue`, {
                     propety: 'hp',
                     value: hpCache
                 });
-                this.roundCount();
+                this.roundCount(atkNamespace);
             },
             //计算治疗量
             //参数为发动技能者，技能
@@ -513,10 +522,11 @@
                     return false;
                 }
                 this.toggleSkillsPanel();
-                this.roundCount();
+                this.roundCount(namespace);
             },
             //buff的相关逻辑
             calculateBuff: function (user, skill) {
+                let namespace = this[`${user,}Namespace`];
                 let type = skill.effect.type;
                 let buff = skill.effect.buff;
                 let target = '';
@@ -609,16 +619,7 @@
             },
             //物理攻击
             attack: function (attacker, target) {
-                let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
-                let spdCache = this.getValue(target, 'extraAttributes', 'spd');
-                let hitRate = (hitCache + 100) / (spdCache + 100) * .7;
-                let random = Math.random();
-                if (random > hitRate) {
-                    console.log('攻击落空');
-                    this.roundCount();
-                } else {
-                    this.calculateDamage(1, attacker, target);
-                }
+                this.calculateDamage(1, attacker, target);
             },
             //发动伤害技能
             useDamageSkill: function (attacker, target, sid) {
