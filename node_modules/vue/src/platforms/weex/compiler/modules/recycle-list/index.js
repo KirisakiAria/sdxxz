@@ -1,5 +1,6 @@
 /* @flow */
 
+import { preTransformRecycleList } from './recycle-list'
 import { postTransformComponent } from './component'
 import { postTransformComponentRoot } from './component-root'
 import { postTransformText } from './text'
@@ -7,6 +8,7 @@ import { preTransformVBind } from './v-bind'
 import { preTransformVIf } from './v-if'
 import { preTransformVFor } from './v-for'
 import { postTransformVOn } from './v-on'
+import { preTransformVOnce } from './v-once'
 
 let currentRecycleList = null
 
@@ -17,12 +19,14 @@ function shouldCompile (el: ASTElement, options: WeexCompilerOptions) {
 
 function preTransformNode (el: ASTElement, options: WeexCompilerOptions) {
   if (el.tag === 'recycle-list') {
+    preTransformRecycleList(el, options)
     currentRecycleList = el
   }
   if (shouldCompile(el, options)) {
     preTransformVBind(el, options)
     preTransformVIf(el, options) // also v-else-if and v-else
     preTransformVFor(el, options)
+    preTransformVOnce(el, options)
   }
 }
 

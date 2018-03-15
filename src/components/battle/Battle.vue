@@ -95,7 +95,7 @@
                         <transition name="slide2-fade" mode="out-in">
                             <div key="damageSkillsList" v-if="show.skillPanleList.damage" class="damageSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy',item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy','damageSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i1">伤害量：{{item.effect.damage.value}}</span>
@@ -110,7 +110,7 @@
                             </div>
                             <div key="cureSkillsList" v-if="show.skillPanleList.cure" class="cureSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player',item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player','cureSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i1">治疗量：{{item.effect.cure}}</span>
@@ -124,7 +124,7 @@
                             </div>
                             <div key="buffSkillsList" v-if="show.skillPanleList.buff" class="buffSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkillitem.sid('player',item.sid)">
+                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkill('player','buffSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -493,7 +493,7 @@
                     }
                 }
                 let hpCache = this.changeValue(0, tarRegularData.hp, losingValue);
-                this.$store.commit(`${tarNamespace}/changeBaseValue`, {
+                this.$store.commit(`${tarNamespace}/changeBaseAttributesValue`, {
                     propety: 'hp',
                     value: hpCache
                 });
@@ -516,7 +516,7 @@
                         property = 'mp';
                         cache = this.changeValue(1, regularData.mp, skill.effect.cure, regularData.maxmp)
                     }
-                    this.$store.commit(`${namespace}/changeBaseValue`, {
+                    this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                         propety: property,
                         value: cache
                     });
@@ -528,6 +528,7 @@
             },
             //buff的相关逻辑
             calculateBuff: function (user, skill) {
+                let vm = this;
                 let type = skill.effect.type;
                 let buff = skill.effect.buff;
                 let target = '';
@@ -540,32 +541,45 @@
                         target = 'enemy';
                     }
                 }
-                let namespace = this[`${target}Namespace`];
-                //百分比
-                if (type === 'percentage') {
-                    buff.forEach(e => {
-                        if (e.type === 1) {
-                            this.$store.commit(`player/change${e.position[0]}Value`, {
-                                propety: e.position[1],
-                                value: e.value
-                            })
-                            this.pushBuff('player/pushBuff', {
-                                buff: 1
-                            })
-                        } else if (e.type === 2) {
-
-                        } else {
-
-                        }
+                //先缓存原始值
+                let originalValue = [];
+                buff.forEach(e => {
+                    originalValue.push({
+                        type: e.type,
+                        position: e.position,
+                        value: vm.getValue(target, e.position[0], e.position[1])
                     });
-                    //固定数值
-                } else {
+                });
+                //push进入buff状态
+                let namespace = this[`${target}Namespace`];
+                this.pushBuff(`${namespace}/pushBuff`, {
+                    sid: skill.sid,
+                    name: skill.sid.name,
+                    round: skill.sid.round,
+                    originalValue
+                });
+                //更改数值
+                buff.forEach(e => {
+                    if (e.type === 1) {
+                        this.$store.commit(`${namespace}/changeExtraAttributesValue`, {
+                            propety: e.position[1],
+                            value: e.value
+                        });
+                    } else if (e.type === 2) {
+                        this.$store.dispatch(`${namespace}/changeSkillValue`, {
+                            p1: e.position[0],
+                            p2: e.position[1],
+                            value: e.value
+                        });
+                    } else {
 
-                }
+                    }
+                });
             },
-            findSkill: function (sid) {
+            findSkill: function (list, sid) {
                 let skill = null;
-                this.cureSkillsList.forEach(e => {
+                let skillList = this[list];
+                skillList.forEach(e => {
                     if (e.sid === sid) {
                         skill = e;
                         return;
@@ -578,7 +592,7 @@
                 if (skill.consumeType.value == 1) {
                     if (regularData.mp - skill.consume >= 0) {
                         let consumeValue = regularData.mp - skill.consume;
-                        this.$store.commit(`${namespace}/changeBaseValue`, {
+                        this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                             propety: 'mp',
                             value: consumeValue
                         });
@@ -590,7 +604,7 @@
                 } else {
                     if (regularData.hp - skill.consume >= 0) {
                         let consumeValue = regularData.hp - skill.consume;
-                        this.$store.commit(`${namespace}/changeBaseValue`, {
+                        this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                             propety: 'hp',
                             value: consumeValue
                         });
@@ -623,18 +637,18 @@
                 this.calculateDamage(1, attacker, target);
             },
             //发动伤害技能
-            useDamageSkill: function (attacker, target, sid) {
-                this.findSkill(sid);
+            useDamageSkill: function (attacker, target, list, sid) {
+                let skill = this.findSkill(list, sid);
                 this.calculateDamage(2, attacker, target, skill);
             },
             //发动治疗技能
-            useCureSkill: function (target, sid) {
-                this.findSkill(sid);
+            useCureSkill: function (target, list, sid) {
+                let skill = this.findSkill(list, sid);
                 this.calculateCure(target, skill);
             },
             //发动增/减益技能
-            useBuffSkill: function (user, sid) {
-                this.findSkill(sid);
+            useBuffSkill: function (user, list, sid) {
+                let skill = this.findSkill(list, sid);
 
             },
             items: function () {

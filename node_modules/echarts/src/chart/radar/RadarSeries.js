@@ -23,8 +23,8 @@ var RadarSeries = SeriesModel.extend({
 
     getInitialData: function (option, ecModel) {
         return createListSimply(this, {
-            extraPrefix: 'indicator_',
-            extraFromZero: true
+            generateCoord: 'indicator_',
+            generateCoordCount: Infinity
         });
     },
 

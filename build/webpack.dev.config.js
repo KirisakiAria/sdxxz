@@ -11,6 +11,8 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	devtool: 'cheap-module-source-map',
 
+	mode: 'development',
+	
 	devServer: {
 		contentBase: path.resolve(__dirname, '../src'),
 		historyApiFallback: true,

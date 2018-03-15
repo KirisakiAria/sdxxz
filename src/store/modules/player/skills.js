@@ -157,7 +157,9 @@ let state = {
 				value: 1
 			},
 			effect: {
-				cure: 60
+				cure: {
+					value: 60
+				}
 			}
 		},
 		cut: {
@@ -171,7 +173,9 @@ let state = {
 				value: 2
 			},
 			effect: {
-				cure: 120
+				cure: {
+					value: 120
+				}
 			}
 		},
 	},
@@ -188,43 +192,49 @@ let state = {
 				name: '魔法',
 				value: 1
 			},
-			type: 'percentage',
 			effect: {
 				target: 1,
 				buff: [{
 						type: 1,
-						position: ['Ext', 'atk'],
-						value: 1.18
+						position: ['extraAttributes', 'atk'],
+						value: 1.18,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'mga'],
-						value: 1.18
+						position: ['extraAttributes', 'mga'],
+						value: 1.18,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'def'],
-						value: 1.1
+						position: ['extraAttributes', 'def'],
+						value: 1.1,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'res'],
-						value: 1.1
+						position: ['extraAttributes', 'res'],
+						value: 1.1,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'def'],
-						value: 1.4
+						position: ['extraAttributes', 'def'],
+						value: 1.4,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'crt'],
-						value: 1.12
+						position: ['extraAttributes', 'crt'],
+						value: 1.12,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'spd'],
-						value: 1.12
+						position: ['extraAttributes', 'spd'],
+						value: 1.12,
+						valueType: 'percentage'
 					}
 				],
 				round: 3
@@ -245,33 +255,39 @@ let state = {
 				target: 1,
 				buff: [{
 						type: 1,
-						position: ['Ext', 'atk'],
-						value: 1.12
+						position: ['extraAttributes', 'atk'],
+						value: 1.12,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'mga'],
-						value: 1.12
+						position: ['extraAttributes', 'mga'],
+						value: 1.12,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['Ext', 'crt'],
-						value: 1.12
+						position: ['extraAttributes', 'crt'],
+						value: 1.12,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['El', 'toxic'],
-						value: 1.5
+						position: ['elements', 'toxic'],
+						value: 1.5,
+						valueType: 'percentage'
 					},
 					{
 						type: 1,
-						position: ['El', 'toxic'],
-						value: 1.5
+						position: ['elements', 'toxic'],
+						value: 1.5,
+						valueType: 'percentage'
 					},
 					{
 						type: 2,
 						position: ['damageSkills', 'cnmnmbngsb', 'effect', 'damage'],
-						value: 1.3
+						value: 1.3,
+						valueType: 'percentage'
 					}
 				],
 				round: 3
@@ -310,11 +326,11 @@ let state = {
 			type: 'static',
 			effect: {
 				target: 1,
-
 				buff: [{
 					type: 2,
 					position: ['cureSkills', 'buy'],
-					value: 3
+					value: 3,
+					valueType: 'percentage'
 				}],
 				round: 4
 			}
@@ -328,23 +344,17 @@ let state = {
 			desc: '你是一名steam玩家，不过这个被动现在好像没什么用。',
 			effect: {}
 		},
+		dotaplus: {
+			sid: '3001',
+			learned: true,
+			name: 'Dota2Plus会员',
+			desc: '你开了五千年的Dota2Plus会员，自带血崩光环',
+			effect: {}
+		},
 	}
-}
-
-const mutations = {
-	changeDamageSkillsValue(state, payload) {
-		state.damageSkills.effect.damage.value = payload.value;
-	},
-	changeCureSkillsValue(state, payload) {
-		state.cureSkills.effect.damage.value = payload.value;
-	},
-}
-
-const action = {
-
 }
 
 export default {
 	state,
-	mutations
+	namespaced: true
 }

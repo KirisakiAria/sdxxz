@@ -180,13 +180,10 @@ let state = {
 }
 
 const mutations = {
-	changeBaseValue(state, payload) {
+	changeBaseAttributesValue(state, payload) {
 		state.baseAttributes[payload.propety]['value'] = payload.value;
 	},
-	changeExtValue(state, payload) {
-		state.extraAttributes[payload.propety]['value'] = payload.value;
-	},
-	changeExtValue(state, payload) {
+	changeExtraAttributesValue(state, payload) {
 		state.extraAttributes[payload.propety]['value'] = payload.value;
 	},
 	pushBuff(state, payload) {
@@ -226,6 +223,16 @@ const actions = {
 					buff.splice(position, 1);
 				}
 			}
+		}
+	},
+	changeSkillValue: function (context, payload) {
+		let [p1, p2] = [payload.p1, payload.p2];
+		let skillState = context.rootState.playerSkills[p1][p2]
+		if (p1 === 'damageSkills') {
+
+		}
+		else if (p1 === 'cureSkills') {
+			
 		}
 	}
 }

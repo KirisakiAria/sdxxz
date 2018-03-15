@@ -91,13 +91,10 @@ let state = {
 }
 
 const mutations = {
-	changeBaseValue(state, payload) {
+	changeBaseAttributesValue(state, payload) {
 		state.baseAttributes[payload.propety]['value'] = payload.value;
 	},
-	changeExtValue(state, payload) {
-		state.extraAttributes[payload.propety]['value'] = payload.value;
-	},
-	changeExtValue(state, payload) {
+	changeExtraAttributesValue(state, payload) {
 		state.extraAttributes[payload.propety]['value'] = payload.value;
 	},
 	pushBuff(state, payload) {
@@ -109,6 +106,7 @@ const mutations = {
 		}), 1);
 	}
 }
+
 
 const actions = {
 	changeRound(context) {
