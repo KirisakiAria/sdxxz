@@ -5,7 +5,7 @@ let state = {
 			learned: true,
 			level: 1,
 			name: '扬沙',
-			desc: '抓起一把沙子扬过去，对敌方造成40点风属性伤害，并减少对方15%命中。',
+			desc: '抓起一把沙子扬过去，对敌方造成48点风属性伤害，并减少对方22%命中，持续两回合',
 			consume: 60,
 			consumeType: {
 				name: '魔法',
@@ -19,12 +19,13 @@ let state = {
 						name: '风'
 					},
 					ignoring: false,
-					value: 40
+					value: 48
 				},
 				buff: [{
 					type: 1,
-					position: ['hit'],
-					value: 0.85
+					position: ['extraAttributes', 'hit'],
+					value: 0.78,
+					valueType: 'percentage'
 				}]
 			}
 		},
@@ -33,7 +34,7 @@ let state = {
 			learned: false,
 			level: 3,
 			name: '素质对话',
-			desc: '与敌方单体进行文明交流，敌方素质明显提高然后受到80点物理伤害。',
+			desc: '与敌方单体进行文明交流，敌方素质明显提高然后受到85点物理伤害。',
 			consume: 50,
 			consumeType: {
 				name: '魔法',
@@ -46,7 +47,7 @@ let state = {
 						name: '物理'
 					},
 					ignoring: false,
-					value: 80
+					value: 85
 				}
 			}
 		},
@@ -55,7 +56,7 @@ let state = {
 			learned: true,
 			level: 20,
 			name: '素质三连',
-			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到300点无视魔防的物理伤害，物防降低20%，持续三回合。',
+			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到328点无视魔防的物理伤害，物防降低28%，持续三回合',
 			consume: 180,
 			consumeType: {
 				name: '魔法',
@@ -69,12 +70,13 @@ let state = {
 						name: '物理'
 					},
 					ignoring: true,
-					value: 300
+					value: 328
 				},
 				buff: [{
 					type: 1,
-					position: ['def'],
-					value: 0.8
+					position: ['extraAttributes', 'def'],
+					value: 0.72,
+					valueType: 'percentage'
 				}]
 			}
 		},
@@ -83,7 +85,7 @@ let state = {
 			learned: false,
 			level: 12,
 			name: '飞痰',
-			desc: '一口老痰吐到敌方脸上，使敌方单体受到100点冰属性伤害。',
+			desc: '一口老痰吐到敌方脸上，使敌方单体受到110点冰属性伤害。',
 			consume: 90,
 			consumeType: {
 				name: '魔法',
@@ -105,8 +107,8 @@ let state = {
 			learned: false,
 			level: 17,
 			name: '蝌蚪',
-			desc: '喷射出大量白色蝌蚪，对敌方全体造成200点毒属性伤害。',
-			consume: 120,
+			desc: '喷射出大量白色蝌蚪，对敌方全体造成195点毒属性伤害并降低毒属性24%，持续4回合',
+			consume: 125,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -118,8 +120,14 @@ let state = {
 						name: '毒'
 					},
 					ignoring: false,
-					value: 200
-				}
+					value: 195
+				},
+				buff: [{
+					type: 1,
+					position: ['elements', 'toxic'],
+					value: 0.78,
+					valueType: 'percentage'
+				}]
 			}
 		},
 		arson: {
@@ -127,8 +135,8 @@ let state = {
 			learned: false,
 			level: 24,
 			name: '纵火',
-			desc: '使用打火机点燃敌方的jj，敌方受到250点火焰伤害并附加20点灼伤效果，持续三回合。',
-			consume: 165,
+			desc: '使用打火机点燃敌方的jj，敌方受到254点火焰伤害并降低魔防33%，持续三回合。',
+			consume: 158,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -141,13 +149,14 @@ let state = {
 						name: '火'
 					},
 					ignoring: false,
-					value: 250
+					value: 254
 				},
-				buff: {
-					damage: 20,
-					type: 'fire',
-					round: 3
-				}
+				buff: [{
+					type: 1,
+					position: ['extraAttributes', 'res'],
+					value: 0.67,
+					valueType: 'percentage'
+				}]
 			}
 		},
 	},
@@ -157,7 +166,7 @@ let state = {
 			learned: true,
 			level: 1,
 			name: '+1',
-			desc: '+1使我神清气爽，恢复60点生命。',
+			desc: '+1使我神清气爽，恢复66点生命。',
 			consume: 75,
 			consumeType: {
 				name: '魔法',
@@ -165,7 +174,7 @@ let state = {
 			},
 			effect: {
 				cure: {
-					value: 60
+					value: 66
 				}
 			}
 		},
@@ -174,8 +183,8 @@ let state = {
 			learned: true,
 			level: 5,
 			name: '剁手',
-			desc: '没钱了但又控制不住欲望，只能把手剁了，失去80点生命恢复120点魔法。',
-			consume: 80,
+			desc: '没钱了但又控制不住欲望，只能把手剁了，失去78点生命恢复120点魔法。',
+			consume: 78,
 			consumeType: {
 				name: '生命',
 				value: 2
@@ -199,7 +208,7 @@ let state = {
 			type: 1,
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12',
-			consume: 60,
+			consume: 55,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -259,7 +268,7 @@ let state = {
 			type: 1,
 			name: '素质提升',
 			desc: '提升自己素质，使物攻、魔攻、暴击提升20%，毒属性提升15%，并使素质三连伤害提高30%',
-			consume: 100,
+			consume: 96,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -307,7 +316,7 @@ let state = {
 			type: 2,
 			name: '可惜没如果',
 			desc: '召唤沉默术士，使对方群体沉默',
-			consume: 200,
+			consume: 188,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -316,7 +325,7 @@ let state = {
 				target: 2,
 				buff: [{
 					type: 3,
-					position:  'slient',
+					position: 'slient',
 					round: 5
 				}],
 				round: 4
@@ -329,7 +338,7 @@ let state = {
 			type: 1,
 			name: 'g胖',
 			desc: '召唤g胖附体，使+1技能恢复效果提升三倍',
-			consume: 100,
+			consume: 95,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -352,7 +361,7 @@ let state = {
 			type: 2,
 			name: '反向剁手',
 			desc: '剁掉敌方双手，在长出来之前不能攻击',
-			consume: 180,
+			consume: 175,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -374,7 +383,7 @@ let state = {
 			type: 1,
 			name: '传销三连',
 			desc: '71附体，疯狂搞敌方，物攻、物防、魔攻、魔防降低30%',
-			consume: 180,
+			consume: 165,
 			consumeType: {
 				name: '魔法',
 				value: 1
