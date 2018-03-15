@@ -10,7 +10,7 @@
 4. 输入npm run dev或npm run start运行项目（如果你有服务器环境也可以将dist中文件直接放到服务器中运行）
 
 ## 运行参数
-* npm run dev:使用webpack-dev-server在开发环境下运行项目
+* npm run dev 使用webpack-dev-server在开发环境下运行项目
 * npm run build 打包
 * npm run start 使用electron运行项目
 
