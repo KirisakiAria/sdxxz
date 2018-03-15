@@ -410,8 +410,8 @@
                 }
             },
             deBuff: function (list, debuffName) {
-                let list = this[list];
-                let ifDebuff = list.findIndex(e => {
+                let buffList = this[list];
+                let ifDebuff = buffList.findIndex(e => {
                     return e.type === debuffName;
                 });
                 if (ifDebuff !== -1) {
