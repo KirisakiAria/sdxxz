@@ -29,7 +29,7 @@
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
-								<span class="i1">治疗量：{{item.effect.cure}}</span>
+								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
 								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
 							</div>
 							<div class="bottom">
@@ -44,7 +44,7 @@
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
-								<span class="i3">持续回合数：{{item.effect.round}}</span>
+								<span class="i3">持续回合数：{{item.effect.round - 1}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>

@@ -16,7 +16,7 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 120
+			value: 140
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 120
+			value: 140
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -32,7 +32,7 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 500
+			value: 40
 		}
 	},
 	extraAttributes: {
@@ -107,7 +107,6 @@ const mutations = {
 	}
 }
 
-
 const actions = {
 	changeRound(context) {
 		let [buff, length] = [context.state.buff, context.state.buff.length];
@@ -122,7 +121,7 @@ const actions = {
 							context.state[p1][p2]['value'] = item.value;
 						} else if (item.type === 2) {
 							let [p3, p4] = [item.position[2], item.position[3]];
-							context.rootState.enemySkills[p1][p2][p3][p4]['value'] = item.value;
+							context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
 						}
 					});
 				}
@@ -135,6 +134,16 @@ const actions = {
 					buff.splice(position, 1);
 				}
 			}
+		}
+		console.log(context.state.buff);
+	},
+	changeSkillValue: function (context, payload) {
+		let [p1, p2] = [payload.p1, payload.p2];
+		let skillState = context.rootState.playerSkills[p1][p2]
+		if (p1 === 'damageSkills') {
+			skillState.damage.value == payload.value;
+		} else if (p1 === 'cureSkills') {
+			skillState.cure.value == payload.value;
 		}
 	}
 }

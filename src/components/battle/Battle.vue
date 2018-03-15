@@ -32,7 +32,7 @@
                 <div class="buff">
                     <h6 class="tac">状态</h6>
                     <div class="con">
-
+                        <span :key="item.name" v-for="item in enemyBuffList">{{item.name}}</span>
                     </div>
                 </div>
             </div>
@@ -71,8 +71,8 @@
                 <div class="operation">
                     <h6 class="tac">操作</h6>
                     <div class="con">
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="attack('player','enemy')">攻击</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="toggleSkillsPanel()">技能</button>
+                        <button :class="{disabled:round.enemy||disabled.disarm}" :disabled="round.enemy||disabled.disarm" class="btn" @click="attack('player','enemy')">攻击</button>
+                        <button :class="{disabled:round.enemy||disabled.slient}" :disabled="round.enemy||disabled.slient" class="btn" @click="toggleSkillsPanel()">技能</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="items(1)">道具</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn">占位</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape(1)">逃跑</button>
@@ -113,7 +113,7 @@
                                     <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player','cureSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
-                                            <span class="i1">治疗量：{{item.effect.cure}}</span>
+                                            <span class="i1">治疗量：{{item.effect.cure.value}}</span>
                                             <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
                                         </div>
                                         <div class="bottom">
@@ -128,7 +128,7 @@
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span class="i3">持续回合数：{{item.effect.round}}</span>
+                                            <span class="i3">持续回合数：{{item.effect.round - 1}}</span>
                                         </div>
                                         <div class="bottom">
                                             <p>技能介绍：{{item.desc}}</p>
@@ -343,6 +343,9 @@
 </style>
 <script>
     import Tips from '../tips/Tips';
+    import {
+        STATUS_CODES
+    } from 'http';
 
     export default {
         name: 'Battle',
@@ -362,6 +365,10 @@
                     },
                     skillPanel: false,
                     tips: false
+                },
+                disabled: {
+                    disarm: false,
+                    slient: false
                 },
                 tipsData: ''
             };
@@ -393,8 +400,22 @@
                 //正常情况下的一回合
                 if (!(this.round.num % 2)) {
                     let enemy = this.enemyNamespace;
+                    //敌我双方buff持续时间各减少一回合
                     this.$store.dispatch('player/changeRound');
                     this.$store.dispatch(`${enemy}/changeRound`);
+                    this.deBuff('playerBuffList', 'slient');
+                    this.deBuff('enemyBuffList', 'slient');
+                    this.deBuff('playerBuffList', 'disarm');
+                    this.deBuff('enemyBuffList', 'disarm');
+                }
+            },
+            deBuff: function (list, debuffName) {
+                let list = this[list];
+                let ifDebuff = list.findIndex(e => {
+                    return e.type === debuffName;
+                });
+                if (ifDebuff !== -1) {
+                    this.disabled[debuffName] = true;
                 }
             },
             //计算伤害
@@ -414,7 +435,7 @@
                     let random = Math.random();
                     if (random > hitRate) {
                         console.log('攻击落空');
-                        this.roundCount();
+                        return this.roundCount();
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
                         let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
@@ -444,47 +465,51 @@
                                 'elements', 'earth'),
                         }
                         //伤害数值、伤害元素类型、是否无视魔防
-                        //元素伤害固定为魔攻的50%
                         let damage = skill.effect.damage.value;
                         let damageTypeValue = skill.effect.damage.type.value;
                         let ifIgnoring = skill.effect.damage.ignoring;
-                        let elementsDamage = mgaCache * 0.5;
+                        let elementsDamage = 0;
                         if (!ifIgnoring) {
                             //判断技能伤害类型，结算附加伤害
                             switch (damageTypeValue) {
                                 case 1:
-                                    elementsDamage -= defCache * 0.2;
+                                    elementsDamage = mgaCache * 0.6 - defCache * 0.8;
                                     break;
                                 case 2:
-                                    elementsDamage = elementsDamage + attackerElements.fire * 1.5 - targetElements.fire *
-                                        0.4;
+                                    elementsDamage = mgaCache * 0.4 * (attackerElements.fire * 1.2 - targetElements
+                                        .fire *
+                                        0.8);
                                     break;
                                 case 3:
-                                    elementsDamage = elementsDamage + attackerElements.ice * 1.5 - targetElements.ice *
-                                        0.4;
+                                    elementsDamage = mgaCache * 0.4 * (attackerElements.ice * 1.2 - targetElements
+                                        .ice *
+                                        0.8);
                                     break;
                                 case 4:
-                                    elementsDamage = elementsDamage + attackerElements.toxic * 1.5 - targetElements
+                                    elementsDamage = mgaCache * 0.4 * (attackerElements.toxic * 1.2 -
+                                        targetElements
                                         .toxic *
-                                        0.4;
+                                        0.8);
                                     break;
                                 case 5:
-                                    elementsDamage = elementsDamage + attackerElements.wind * 1.5 - targetElements.wind *
-                                        0.4;
+                                    elementsDamage = mgaCache * 0.4 * (attackerElements.wind * 1.2 -
+                                        targetElements.wind *
+                                        0.8);
                                     break;
                                 case 6:
-                                    elementsDamage = elementsDamage + attackerElements.earth * 1.5 - targetElements
+                                    elementsDamage = mgaCache * 0.4 * (attackerElements.earth * 1.2 -
+                                        targetElements
                                         .earth *
-                                        0.4;
+                                        0.8);
                                     break;
                             }
                             //实际造成的魔法伤害
-                            let mgaValue = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
+                            let mgaValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
                                 elementsDamage);
                             let resValue = parseInt(resCache * 0.3);
                             losingValue = mgaValue - resValue;
                         } else {
-                            losingValue = parseInt(this.randomNum(mgaCache * 0.85, mgaCache * 1.2)) + parseInt(
+                            losingValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
                                 elementsDamage);
                         }
                         this.toggleSkillsPanel();
@@ -511,10 +536,10 @@
                     //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
                     if (skill.consumeType.value === 1) {
                         property = 'hp';
-                        cache = this.changeValue(1, regularData.hp, skill.effect.cure, regularData.maxhp)
+                        cache = this.changeValue(1, regularData.hp, skill.effect.cure.value, regularData.maxhp)
                     } else {
                         property = 'mp';
-                        cache = this.changeValue(1, regularData.mp, skill.effect.cure, regularData.maxmp)
+                        cache = this.changeValue(1, regularData.mp, skill.effect.cure.value, regularData.maxmp)
                     }
                     this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                         propety: property,
@@ -526,55 +551,101 @@
                 this.toggleSkillsPanel();
                 this.roundCount();
             },
-            //buff的相关逻辑
+            //添加buff的相关逻辑
             calculateBuff: function (user, skill) {
-                let vm = this;
-                let type = skill.effect.type;
-                let buff = skill.effect.buff;
-                let target = '';
-                if (skill.effect.target === 1) {
-                    target = user;
-                } else {
-                    if (user == 'enemy') {
-                        target = 'player';
+                let regularData = this[`${user}RegularData`];
+                let namespace = this[`${user}Namespace`];
+                let ifEnough = this.consume(skill, regularData, namespace);
+                if (ifEnough) {
+                    let [vm, type, buff, target] = [this, skill.effect.type, skill.effect.buff, ''];
+                    if (skill.effect.target === 1) {
+                        target = user;
                     } else {
-                        target = 'enemy';
+                        if (user === 'enemy') {
+                            target = 'player';
+                        } else {
+                            target = 'enemy';
+                        }
                     }
-                }
-                //先缓存原始值
-                let originalValue = [];
-                buff.forEach(e => {
-                    originalValue.push({
-                        type: e.type,
-                        position: e.position,
-                        value: vm.getValue(target, e.position[0], e.position[1])
+                    let originalValue = [];
+                    let skillType = 'normal';
+                    //若技能是提升一定数值的类型则先缓存原始值
+                    if (skill.type === 1) {
+                        buff.forEach(e => {
+                            //自身属性值
+                            let value = 0
+                            if (e.type === 1) {
+                                let [p1, p2] = [e.position[0], e.position[1]];
+                                value = vm.getValue(target, p1, p2);
+                                //技能
+                            } else {
+                                let [p1, p2, p3, p4] = [e.position[0], e.position[1], e.position[
+                                    2], e.position[3]];
+                                value = this.$store.state[`${target}Skills`][p1][p2][p3][p4]['value'];
+                            }
+                            originalValue.push({
+                                type: e.type,
+                                position: e.position,
+                                value: value
+                            });
+                        });
+                    } else {
+                        skillType = skill.effect.buff[0].position
+                    }
+                    //将buff push进目标的buff数组中
+                    let namespace = this[`${target}Namespace`];
+                    this.$store.commit(`${namespace}/pushBuff`, {
+                        buff: {
+                            sid: skill.sid,
+                            name: skill.name,
+                            round: skill.effect.round,
+                            type: skillType,
+                            originalValue
+                        }
                     });
-                });
-                //push进入buff状态
-                let namespace = this[`${target}Namespace`];
-                this.pushBuff(`${namespace}/pushBuff`, {
-                    sid: skill.sid,
-                    name: skill.sid.name,
-                    round: skill.sid.round,
-                    originalValue
-                });
-                //更改数值
-                buff.forEach(e => {
-                    if (e.type === 1) {
-                        this.$store.commit(`${namespace}/changeExtraAttributesValue`, {
-                            propety: e.position[1],
-                            value: e.value
-                        });
-                    } else if (e.type === 2) {
-                        this.$store.dispatch(`${namespace}/changeSkillValue`, {
-                            p1: e.position[0],
-                            p2: e.position[1],
-                            value: e.value
-                        });
-                    } else {
-
-                    }
-                });
+                    //buff生效，更改相关值，沉默类状态技能无需更改值
+                    buff.forEach(e => {
+                        //更改自身属性
+                        if (e.type === 1) {
+                            let [p1, p2] = [e.position[0], e.position[1]];
+                            let [changeValue, originValue] = [0, vm.getValue(namespace, p1, p2)];
+                            //判断技能是提升倍数还是增加固定数值
+                            if (e.valueType === 'percentage') {
+                                changeValue = Math.ceil(originValue * e.value);
+                            } else {
+                                changeValue = Math.ceil(originValue + e.value);
+                            }
+                            this.$store.commit(`${namespace}/changeExtraAttributesOrElementsValue`, {
+                                type: e.position[0],
+                                propety: e.position[1],
+                                value: changeValue
+                            });
+                            //更改技能属性
+                        } else if (e.type === 2) {
+                            let [p1, p2, p3, p4] = [e.position[0], e.position[1], e.position[2], e.position[
+                                3]];
+                            let [changeValue, originValue] = [0, this.$store.state[`${target}Skills`][p1][
+                                p2
+                            ][p3][p4]['value']];
+                            if (e.valueType === 'percentage') {
+                                changeValue = Math.ceil(originValue * e.value);
+                            } else {
+                                changeValue = Math.ceil(originValue + e.value);
+                            }
+                            this.$store.dispatch(`${namespace}/changeSkillValue`, {
+                                p1: e.position[0],
+                                p2: e.position[1],
+                                p3: e.position[2],
+                                p4: e.position[3],
+                                value: changeValue
+                            });
+                        }
+                    });
+                } else {
+                    return false;
+                }
+                this.toggleSkillsPanel();
+                this.roundCount();
             },
             findSkill: function (list, sid) {
                 let skill = null;
@@ -589,7 +660,7 @@
             },
             //施放技能后的魔法/生命消耗操作
             consume: function (skill, regularData, namespace) {
-                if (skill.consumeType.value == 1) {
+                if (skill.consumeType.value === 1) {
                     if (regularData.mp - skill.consume >= 0) {
                         let consumeValue = regularData.mp - skill.consume;
                         this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
@@ -649,7 +720,7 @@
             //发动增/减益技能
             useBuffSkill: function (user, list, sid) {
                 let skill = this.findSkill(list, sid);
-
+                this.calculateBuff(user, skill);
             },
             items: function () {
                 this.roundCount();
@@ -787,26 +858,7 @@
                         //获胜
                     } else if (!eHp) {
                         //经验获取、升级
-                        let [ownedExp, gotExp, levelUpExp] = [
-                            this.player.baseAttributes.exp.value,
-                            this.enemy.baseAttributes.exp.value,
-                            this.player.levelUpExp
-                        ];
-                        this.$store.commit('player/changeExp', {
-                            value: ownedExp + gotExp
-                        });
-                        let [nowExp, upExp] = [this.player.baseAttributes.exp.value, 0];
-                        levelUpExp.forEach(e => {
-                            if (nowExp > e) {
-                                upExp = e;
-                            }
-                        });
-                        let level = levelUpExp.findIndex(value => {
-                            return value == upExp;
-                        });
-                        this.$store.commit('player/changeLevel', {
-                            value: level
-                        });
+
                         this.$emit('closeBattle');
                     } else if (newValue.enemy) {
                         this.enemyAction();

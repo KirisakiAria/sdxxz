@@ -3,7 +3,6 @@
 		<div class="mask" @click="closeTips"></div>
 		<div class="wrapper">
 			<p>{{content}}</p>
-			<button @click="closeTips">确定</button>
 		</div>
 	</section>
 </template>
@@ -34,11 +33,6 @@
 			justify-content: center;
 			align-items: center;
 			.cw;
-			button {
-				height: .25rem;
-				margin-top: 0.2rem;
-				border: none;
-			}
 		}
 	}
 </style>

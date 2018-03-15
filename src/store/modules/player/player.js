@@ -26,31 +26,31 @@ let state = {
 		},
 		hp: {
 			decs: '当前生命',
-			value: 200,
+			value: 250,
 		},
 		mp: {
 			decs: '当前魔法',
-			value: 150,
+			value: 200,
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 200,
+			value: 250,
 		},
 		maxmp: {
 			decs: '魔法总量',
-			value: 150,
+			value: 200,
 		},
 		namespace: 'player'
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 20,
+			value: 25,
 			grow: 7
 		},
 		mga: {
 			decs: '魔攻',
-			value: 15,
+			value: 20,
 			grow: 5
 		},
 		def: {
@@ -156,35 +156,22 @@ let state = {
 			value: ''
 		}
 	},
-	levelUpExp: [0, 0, 100, 140, 196, 274, 384, 537, 752, 1054, 1475, 2066, 2892, 4049, 5669, 7937, 11112, 15556, 21779, 30491, 42687, 59763, 83668],
 	items: [],
-	buff: [{
-		sid: '2000',
-		name: 'Steam，登录！',
-		round: 2,
-		originalValue: [{
-			type: 1,
-			position: ['extraAttributes', 'atk'],
-			value: 25
-		}, {
-			type: 1,
-			position: ['extraAttributes', 'mga'],
-			value: 20
-		}, {
-			type: 2,
-			position: ['damageSkills', 'cnmnmbngsb', 'effect', 'damage'],
-			value: 300
-		}]
-	}],
-	debuff: []
+	buff: []
+}
+
+let getters = {
+	levelUpExp: state => {
+		return state.level.value * (state.level.value + 5) * 10
+	}
 }
 
 const mutations = {
 	changeBaseAttributesValue(state, payload) {
 		state.baseAttributes[payload.propety]['value'] = payload.value;
 	},
-	changeExtraAttributesValue(state, payload) {
-		state.extraAttributes[payload.propety]['value'] = payload.value;
+	changeExtraAttributesOrElementsValue(state, payload) {
+		state[payload.type][payload.propety]['value'] = payload.value;
 	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
@@ -224,16 +211,11 @@ const actions = {
 				}
 			}
 		}
+		//console.log(context.state.buff);
 	},
 	changeSkillValue: function (context, payload) {
-		let [p1, p2] = [payload.p1, payload.p2];
-		let skillState = context.rootState.playerSkills[p1][p2]
-		if (p1 === 'damageSkills') {
-
-		}
-		else if (p1 === 'cureSkills') {
-			
-		}
+		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
+		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
 	}
 }
 
