@@ -23,7 +23,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 	module: {
 		rules: [{
 			test: /\.(less|css)$/,
-			use: ['style-loader', 'css-loader', 'less-loader'],
+			use: ['style-loader', 'css-loader', 'less-loader']
 		}]
 	},
 

@@ -94,11 +94,14 @@ const mutations = {
 	changeBaseAttributesValue(state, payload) {
 		state.baseAttributes[payload.propety]['value'] = payload.value;
 	},
-	changeExtraAttributesValue(state, payload) {
-		state.extraAttributes[payload.propety]['value'] = payload.value;
+	changeExtraAttributesOrElementsValue(state, payload) {
+		state[payload.type][payload.propety]['value'] = payload.value;
 	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
+	},
+	changeRoundToZero(state, payload) {
+		state.buff[payload.index].round = 0;
 	},
 	removeDesignatedBuff(state, payload) {
 		state.buff.splice(state.buff.findIndex(e => {
@@ -108,12 +111,14 @@ const mutations = {
 }
 
 const actions = {
-	changeRound(context) {
-		let [buff, length] = [context.state.buff, context.state.buff.length];
+	changeRound(context, payload) {
+		let [buff, length, ifDecrease] = [context.state.buff, context.state.buff.length, payload.ifDecrease];
 		if (length) {
 			buff.forEach(e => {
-				e.round--;
-				if (e.round<=0) {
+				if (ifDecrease) {
+					e.round--;
+				}
+				if (!e.round) {
 					//buff剩余回合为0了就把原始值再赋回去
 					e.originalValue.forEach(item => {
 						let [p1, p2] = [item.position[0], item.position[1]];
@@ -138,13 +143,8 @@ const actions = {
 		//console.log(context.state.buff);
 	},
 	changeSkillValue: function (context, payload) {
-		let [p1, p2] = [payload.p1, payload.p2];
-		let skillState = context.rootState.playerSkills[p1][p2]
-		if (p1 === 'damageSkills') {
-			skillState.damage.value == payload.value;
-		} else if (p1 === 'cureSkills') {
-			skillState.cure.value == payload.value;
-		}
+		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
+		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
 	}
 }
 

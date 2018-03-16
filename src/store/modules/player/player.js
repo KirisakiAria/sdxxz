@@ -26,19 +26,19 @@ let state = {
 		},
 		hp: {
 			decs: '当前生命',
-			value: 250,
+			value: 240,
 		},
 		mp: {
 			decs: '当前魔法',
-			value: 2000000,
+			value: 180,
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 250,
+			value: 240,
 		},
 		maxmp: {
 			decs: '魔法总量',
-			value: 2000000,
+			value: 180,
 		},
 		namespace: 'player'
 	},

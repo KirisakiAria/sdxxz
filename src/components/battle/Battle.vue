@@ -536,8 +536,7 @@
             //计算治疗量
             //参数为发动技能者，技能
             calculateCure: function (target, skill) {
-                let regularData = this[`${target}RegularData`];
-                let namespace = this[`${target}Namespace`];
+                let [regularData, namespace] = [this[`${target}RegularData`], this[`${target}Namespace`]];
                 let ifEnough = this.consume(skill, regularData, namespace);
                 let cache = 0;
                 let property = '';
@@ -561,12 +560,12 @@
                 this.roundCount();
             },
             //添加buff的相关逻辑
-            calculateBuff: function (user, skill) {
-                let regularData = this[`${user}RegularData`];
-                let userNamespace = this[`${user}Namespace`];
+            calculateBuff: function (user, skill, ifAtk) {
+                let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
                 let ifEnough = this.consume(skill, regularData, userNamespace);
                 if (ifEnough) {
-                    let [vm, type, buff, target] = [this, skill.effect.type, skill.effect.buff, ''];
+                    let [vm, buff, target] = [this, skill.effect.buff, ''];
+                    //首先判断施放buff的目标对象
                     if (skill.effect.target === 1) {
                         target = user;
                     } else {
@@ -576,29 +575,30 @@
                             target = 'enemy';
                         }
                     }
-                    let namespace = this[`${target}Namespace`];
-                    let originalValue = [];
+                    let [namespace, originalValue] = [this[`${target}Namespace`],
+                        []
+                    ];
                     //同一种类型的buff只能存在一个,push新的buff之前需pop已存在相同类型的buff
                     let ifIdentical = this[`${target}BuffList`].findIndex(e => {
-                        return e.type === skill.type;
+                        return e.buffType === skill.buffType;
                     });
                     if (ifIdentical !== -1) {
                         this.$store.commit(`${namespace}/changeRoundToZero`, {
                             index: ifIdentical
                         });
-                        this.$store.dispatch(`${target}/changeRound`, {
+                        this.$store.dispatch(`${namespace}/changeRound`, {
                             ifDecrease: false
                         });
                     }
-                    //若技能是提升一定数值的类型则先缓存原始值
-                    if (skill.type === 1) {
+                    //若技能是提升一定数值的类型则先缓存原始值到originalValue数组中
+                    if (skill.buffType === 1) {
                         buff.forEach(e => {
-                            //自身属性值
-                            let value = 0
+                            let value = 0;
+                            //缓存自身属性值
                             if (e.type === 1) {
                                 let [p1, p2] = [e.position[0], e.position[1]];
                                 value = vm.getValue(target, p1, p2);
-                                //技能
+                                //缓存技能的值
                             } else {
                                 let [p1, p2, p3, p4] = [e.position[0], e.position[1], e.position[
                                     2], e.position[3]];
@@ -612,13 +612,12 @@
                         });
                     }
                     //将buff push进目标的buff数组中
-
                     this.$store.commit(`${namespace}/pushBuff`, {
                         buff: {
                             sid: skill.sid,
                             name: skill.name,
                             round: skill.effect.round,
-                            type: skill.type,
+                            buffType: skill.buffType,
                             originalValue
                         }
                     });
@@ -627,7 +626,7 @@
                         //更改自身属性
                         if (e.type === 1) {
                             let [p1, p2] = [e.position[0], e.position[1]];
-                            let [changeValue, originValue] = [0, vm.getValue(namespace, p1, p2)];
+                            let [changeValue, originValue] = [0, vm.getValue(target, p1, p2)];
                             //判断技能是提升倍数还是增加固定数值
                             if (e.valueType === 'percentage') {
                                 changeValue = Math.ceil(originValue * e.value);
@@ -663,8 +662,10 @@
                 } else {
                     return false;
                 }
-                this.toggleSkillsPanel();
-                this.roundCount();
+                if (!ifAtk) {
+                    this.toggleSkillsPanel();
+                    this.roundCount();
+                }
             },
             findSkill: function (list, sid) {
                 let skill = null;
@@ -729,6 +730,7 @@
             //发动伤害技能
             useDamageSkill: function (attacker, target, list, sid) {
                 let skill = this.findSkill(list, sid);
+                this.calculateBuff(attacker, skill, true);
                 this.calculateDamage(2, attacker, target, skill);
             },
             //发动治疗技能
@@ -739,7 +741,7 @@
             //发动增/减益技能
             useBuffSkill: function (user, list, sid) {
                 let skill = this.findSkill(list, sid);
-                this.calculateBuff(user, skill);
+                this.calculateBuff(user, skill, false);
             },
             items: function () {
                 this.roundCount();
