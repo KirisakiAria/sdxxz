@@ -2,11 +2,11 @@
 	<section class="practice mainSection">
 		<transition name="slide-fade" mode="out-in">
 			<section v-if="show.list" class="list">
-				<div class="item" v-for='item in enemyList'>
+				<div :key="item.id" class="item" v-for='item in enemyList'>
 					<div class="head">{{item.level}}</div>
 					<div class="content">
 						<ul>
-							<li :key="list" v-for="key in item.list">
+							<li :key="key.eid" v-for="key in item.list">
 								<div class="ib">
 									<div class="top">
 										<span>{{key.baseAttributes.name.value}}</span>
@@ -23,7 +23,7 @@
 				</div>
 			</section>
 			<!-- 传入点击挑战按钮对应的敌人的数据 -->
-			<Battle enemy="enemy" v-if="show.battle"></Battle>
+			<Battle :enemy="enemy" v-if="show.battle" @closeBattle="closeBattle"></Battle>
 		</transition>
 	</section>
 </template>
@@ -80,8 +80,8 @@
 		data() {
 			return {
 				show: {
-					list: false,
-					battle: true
+					list: true,
+					battle: false
 				},
 				enemy: null
 			}
@@ -89,7 +89,7 @@
 		methods: {
 			pushArr: function (target) {
 				let [arr, state] = [
-					[], this.$store.state.enemy
+					[], this.$store.state
 				];
 				Array.from(arguments).forEach(e => {
 					arr.push(state[e]);
@@ -101,8 +101,7 @@
 				this.show.battle = true;
 				this.enemy = enemy;
 			},
-			close: function () {
-				console.log('1')
+			closeBattle: function () {
 				this.show.list = true;
 				this.show.battle = false;
 				this.enemy = null;
@@ -118,9 +117,11 @@
 			},
 			enemyList: function () {
 				return [{
+					id: 1,
 					level: '0~5级',
 					list: this.level0_5EnemyList
 				}, {
+					id: 2,
 					level: '6~10级',
 					list: this.level6_10EnemyList
 				}]

@@ -45,7 +45,7 @@ let state = {
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 25,
+			value: 2500,
 			grow: 7
 		},
 		mga: {
@@ -63,11 +63,14 @@ let state = {
 			value: 15,
 			grow: 2.8
 		},
-		//暴击系数默认1.5
 		crt: {
 			decs: '暴击',
 			value: 5,
 			grow: 1.2
+		},
+		mul: {
+			decs: '暴击系数',
+			value: 1.5
 		},
 		hit: {
 			decs: '命中',
@@ -158,7 +161,8 @@ let state = {
 
 let getters = {
 	levelUpExp: state => {
-		return state.level.value * (state.level.value + 5) * 10
+		let level = state.baseAttributes.level.value;
+		return level * (level + 5) * 10;
 	}
 }
 
@@ -168,6 +172,9 @@ const mutations = {
 	},
 	changeExtraAttributesOrElementsValue(state, payload) {
 		state[payload.type][payload.propety]['value'] = payload.value;
+	},
+	levelup(state) {
+		state.baseAttributes.level.value++;
 	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
@@ -222,6 +229,7 @@ const actions = {
 
 export default {
 	state,
+	getters,
 	mutations,
 	actions,
 	namespaced: true

@@ -1,8 +1,8 @@
 <template>
     <section class="battle mainSection">
-        <section class="control section">
-            <h5 class="tac">战斗信息</h5>
-            <p>傻吊村小傻吊对你发动了物理攻击，生命损失20点</p>
+        <section class="control section tac">
+            <h5>战斗信息</h5>
+            <p>此模块尚未开发</p>
         </section>
         <section class="enemy section">
             <div v-if="round.enemy" class="round">
@@ -157,7 +157,7 @@
             </section>
         </transition>
         <transition name="scale-fade">
-            <Tips :content="tipsData" v-show="show.tips" @closeTips="closeTips"></Tips>
+            <Tips :content="tips.data" v-show="show.tips" @closeTips="closeTips()" @click.native="closeBattle()"></Tips>
         </transition>
     </section>
 </template>
@@ -375,7 +375,10 @@
                         slient: false
                     }
                 },
-                tipsData: ''
+                tips: {
+                    data: '',
+                    close: false
+                }
             };
         },
         methods: {
@@ -440,7 +443,7 @@
                     let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
                     let spdCache = this.getValue(target, 'extraAttributes',
                         'spd');
-                    let hitRate = (hitCache + 100) / (spdCache + 100) * .7;
+                    let hitRate = (hitCache + 100) / (spdCache + 100) * .65;
                     let random = Math.random();
                     if (random > hitRate) {
                         console.log('攻击落空');
@@ -453,8 +456,13 @@
                         losingValue = atkValue - defValue;
                     }
                 } else {
-                    //首先计算是否有足够血量/魔法能发动技能
-                    let ifEnough = this.consume(skill, atkRegularData, atkNamespace);
+                    //首先计算是否有足够血量/魔法能发动技能，如果此技能会施加负面状态则在计算状态时已经判断过消耗
+                    let ifEnough = false;
+                    if (!skill.effect.buff) {
+                        ifEnough = this.consume(skill, atkRegularData, atkNamespace);
+                    } else {
+                        ifEnough = true;
+                    }
                     if (ifEnough) {
                         let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
                         let resCache = this.getValue(target, 'extraAttributes', 'res');
@@ -485,28 +493,28 @@
                                     elementsDamage = mgaCache * 0.6 - defCache * 0.8;
                                     break;
                                 case 2:
-                                    elementsDamage = mgaCache * 0.4 * (attackerElements.fire * 1.2 - targetElements
+                                    elementsDamage = mgaCache * 0.3 * (attackerElements.fire * 1.1 - targetElements
                                         .fire *
                                         0.8);
                                     break;
                                 case 3:
-                                    elementsDamage = mgaCache * 0.4 * (attackerElements.ice * 1.2 - targetElements
+                                    elementsDamage = mgaCache * 0.3 * (attackerElements.ice * 1.1 - targetElements
                                         .ice *
                                         0.8);
                                     break;
                                 case 4:
-                                    elementsDamage = mgaCache * 0.4 * (attackerElements.toxic * 1.2 -
+                                    elementsDamage = mgaCache * 0.3 * (attackerElements.toxic * 1.1 -
                                         targetElements
                                         .toxic *
                                         0.8);
                                     break;
                                 case 5:
-                                    elementsDamage = mgaCache * 0.4 * (attackerElements.wind * 1.2 -
+                                    elementsDamage = mgaCache * 0.3 * (attackerElements.wind * 1.1 -
                                         targetElements.wind *
                                         0.8);
                                     break;
                                 case 6:
-                                    elementsDamage = mgaCache * 0.4 * (attackerElements.earth * 1.2 -
+                                    elementsDamage = mgaCache * 0.3 * (attackerElements.earth * 1.1 -
                                         targetElements
                                         .earth *
                                         0.8);
@@ -659,6 +667,7 @@
                             });
                         }
                     });
+                    return true;
                 } else {
                     return false;
                 }
@@ -730,8 +739,10 @@
             //发动伤害技能
             useDamageSkill: function (attacker, target, list, sid) {
                 let skill = this.findSkill(list, sid);
-                this.calculateBuff(attacker, skill, true);
-                this.calculateDamage(2, attacker, target, skill);
+                let ifConsume = this.calculateBuff(attacker, skill, true);
+                if (ifConsume) {
+                    this.calculateDamage(2, attacker, target, skill);
+                }
             },
             //发动治疗技能
             useCureSkill: function (target, list, sid) {
@@ -805,29 +816,31 @@
                 }
             },
             openTips: function (content) {
-                this.tipsData = content;
+                this.tips.data = content;
                 this.show.tips = true;
             },
             closeTips: function () {
                 this.show.tips = false;
+            },
+            closeBattle: function () {
+                if (this.tips.close) {
+                    this.$emit('closeBattle');
+                }
             }
         },
-        // props: [
-        // 	'enemy'
-        // ],
+        props: [
+            'enemy'
+        ],
         computed: {
             //取得命名空间用来commit
             playerNamespace: function () {
                 return this.$store.state.player.baseAttributes.namespace;
             },
             enemyNamespace: function () {
-                return this.$store.state.villageC.baseAttributes.namespace;
+                return this.enemy.baseAttributes.namespace;
             },
             player: function () {
                 return this.$store.state.player;
-            },
-            enemy: function () {
-                return this.$store.state.villageC;
             },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
@@ -865,6 +878,9 @@
             },
             enemyBuffList: function () {
                 return this.enemy.buff;
+            },
+            levelUpExp() {
+                return this.$store.getters['player/levelUpExp']
             }
         },
         watch: {
@@ -874,13 +890,59 @@
                     let [pHp, eHp] = [this.playerRegularData.hp, this.enemyRegularData.hp];
                     //死亡
                     if (!pHp) {
+                        //重置自己的状态
+                        let [maxhp, maxmp] = [this.player.baseAttributes.maxhp.value, this.player.baseAttributes.maxmp.value];
+                        this.$store.commit('player/changeBaseAttributesValue', {
+                            propety: 'hp',
+                            value: maxhp * 0.1
+                        });
+                        this.$store.commit('player/changeBaseAttributesValue', {
+                            propety: 'mp',
+                            value: maxmp * 0.1
+                        });
+                        this.playerBuffList.forEach((e, i) => {
+                            this.$store.commit('player/changeRoundToZero', {
+                                index: i
+                            });
+                        });
+                        this.$store.dispatch('player/changeRound', {
+                            ifDecrease: false
+                        });
+                        this.tips.close = true;
                         this.openTips('gg');
-                        this.$emit('closeBattle');
                         //获胜
                     } else if (!eHp) {
                         //经验获取、升级
-
-                        this.$emit('closeBattle');
+                        let value = this.enemy.baseAttributes.exp.value;
+                        this.$store.commit('player/changeBaseAttributesValue', {
+                            propety: 'exp',
+                            value
+                        });
+                        let nowExp = this.player.baseAttributes.exp.value;
+                        if (this.levelUpExp <= nowExp) {
+                            this.$store.commit('player/levelup');
+                        }
+                        //重置怪物的状态
+                        let enemyNamespace = this.enemyNamespace;
+                        let [maxhp, maxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
+                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
+                            propety: 'hp',
+                            value: maxhp
+                        });
+                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
+                            propety: 'mp',
+                            value: maxmp
+                        });
+                        this.enemyBuffList.forEach((e, i) => {
+                            this.$store.commit(`${enemyNamespace}/changeRoundToZero`, {
+                                index: i
+                            });
+                        });
+                        this.$store.dispatch(`${enemyNamespace}/changeRound`, {
+                            ifDecrease: false
+                        });
+                        this.tips.close = true;
+                        this.openTips('获胜！');
                     } else if (newValue.enemy) {
                         this.enemyAction();
                     }

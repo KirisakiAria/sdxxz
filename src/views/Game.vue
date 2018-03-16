@@ -1,11 +1,13 @@
 <template>
 	<section class="game mainSection">
 		<transition name="slide2-fade" mode="out-in">
-			<Mission v-if="showList[0]"></Mission>
-			<Practice v-if="showList[1]"></Practice>
-			<Skill v-if="showList[2]"></Skill>
-			<Backpack v-if="showList[3]"></Backpack>
-			<My v-if="showList[4]"></My>
+			<keep-alive>
+				<Mission v-if="showList[0]"></Mission>
+				<Practice v-if="showList[1]"></Practice>
+				<Skill v-if="showList[2]"></Skill>
+				<Backpack v-if="showList[3]"></Backpack>
+				<My v-if="showList[4]"></My>
+			</keep-alive>
 		</transition>
 		<footerView></footerView>
 	</section>

@@ -5,9 +5,9 @@ let state = {
 			learned: true,
 			level: 1,
 			name: '扬沙',
-			desc: '抓起一把沙子扬过去，对敌方造成48点风属性伤害，并减少对方22%命中，持续两回合',
+			desc: '抓起一把沙子扬过去，对敌方造成42点风属性伤害，并减少对方22%命中，持续两回合',
 			buffType: 1,
-			consume: 60,
+			consume: 65,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -19,7 +19,7 @@ let state = {
 						name: '风'
 					},
 					ignoring: false,
-					value: 48
+					value: 42
 				},
 				target: 2,
 				buff: [{
@@ -34,7 +34,7 @@ let state = {
 		cnm: {
 			sid: '0001',
 			learned: false,
-			level: 3,
+			level: 5,
 			name: '素质对话',
 			desc: '与敌方单体进行文明交流，敌方素质明显提高然后受到85点物理伤害。',
 			consume: 50,
@@ -175,35 +175,35 @@ let state = {
 	cureSkills: {
 		buy: {
 			sid: '1000',
-			learned: true,
-			level: 1,
+			learned: false,
+			level: 2,
 			name: '+1',
-			desc: '+1使我神清气爽，恢复66点生命。',
-			consume: 75,
+			desc: '+1使我神清气爽，恢复78点生命。',
+			consume: 72,
 			consumeType: {
 				name: '魔法',
 				value: 1
 			},
 			effect: {
 				cure: {
-					value: 66
+					value: 78
 				}
 			}
 		},
 		cut: {
 			sid: '1001',
 			learned: false,
-			level: 5,
+			level: 6,
 			name: '剁手',
-			desc: '没钱了但又控制不住欲望，只能把手剁了，失去78点生命恢复120点魔法。',
-			consume: 78,
+			desc: '没钱了但又控制不住欲望，只能把手剁了，失去74点生命恢复150点魔法。',
+			consume: 74,
 			consumeType: {
 				name: '生命',
 				value: 2
 			},
 			effect: {
 				cure: {
-					value: 160
+					value: 150
 				}
 			}
 		},
@@ -215,8 +215,8 @@ let state = {
 	buffSkills: {
 		login: {
 			sid: '2000',
-			learned: true,
-			level: 1,
+			learned: false,
+			level: 4,
 			buffType: 1,
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12',

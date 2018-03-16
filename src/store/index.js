@@ -17,6 +17,9 @@ export default new Vuex.Store({
 		player,
 		playerSkills,
 		villageC,
+		villageB,
+		villageA,
+		villageS,
 		enemySkills
 	}
 });

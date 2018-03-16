@@ -32,13 +32,13 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 40
+			value: 4000
 		}
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 30
+			value: 25
 		},
 		mga: {
 			decs: '魔攻',
@@ -46,19 +46,23 @@ let state = {
 		},
 		def: {
 			decs: '物防',
-			value: 16
+			value: 10
 		},
 		res: {
 			decs: '魔防',
-			value: 18
+			value: 14
 		},
 		crt: {
 			decs: '暴击',
-			value: 10
+			value: 6
+		},
+		mul: {
+			decs: '暴击系数',
+			value: 1.5
 		},
 		hit: {
 			decs: '命中',
-			value: 35
+			value: 32
 		},
 		spd: {
 			decs: '速度',
