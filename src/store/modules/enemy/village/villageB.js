@@ -1,22 +1,22 @@
 let state = {
 	baseAttributes: {
 		eid: 0,
-		namespace: 'villageC',
+		namespace: 'villageB',
 		name: {
 			decs: '姓名',
-			value: '傻屌村小傻屌'
+			value: '傻屌村中傻屌'
 		},
 		description: {
 			decs: '描述',
-			value: '最辣鸡的傻屌，打不过你就退群吧'
+			value: '倒数第二辣鸡的傻屌，打不过你就退群吧'
 		},
 		level: {
 			decs: '等级',
-			value: 2
+			value: 3
 		},
 		hp: {
 			decs: '生命',
-			value: 140
+			value: 180
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 140
+			value: 180
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -32,13 +32,13 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 4000
+			value: 68
 		}
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 25
+			value: 32
 		},
 		mga: {
 			decs: '魔攻',
@@ -46,15 +46,15 @@ let state = {
 		},
 		def: {
 			decs: '物防',
-			value: 10
+			value: 18
 		},
 		res: {
 			decs: '魔防',
-			value: 14
+			value: 20
 		},
 		crt: {
 			decs: '暴击',
-			value: 6
+			value: 9
 		},
 		mul: {
 			decs: '暴击系数',
@@ -62,11 +62,11 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 32
+			value: 40
 		},
 		spd: {
 			decs: '速度',
-			value: 1
+			value: 3
 		}
 	},
 	elements: {

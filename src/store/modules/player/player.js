@@ -26,46 +26,46 @@ let state = {
 		},
 		hp: {
 			decs: '当前生命',
-			value: 240,
+			value: 190,
 		},
 		mp: {
 			decs: '当前魔法',
-			value: 180,
+			value: 120,
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 240,
+			value: 190,
 		},
 		maxmp: {
 			decs: '魔法总量',
-			value: 180,
+			value: 120,
 		},
 		namespace: 'player'
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 2500,
+			value: 28,
 			grow: 7
 		},
 		mga: {
 			decs: '魔攻',
-			value: 20,
+			value: 21,
 			grow: 5
 		},
 		def: {
 			decs: '物防',
-			value: 15,
+			value: 14,
 			grow: 4.6
 		},
 		res: {
 			decs: '魔防',
-			value: 15,
+			value: 12,
 			grow: 2.8
 		},
 		crt: {
 			decs: '暴击',
-			value: 5,
+			value: 6,
 			grow: 1.2
 		},
 		mul: {
@@ -74,22 +74,22 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 40,
+			value: 42,
 			grow: 2.5
 		},
 		spd: {
 			decs: '速度',
-			value: 3,
+			value: 4,
 			grow: 0.4
 		},
 		chr: {
 			decs: '魅力',
-			value: 10,
+			value: 12,
 			grow: 3
 		},
 		luk: {
 			decs: '幸运',
-			value: 10,
+			value: 5,
 			grow: 5
 		},
 		gold: {
@@ -106,27 +106,27 @@ let state = {
 		fire: {
 			decs: '火属性',
 			value: 5,
-			grow: 1.5
+			grow: 1.6
 		},
 		ice: {
 			decs: '冰属性',
 			value: 5,
-			grow: 1.5
+			grow: 1.6
 		},
 		toxic: {
 			decs: '毒属性',
 			value: 5,
-			grow: 1.5
+			grow: 1.6
 		},
 		wind: {
 			decs: '风属性',
 			value: 5,
-			grow: 1.5
+			grow: 1.6
 		},
 		earth: {
 			decs: '土属性',
 			value: 5,
-			grow: 1.5
+			grow: 1.6
 		}
 	},
 	equipments: {

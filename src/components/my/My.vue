@@ -22,6 +22,7 @@
 					<span>{{baseAttributes[7].value}}/{{baseAttributes[9].value}}</span>
 				</div>
 			</div>
+			<ProgressBar :value="playerExp" :max="playerLevelUpExp"></ProgressBar>
 			<div class="attributes">
 				<ul>
 					<li :key="items.decs" v-for="items in extraAttributes">{{items.decs}}：{{items.value}}</li>
@@ -152,6 +153,7 @@
 <script>
 	import avatarImg from '../../assets/images/avatar.jpg'
 	import bgImg from '../../assets/images/bg.png'
+	import ProgressBar from '../progressbar/ProgressBar'
 
 	export default {
 		name: 'My',
@@ -186,7 +188,16 @@
 			},
 			elements: function () {
 				return this.getPlayerArr('elements');
+			},
+			playerExp: function () {
+				return this.baseAttributes[3]['value'];
+			},
+			playerLevelUpExp: function () {
+				return this.$store.getters['player/levelUpExp']
 			}
-		}
+		},
+		components: {
+			ProgressBar
+		},
 	}
 </script>

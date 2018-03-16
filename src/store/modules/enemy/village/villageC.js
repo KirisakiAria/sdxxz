@@ -32,7 +32,7 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 4000
+			value: 28
 		}
 	},
 	extraAttributes: {

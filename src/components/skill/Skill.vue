@@ -11,7 +11,7 @@
 			<transition name="slide2-fade" mode="out-in">
 				<div key="damageSkillsList" v-if="show.damage" class="damageSkillsList">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList" @click="learn(item.level,item.point)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">伤害量：{{item.effect.damage.value}}</span>
@@ -26,7 +26,7 @@
 				</div>
 				<div key="cureSkillsList" v-if="show.cure" class="cureSkillsList">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList" @click="learn(item.level,item.point)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
@@ -40,7 +40,7 @@
 				</div>
 				<div key="buffSkillsList" v-if="show.buff" class="buffSkillsList">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList" @click="learn(item.level,item.point)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -54,7 +54,7 @@
 				</div>
 				<div key="passiveSkillsList" v-if="show.passive" class="passiveSkillsList">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList">
+						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList" @click="learn(item.level,item.point)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 							</div>
@@ -179,6 +179,9 @@
 					arr.push(e);
 				});
 				return arr;
+			},
+			learn: function (level, point) {
+				console.log(level + '' + point)
 			}
 		},
 		computed: {

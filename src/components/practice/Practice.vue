@@ -1,6 +1,6 @@
 <template>
 	<section class="practice mainSection">
-		<transition name="slide-fade" mode="out-in">
+		<transition name="slide2-fade" mode="out-in">
 			<section v-if="show.list" class="list">
 				<div :key="item.id" class="item" v-for='item in enemyList'>
 					<div class="head">{{item.level}}</div>
