@@ -113,7 +113,7 @@ const actions = {
 		if (length) {
 			buff.forEach(e => {
 				e.round--;
-				if (!e.round) {
+				if (e.round<=0) {
 					//buff剩余回合为0了就把原始值再赋回去
 					e.originalValue.forEach(item => {
 						let [p1, p2] = [item.position[0], item.position[1]];
@@ -135,7 +135,7 @@ const actions = {
 				}
 			}
 		}
-		console.log(context.state.buff);
+		//console.log(context.state.buff);
 	},
 	changeSkillValue: function (context, payload) {
 		let [p1, p2] = [payload.p1, payload.p2];

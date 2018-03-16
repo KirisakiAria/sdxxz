@@ -71,8 +71,10 @@
                 <div class="operation">
                     <h6 class="tac">操作</h6>
                     <div class="con">
-                        <button :class="{disabled:round.enemy||disabled.disarm}" :disabled="round.enemy||disabled.disarm" class="btn" @click="attack('player','enemy')">攻击</button>
-                        <button :class="{disabled:round.enemy||disabled.slient}" :disabled="round.enemy||disabled.slient" class="btn" @click="toggleSkillsPanel()">技能</button>
+                        <button :class="{disabled:round.enemy||disabled.player.disarm}" :disabled="round.enemy||disabled.player.disarm" class="btn"
+                            @click="attack('player','enemy')">攻击</button>
+                        <button :class="{disabled:round.enemy||disabled.player.slient}" :disabled="round.enemy||disabled.player.slient" class="btn"
+                            @click="toggleSkillsPanel()">技能</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="items(1)">道具</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn">占位</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape(1)">逃跑</button>
@@ -343,16 +345,13 @@
 </style>
 <script>
     import Tips from '../tips/Tips';
-    import {
-        STATUS_CODES
-    } from 'http';
 
     export default {
         name: 'Battle',
         data() {
             return {
                 round: {
-                    num: 0, //这里的回合数为小回合
+                    num: 0, //此数值*2为正常情况下的一回合
                     enemy: false,
                     player: true
                 },
@@ -367,8 +366,14 @@
                     tips: false
                 },
                 disabled: {
-                    disarm: false,
-                    slient: false
+                    player: {
+                        disarm: false,
+                        slient: false
+                    },
+                    enemy: {
+                        disarm: false,
+                        slient: false
+                    }
                 },
                 tipsData: ''
             };
@@ -401,21 +406,25 @@
                 if (!(this.round.num % 2)) {
                     let enemy = this.enemyNamespace;
                     //敌我双方buff持续时间各减少一回合
-                    this.$store.dispatch('player/changeRound');
-                    this.$store.dispatch(`${enemy}/changeRound`);
-                    this.deBuff('playerBuffList', 'slient');
-                    this.deBuff('enemyBuffList', 'slient');
-                    this.deBuff('playerBuffList', 'disarm');
-                    this.deBuff('enemyBuffList', 'disarm');
+                    this.$store.dispatch('player/changeRound', {
+                        ifDecrease: true
+                    });
+                    this.$store.dispatch(`${enemy}/changeRound`, {
+                        ifDecrease: true
+                    });
+                    this.deBuff('player', 'slient');
+                    this.deBuff('enemy', 'slient');
+                    this.deBuff('player', 'disarm');
+                    this.deBuff('enemy', 'disarm');
                 }
             },
-            deBuff: function (list, debuffName) {
-                let buffList = this[list];
+            deBuff: function (target, debuffName) {
+                let buffList = this[`${target}BuffList`];
                 let ifDebuff = buffList.findIndex(e => {
                     return e.type === debuffName;
                 });
                 if (ifDebuff !== -1) {
-                    this.disabled[debuffName] = true;
+                    this.disabled[target][debuffName] = true;
                 }
             },
             //计算伤害
@@ -554,8 +563,8 @@
             //添加buff的相关逻辑
             calculateBuff: function (user, skill) {
                 let regularData = this[`${user}RegularData`];
-                let namespace = this[`${user}Namespace`];
-                let ifEnough = this.consume(skill, regularData, namespace);
+                let userNamespace = this[`${user}Namespace`];
+                let ifEnough = this.consume(skill, regularData, userNamespace);
                 if (ifEnough) {
                     let [vm, type, buff, target] = [this, skill.effect.type, skill.effect.buff, ''];
                     if (skill.effect.target === 1) {
@@ -567,8 +576,20 @@
                             target = 'enemy';
                         }
                     }
+                    let namespace = this[`${target}Namespace`];
                     let originalValue = [];
-                    let skillType = 'normal';
+                    //同一种类型的buff只能存在一个,push新的buff之前需pop已存在相同类型的buff
+                    let ifIdentical = this[`${target}BuffList`].findIndex(e => {
+                        return e.type === skill.type;
+                    });
+                    if (ifIdentical !== -1) {
+                        this.$store.commit(`${namespace}/changeRoundToZero`, {
+                            index: ifIdentical
+                        });
+                        this.$store.dispatch(`${target}/changeRound`, {
+                            ifDecrease: false
+                        });
+                    }
                     //若技能是提升一定数值的类型则先缓存原始值
                     if (skill.type === 1) {
                         buff.forEach(e => {
@@ -589,17 +610,15 @@
                                 value: value
                             });
                         });
-                    } else {
-                        skillType = skill.effect.buff[0].position
                     }
                     //将buff push进目标的buff数组中
-                    let namespace = this[`${target}Namespace`];
+
                     this.$store.commit(`${namespace}/pushBuff`, {
                         buff: {
                             sid: skill.sid,
                             name: skill.name,
                             round: skill.effect.round,
-                            type: skillType,
+                            type: skill.type,
                             originalValue
                         }
                     });

@@ -30,7 +30,7 @@ let state = {
 		},
 		mp: {
 			decs: '当前魔法',
-			value: 200,
+			value: 2000000,
 		},
 		maxhp: {
 			decs: '生命总量',
@@ -38,7 +38,7 @@ let state = {
 		},
 		maxmp: {
 			decs: '魔法总量',
-			value: 200,
+			value: 2000000,
 		},
 		namespace: 'player'
 	},
@@ -93,13 +93,9 @@ let state = {
 			decs: '金钱',
 			value: 0
 		},
-		points: {
-			decs: '属性点',
-			value: 0
-		},
 		sp: {
 			decs: '技能点',
-			value: 1,
+			value: 0,
 			grow: 1
 		}
 	},
@@ -176,6 +172,9 @@ const mutations = {
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
 	},
+	changeRoundToZero(state, payload) {
+		state.buff[payload.index].round = 0;
+	},
 	removeDesignatedBuff(state, payload) {
 		state.buff.splice(state.buff.findIndex(e => {
 			return e.sid === payload.sid;
@@ -184,11 +183,13 @@ const mutations = {
 }
 
 const actions = {
-	changeRound(context) {
-		let [buff, length] = [context.state.buff, context.state.buff.length];
+	changeRound(context, payload) {
+		let [buff, length, ifDecrease] = [context.state.buff, context.state.buff.length, payload.ifDecrease];
 		if (length) {
 			buff.forEach(e => {
-				e.round--;
+				if (ifDecrease) {
+					e.round--;
+				}
 				if (!e.round) {
 					//buff剩余回合为0了就把原始值再赋回去
 					e.originalValue.forEach(item => {

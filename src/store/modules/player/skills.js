@@ -53,7 +53,7 @@ let state = {
 		},
 		cnmnmbngsb: {
 			sid: '0002',
-			learned: true,
+			learned: false,
 			level: 20,
 			name: '素质三连',
 			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到328点无视魔防的物理伤害，物防降低28%，持续三回合',
@@ -347,7 +347,7 @@ let state = {
 				target: 1,
 				buff: [{
 					type: 2,
-					position: ['cureSkills', 'buy'],
+					position: ['cureSkills', 'buy', 'effect', 'cure'],
 					value: 3,
 					valueType: 'percentage'
 				}],
