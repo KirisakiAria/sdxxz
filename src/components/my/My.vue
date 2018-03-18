@@ -22,7 +22,7 @@
 					<span>{{baseAttributes[7].value}}/{{baseAttributes[9].value}}</span>
 				</div>
 			</div>
-			<ProgressBar :value="playerExp" :max="playerLevelUpExp"></ProgressBar>
+			<ProgressBar :value="start" :max="end"></ProgressBar>
 			<div class="attributes">
 				<ul>
 					<li :key="items.decs" v-for="items in extraAttributes">{{items.decs}}：{{items.value}}</li>
@@ -189,11 +189,15 @@
 			elements: function () {
 				return this.getPlayerArr('elements');
 			},
-			playerExp: function () {
-				return this.baseAttributes[3]['value'];
+			currentLevelExp: function () {
+				let prevlevel = this.baseAttributes[2]['value'] - 1;
+				return prevlevel * (prevlevel + 5) * 10;
 			},
-			playerLevelUpExp: function () {
-				return this.$store.getters['player/levelUpExp']
+			start: function () {
+				return this.baseAttributes[3]['value'] - this.currentLevelExp;
+			},
+			end: function () {
+				return this.$store.getters['player/levelUpExp'] - this.currentLevelExp;
 			}
 		},
 		components: {
