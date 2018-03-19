@@ -1,7 +1,7 @@
 <template>
 	<main class="main">
 		<transition name="slide-fade" mode="out-in">
-			<!-- <section v-if="show.main" class="menu mainSection">
+			<section v-if="show.main" class="menu mainSection">
 				<div class="link">
 					<a href="https://github.com/KirisakiAria/sdxxz" target="_blank" title="github">
 						<i class="iconfont icon-github"></i>
@@ -16,7 +16,8 @@
 						<router-link to="/new">新的游戏</router-link>
 					</li>
 					<li>
-						<router-link to="/load">读取存档</router-link>
+						<button>读取存档</button>
+						<input class="file" type="file" @change="load()" ref="file" />
 					</li>
 					<li>
 						<router-link to="/setting">设置</router-link>
@@ -25,7 +26,7 @@
 				<footer class="footer">
 					<p>伟大鱼塘</p>
 				</footer>
-			</section> -->
+			</section>
 			<router-view></router-view>
 		</transition>
 	</main>
@@ -33,11 +34,18 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import './style/style';
-
 	.menu {
 		height: 100vh;
 		position: relative;
 		.col;
+		.file {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			opacity: 0;
+		}
 		.link {
 
 			position: absolute;
@@ -57,11 +65,19 @@
 			margin-top: .618rem;
 
 			li {
-				padding: .14rem;
-				font-size: .16rem;
 				margin: .18rem 0;
 				.bor(#ccc);
 				text-align: center;
+				position: relative;
+				a,
+				button {
+					width: auto;
+					height: auto;
+					border: none;
+					padding: .14rem;
+					display: inline-block;
+					font-size: .16rem;
+				}
 			}
 		}
 
@@ -79,6 +95,22 @@
 			return {
 				show: {
 					main: true
+				}
+			}
+		},
+		methods: {
+			//读档
+			load: function () {
+				let vm = this;
+				let file = this.$refs.file.files[0];
+				let reader = new FileReader();
+				reader.readAsText(file, 'utf-8');
+				reader.onload = function () {
+					let data = JSON.parse(this.result);
+					vm.$store.commit('player/loadData', {
+						data
+					});
+					vm.$router.push('game');
 				}
 			}
 		},

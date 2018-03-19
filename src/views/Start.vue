@@ -10,12 +10,15 @@
 			<p>请选择特长</p>
 			<div class="group">
 				<ul>
-					<li :key="speciality" v-for="item in specialitArray">
+					<li :key="item.spid" v-for="item in specialitArray">
 						<button @click="setSpeciality(item.speciality,item.spid)">{{ item.speciality }}</button>
 					</li>
 				</ul>
 			</div>
 		</section>
+		<transition name="scale-fade">
+			<Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips()"></Tips>
+		</transition>
 	</section>
 </template>
 
@@ -23,7 +26,7 @@
 	@import '../style/style';
 	.start {
 		.col;
-
+		height: 100vh;
 		.username {
 			input {
 				display: block;
@@ -59,6 +62,8 @@
 </style>
 
 <script>
+	import Tips from '../components/tips/Tips';
+
 	export default {
 		name: 'Start',
 		data() {
@@ -79,36 +84,50 @@
 				}, {
 					speciality: '摸鱼',
 					spid: 5
-				}]
+				}],
+				tips: {
+					data: '',
+					show: false
+				}
 			}
 		},
 		methods: {
 			changeUsername() {
-				this.$store.commit('player/changeBaseValue', {
+				this.$store.commit('player/changeBaseAttributesValue', {
 					propety: 'name',
 					value: this.username
 				});
 			},
 			setSpeciality: function (speciality, spid) {
-				this.$store.commit('player/changeBaseValue', {
+				this.$store.commit('player/changeBaseAttributesValue', {
 					propety: 'spid',
 					value: spid
 				});
-				this.$store.commit('player/changeBaseValue', {
+				this.$store.commit('player/changeBaseAttributesValue', {
 					propety: 'speciality',
 					value: speciality
 				});
 				if (this.username != '') {
 					this.goStart();
 				} else {
-					alert('请输入角色名');
+					this.openTips('请输入角色名');
 				}
 			},
 			goStart: function () {
 				this.$router.push({
 					path: 'game'
 				});
-			}
+			},
+			openTips: function (content) {
+				this.tips.data = content;
+				this.tips.show = true;
+			},
+			closeTips: function () {
+				this.tips.show = false;
+			},
+		},
+		components: {
+			Tips
 		}
 	}
 </script>

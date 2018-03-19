@@ -49,7 +49,7 @@ let state = {
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 28,
+			value: 2800,
 			grow: 6
 		},
 		mga: {
@@ -179,20 +179,12 @@ const mutations = {
 	},
 	levelup(state) {
 		state.baseAttributes.level.value++;
-		Object.keys(state.baseAttributes).forEach(e => {
-			if (state.baseAttributes[e]['grow']) {
-				state.baseAttributes[e]['value'] += state.baseAttributes[e]['grow'];
-			}
-		});
-		Object.keys(state.extraAttributes).forEach(e => {
-			if (state.extraAttributes[e]['grow']) {
-				state.extraAttributes[e]['value'] += state.extraAttributes[e]['grow'];
-			}
-		});
-		Object.keys(state.elements).forEach(e => {
-			if (state.elements[e]['grow']) {
-				state.elements[e]['value'] += state.elements[e]['grow'];
-			}
+		Object.keys(state).forEach(e => {
+			Object.keys(state[e]).forEach(e2 => {
+				if (state[e][e2]['grow']) {
+					state[e][e2]['value'] += state[e][e2]['grow'];
+				}
+			});
 		});
 	},
 	pushBuff(state, payload) {
@@ -205,6 +197,12 @@ const mutations = {
 		state.buff.splice(state.buff.findIndex(e => {
 			return e.sid === payload.sid;
 		}), 1);
+	},
+	loadData(state, payload) {
+		Object.keys(state).forEach(e => {
+			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
+				state[e] = payload['data'][e];
+		});
 	}
 }
 

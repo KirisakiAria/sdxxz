@@ -6,6 +6,7 @@
 			</div>
 			<h4 class="tac">{{baseAttributes[0].value}}</h4>
 			<h6 class="tac">称号:{{baseAttributes[1].value}}</h6>
+			<button @click="save()">存档</button>
 		</section>
 		<section class="data">
 			<div class="card">
@@ -56,6 +57,18 @@
 
 			background-image: url(../../assets/images/bg.png);
 			background-size: cover;
+
+			button {
+				position: absolute;
+				right: .15rem;
+				top: .15rem;
+				width: .7rem;
+				height: .25rem;
+				font-size: .1rem;
+				.br;
+				.bor(#5f27cd);
+				background: #5f27cd;
+			}
 		}
 
 		.avatar {
@@ -152,16 +165,15 @@
 
 <script>
 	import avatarImg from '../../assets/images/avatar.jpg'
-	import bgImg from '../../assets/images/bg.png'
 	import ProgressBar from '../progressbar/ProgressBar'
+	import FileSaver from 'file-saver'
 
 	export default {
 		name: 'My',
 		data() {
 			return {
 				img: {
-					avatar: avatarImg,
-					bg: bgImg
+					avatar: avatarImg
 				}
 			}
 		},
@@ -174,6 +186,13 @@
 					arr.push(e);
 				});
 				return arr;
+			},
+			save: function () {
+				let data = this.$store.state.player;
+				let blob = new Blob([JSON.stringify(data)], {
+					type: ""
+				});
+				FileSaver.saveAs(blob, "save.json");
 			}
 		},
 		computed: {

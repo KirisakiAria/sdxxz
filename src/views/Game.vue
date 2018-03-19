@@ -1,6 +1,6 @@
 <template>
 	<section class="game mainSection">
-		<transition name="slide2-fade" mode="out-in">
+		<transition name="slide-fade" mode="out-in">
 			<keep-alive>
 				<Mission v-if="showList[0]"></Mission>
 				<Practice v-if="showList[1]"></Practice>

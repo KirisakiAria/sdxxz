@@ -65,7 +65,7 @@
 					show: 'mission',
 					disabled: false
 				}, {
-					isActive: true,
+					isActive: false,
 					title: '修炼场',
 					fontClass: 'iconfont icon-practice',
 					show: 'practice',
@@ -83,7 +83,7 @@
 					show: 'backpack',
 					disabled: false
 				}, {
-					isActive: false,
+					isActive: true,
 					title: '个人',
 					fontClass: 'iconfont icon-my',
 					show: 'my',

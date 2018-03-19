@@ -8,7 +8,7 @@
 		</section>
 		<section class="content">
 			<p class="tips">tips：深色背景为尚未学习的技能，点击学习</p>
-			<transition name="slide2-fade" mode="out-in">
+			<transition name="slide-fade" mode="out-in">
 				<div key="damageSkillsList" v-if="show.damage" class="damageSkillsList">
 					<ul>
 						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList" @click="learn(item)">

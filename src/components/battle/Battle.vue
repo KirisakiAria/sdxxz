@@ -94,7 +94,7 @@
                     </section>
                     <section class="content">
                         <p>点击使用技能</p>
-                        <transition name="slide2-fade" mode="out-in">
+                        <transition name="slide-fade" mode="out-in">
                             <div key="damageSkillsList" v-if="show.skillPanleList.damage" class="damageSkillsList">
                                 <ul>
                                     <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy','damageSkillsList',item.sid)">
@@ -928,7 +928,6 @@
                         let gotValue = this.enemy.baseAttributes.exp.value;
                         let nowValue = this.player.baseAttributes.exp.value;
                         if (!pHp) {
-                            this.openTips('gg');
                             this.$store.commit('player/changeBaseAttributesValue', {
                                 propety: 'exp',
                                 value: nowValue - gotValue
@@ -943,16 +942,19 @@
                                     value: prevLevelUpExp
                                 });
                             }
+                            this.openTips('gg');
                         } else {
-                            this.openTips('获胜！');
+                            //获得经验
                             this.$store.commit('player/changeBaseAttributesValue', {
                                 propety: 'exp',
                                 value: nowValue + gotValue
                             });
                             let nowExp = this.player.baseAttributes.exp.value;
+                            //升级
                             if (this.levelUpExp <= nowExp) {
                                 this.$store.commit('player/levelup');
                             }
+                            this.openTips('获胜！');
                         }
                     } else if (newValue.enemy) {
                         this.enemyAction();
