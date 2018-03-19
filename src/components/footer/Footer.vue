@@ -1,9 +1,11 @@
 <template>
 	<footer class="footer">
 		<ul>
-			<li :class="{active:item.isActive}" v-for="item in footerDate" @click="changeClass(item)">
-				<i :class="item.fontClass"></i>
-				<span>{{item.title}}</span>
+			<li :key="item.title" v-for="item in footerData">
+				<button :disabled="item.disabled" :class="{active:item.isActive}" @click="changeClass(item)">
+					<i :class="item.fontClass"></i>
+					<span>{{item.title}}</span>
+				</button>
 			</li>
 		</ul>
 	</footer>
@@ -13,7 +15,6 @@
 	@import "../../style/style";
 
 	.footer {
-
 		position: fixed;
 		width: 100vw;
 		bottom: 0;
@@ -27,10 +28,15 @@
 				padding: .12rem 0;
 				flex-grow: 1;
 				cursor: pointer;
-				&.active {
-					color: #ff6b81;
+				button {
+					display: block;
+					border: none;
+					width: 100%;
+					height: auto;
+					&.active {
+						color: #ff6b81;
+					}
 				}
-
 				i,
 				span {
 					display: block;
@@ -52,37 +58,42 @@
 		name: 'Footer',
 		data() {
 			return {
-				footerDate: [{
+				footerData: [{
 					isActive: false,
 					title: '任务',
 					fontClass: 'iconfont icon-mission',
-					show: 'mission'
+					show: 'mission',
+					disabled: false
 				}, {
 					isActive: true,
 					title: '修炼场',
 					fontClass: 'iconfont icon-practice',
-					show: 'practice'
+					show: 'practice',
+					disabled: false
 				}, {
 					isActive: false,
 					title: '技能',
 					fontClass: 'iconfont icon-skill',
-					show: 'skill'
+					show: 'skill',
+					disabled: false
 				}, {
 					isActive: false,
 					title: '背包',
 					fontClass: 'iconfont icon-backpack',
-					show: 'backpack'
+					show: 'backpack',
+					disabled: false
 				}, {
 					isActive: false,
 					title: '个人',
 					fontClass: 'iconfont icon-my',
-					show: 'my'
+					show: 'my',
+					disabled: false
 				}]
 			}
 		},
 		methods: {
 			changeClass: function (item) {
-				this.footerDate.forEach(e => {
+				this.footerData.forEach(e => {
 					e.isActive = false;
 				});
 				item.isActive = true;
@@ -90,6 +101,19 @@
 				this.$store.commit('global/show', {
 					property: item.show
 				})
+			}
+		},
+		//在战斗时限制能够载入的页面
+		computed: {
+			ifBattle: function () {
+				return this.$store.state.global.battle;
+			}
+		},
+		watch: {
+			ifBattle: function () {
+				this.footerData[0].disabled = !this.footerData[0].disabled
+				this.footerData[2].disabled = !this.footerData[2].disabled
+				this.footerData[3].disabled = !this.footerData[3].disabled
 			}
 		}
 	}

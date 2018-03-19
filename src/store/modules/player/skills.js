@@ -150,7 +150,7 @@ let state = {
 			level: 24,
 			point: 5,
 			name: '纵火',
-			desc: '使用打火机点燃敌方的jj，敌方受到254点火焰伤害并降低魔防33%，持续四回合。',
+			desc: '使用打火机点燃敌方的jj，敌方受到254点火属性伤害并降低魔防33%，持续四回合。',
 			buffType: 1,
 			consume: 158,
 			consumeType: {

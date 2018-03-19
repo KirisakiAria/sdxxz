@@ -5,7 +5,8 @@ const state = {
 		skill: false,
 		backpack: false,
 		my: false
-	}
+	},
+	battle: false
 }
 
 const mutations = {
@@ -16,6 +17,9 @@ const mutations = {
 			}
 		});
 		state.show[payload.property] = true;
+	},
+	toggleBattle: function (state) {
+		state.battle = !state.battle;
 	}
 }
 

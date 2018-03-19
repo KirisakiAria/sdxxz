@@ -14,6 +14,7 @@
 		progress {
 			width: 60%;
 			.ib;
+			height: .1rem;
 		}
 		progress::-webkit-progress-bar {
 			background: #ced6e0;

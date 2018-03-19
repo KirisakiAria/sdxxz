@@ -97,6 +97,7 @@
 				return arr;
 			},
 			battle: function (enemy) {
+				this.$store.commit('global/toggleBattle');
 				this.show.list = false;
 				this.show.battle = true;
 				this.enemy = enemy;

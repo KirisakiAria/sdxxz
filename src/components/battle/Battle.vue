@@ -765,6 +765,10 @@
                 if (random > escapeRate) {
                     alert('逃跑失败！');
                 } else {
+                    //重置怪物的状态
+                    let enemyNamespace = this.enemyNamespace;
+                    let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
+                    this.resetStatus(enemyNamespace, emaxhp, emaxmp);
                     this.$emit('closeBattle');
                 }
             },
@@ -824,8 +828,29 @@
             },
             closeBattle: function () {
                 if (this.tips.close) {
+                    this.$store.commit('global/toggleBattle');
                     this.$emit('closeBattle');
                 }
+            },
+            resetStatus: function (target, maxhp, maxmp) {
+                let namespace = this[`${target}Namespace`];
+                this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
+                    propety: 'hp',
+                    value: maxhp
+                });
+                this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
+                    propety: 'mp',
+                    value: maxmp
+                });
+                let buffList = this[`${target}BuffList`];
+                buffList.forEach((e, i) => {
+                    this.$store.commit(`${namespace}/changeRoundToZero`, {
+                        index: i
+                    });
+                });
+                this.$store.dispatch(`${namespace}/changeRound`, {
+                    ifDecrease: false
+                });
             }
         },
         props: [
@@ -880,7 +905,7 @@
                 return this.enemy.buff;
             },
             levelUpExp() {
-                return this.$store.getters['player/levelUpExp']
+                return this.$store.getters['player/levelUpExp'];
             }
         },
         watch: {
@@ -889,82 +914,46 @@
                 handler(newValue, oldValue) {
                     let [pHp, eHp] = [this.playerRegularData.hp, this.enemyRegularData.hp];
                     //死亡
-                    if (!pHp) {
-                        //重置自己的状态
+                    if (!pHp || !eHp) {
+                        //重置自己的状态 
                         let [pmaxhp, pmaxmp] = [this.player.baseAttributes.maxhp.value, this.player.baseAttributes.maxmp
                             .value
                         ];
-                        this.$store.commit('player/changeBaseAttributesValue', {
-                            propety: 'hp',
-                            value: pmaxhp * 0.1
-                        });
-                        this.$store.commit('player/changeBaseAttributesValue', {
-                            propety: 'mp',
-                            value: pmaxmp * 0.1
-                        });
-                        this.playerBuffList.forEach((e, i) => {
-                            this.$store.commit('player/changeRoundToZero', {
-                                index: i
-                            });
-                        });
-                        this.$store.dispatch('player/changeRound', {
-                            ifDecrease: false
-                        });
-                        //重置怪物的状态 
-                        let enemyNamespace = this.enemyNamespace;
+                        this.resetStatus('player', pmaxhp, pmaxmp);
+                        //重置怪物的状态
                         let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
-                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
-                            propety: 'hp',
-                            value: emaxhp
-                        });
-                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
-                            propety: 'mp',
-                            value: emaxmp
-                        });
-                        this.enemyBuffList.forEach((e, i) => {
-                            this.$store.commit(`${enemyNamespace}/changeRoundToZero`, {
-                                index: i
-                            });
-                        });
-                        this.$store.dispatch(`${enemyNamespace}/changeRound`, {
-                            ifDecrease: false
-                        });
+                        this.resetStatus('enemy', emaxhp, emaxmp);
                         this.tips.close = true;
-                        this.openTips('gg');
-                        //获胜
-                    } else if (!eHp) {
                         //经验获取、升级
                         let gotValue = this.enemy.baseAttributes.exp.value;
                         let nowValue = this.player.baseAttributes.exp.value;
-                        this.$store.commit('player/changeBaseAttributesValue', {
-                            propety: 'exp',
-                            value: nowValue + gotValue
-                        });
-                        let nowExp = this.player.baseAttributes.exp.value;
-                        if (this.levelUpExp <= nowExp) {
-                            this.$store.commit('player/levelup');
-                        }
-                        //重置怪物的状态
-                        let enemyNamespace = this.enemyNamespace;
-                        let [maxhp, maxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
-                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
-                            propety: 'hp',
-                            value: maxhp
-                        });
-                        this.$store.commit(`${enemyNamespace}/changeBaseAttributesValue`, {
-                            propety: 'mp',
-                            value: maxmp
-                        });
-                        this.enemyBuffList.forEach((e, i) => {
-                            this.$store.commit(`${enemyNamespace}/changeRoundToZero`, {
-                                index: i
+                        if (!pHp) {
+                            this.openTips('gg');
+                            this.$store.commit('player/changeBaseAttributesValue', {
+                                propety: 'exp',
+                                value: nowValue - gotValue
                             });
-                        });
-                        this.$store.dispatch(`${enemyNamespace}/changeRound`, {
-                            ifDecrease: false
-                        });
-                        this.tips.close = true;
-                        this.openTips('获胜！');
+                            //失败后会掉经验
+                            let nowExp = this.player.baseAttributes.exp.value;
+                            let prevlevel = this.player.baseAttributes.level.value - 1;
+                            let prevLevelUpExp = prevlevel * (prevlevel + 5) * 10;
+                            if (this.prevLevelUpExp >= nowExp) {
+                                this.$store.commit('player/changeBaseAttributesValue', {
+                                    propety: 'exp',
+                                    value: prevLevelUpExp
+                                });
+                            }
+                        } else {
+                            this.openTips('获胜！');
+                            this.$store.commit('player/changeBaseAttributesValue', {
+                                propety: 'exp',
+                                value: nowValue + gotValue
+                            });
+                            let nowExp = this.player.baseAttributes.exp.value;
+                            if (this.levelUpExp <= nowExp) {
+                                this.$store.commit('player/levelup');
+                            }
+                        }
                     } else if (newValue.enemy) {
                         this.enemyAction();
                     }

@@ -27,18 +27,22 @@ let state = {
 		hp: {
 			decs: '当前生命',
 			value: 190,
+			grow: 30
 		},
 		mp: {
 			decs: '当前魔法',
 			value: 120,
+			grow: 20
 		},
 		maxhp: {
 			decs: '生命总量',
 			value: 190,
+			grow: 30
 		},
 		maxmp: {
 			decs: '魔法总量',
 			value: 120,
+			grow: 20
 		},
 		namespace: 'player'
 	},
@@ -46,27 +50,27 @@ let state = {
 		atk: {
 			decs: '物攻',
 			value: 28,
-			grow: 7
+			grow: 6
 		},
 		mga: {
 			decs: '魔攻',
 			value: 21,
-			grow: 5
+			grow: 4
 		},
 		def: {
 			decs: '物防',
 			value: 14,
-			grow: 4.6
+			grow: 4
 		},
 		res: {
 			decs: '魔防',
 			value: 12,
-			grow: 2.8
+			grow: 3
 		},
 		crt: {
 			decs: '暴击',
 			value: 6,
-			grow: 1.2
+			grow: 1
 		},
 		mul: {
 			decs: '暴击系数',
@@ -74,13 +78,13 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 42,
-			grow: 2.5
+			value: 48,
+			grow: 4
 		},
 		spd: {
 			decs: '速度',
 			value: 4,
-			grow: 0.4
+			grow: 1
 		},
 		chr: {
 			decs: '魅力',
@@ -106,27 +110,27 @@ let state = {
 		fire: {
 			decs: '火属性',
 			value: 5,
-			grow: 1.6
+			grow: 2
 		},
 		ice: {
 			decs: '冰属性',
 			value: 5,
-			grow: 1.6
+			grow: 2
 		},
 		toxic: {
 			decs: '毒属性',
 			value: 5,
-			grow: 1.6
+			grow: 2
 		},
 		wind: {
 			decs: '风属性',
 			value: 5,
-			grow: 1.6
+			grow: 2
 		},
 		earth: {
 			decs: '土属性',
 			value: 5,
-			grow: 1.6
+			grow: 2
 		}
 	},
 	equipments: {
@@ -175,6 +179,21 @@ const mutations = {
 	},
 	levelup(state) {
 		state.baseAttributes.level.value++;
+		Object.keys(state.baseAttributes).forEach(e => {
+			if (state.baseAttributes[e]['grow']) {
+				state.baseAttributes[e]['value'] += state.baseAttributes[e]['grow'];
+			}
+		});
+		Object.keys(state.extraAttributes).forEach(e => {
+			if (state.extraAttributes[e]['grow']) {
+				state.extraAttributes[e]['value'] += state.extraAttributes[e]['grow'];
+			}
+		});
+		Object.keys(state.elements).forEach(e => {
+			if (state.elements[e]['grow']) {
+				state.elements[e]['value'] += state.elements[e]['grow'];
+			}
+		});
 	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
