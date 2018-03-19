@@ -4,7 +4,7 @@ let state = {
 			sid: '0000',
 			learned: true,
 			level: 1,
-			point:0,
+			point: 0,
 			name: '扬沙',
 			desc: '抓起一把沙子扬过去，对敌方造成42点风属性伤害，并减少对方22%命中，持续两回合',
 			buffType: 1,

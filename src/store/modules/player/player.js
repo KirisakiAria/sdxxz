@@ -49,7 +49,7 @@ let state = {
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 2800,
+			value: 28,
 			grow: 6
 		},
 		mga: {

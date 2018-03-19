@@ -66,8 +66,8 @@
 				height: .25rem;
 				font-size: .1rem;
 				.br;
-				.bor(#5f27cd);
-				background: #5f27cd;
+				.bor(#a29bfe);
+				background: #a29bfe;
 			}
 		}
 

@@ -568,7 +568,7 @@
                 this.roundCount();
             },
             //添加buff的相关逻辑
-            calculateBuff: function (user, skill, ifAtk) {
+            calculateBuff: function (user, skill, other) {
                 let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
                 let ifEnough = this.consume(skill, regularData, userNamespace);
                 if (ifEnough) {
@@ -671,7 +671,7 @@
                 } else {
                     return false;
                 }
-                if (!ifAtk) {
+                if (!other) {
                     this.toggleSkillsPanel();
                     this.roundCount();
                 }
