@@ -23,7 +23,7 @@
 				</div>
 			</section>
 			<!-- 传入点击挑战按钮对应的敌人的数据 -->
-			<Battle :enemy="enemy" v-if="show.battle" @closeBattle="closeBattle"></Battle>
+			<Battle :enemy="enemy" mode="practice" v-if="show.battle" @closeBattle="closeBattle"></Battle>
 		</transition>
 	</section>
 </template>
@@ -32,6 +32,7 @@
 	@import "../../style/style";
 
 	.practice {
+		padding-bottom: .7rem;
 		.head {
 			padding: .15rem;
 
@@ -111,10 +112,10 @@
 		computed: {
 			/*获取敌人列表*/
 			level0_5EnemyList: function () {
-				return this.pushArr('villageC', 'villageB', 'villageA');
+				return this.pushArr('groupC', 'groupB', 'groupA');
 			},
 			level6_10EnemyList: function () {
-				return this.pushArr('villageS');
+				return this.pushArr('groupS', 'groupSS');
 			},
 			enemyList: function () {
 				return [{

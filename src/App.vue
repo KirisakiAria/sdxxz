@@ -1,7 +1,7 @@
 <template>
 	<main class="main">
 		<transition name="slide-fade" mode="out-in">
-			<section v-if="show.main" class="menu mainSection">
+			<!-- <section v-if="show.main" class="menu mainSection">
 				<div class="link">
 					<a href="https://github.com/KirisakiAria/sdxxz" target="_blank" title="github">
 						<i class="iconfont icon-github"></i>
@@ -26,7 +26,7 @@
 				<footer class="footer">
 					<p>伟大鱼塘</p>
 				</footer>
-			</section>
+			</section> -->
 			<router-view></router-view>
 		</transition>
 	</main>
@@ -108,7 +108,10 @@
 				reader.onload = function () {
 					let data = JSON.parse(this.result);
 					vm.$store.commit('player/loadData', {
-						data
+						data: data[0]
+					});
+					vm.$store.commit('playerSkills/loadData', {
+						data: data[1]
 					});
 					vm.$router.push('game');
 				}

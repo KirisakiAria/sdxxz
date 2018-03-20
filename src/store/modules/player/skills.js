@@ -6,9 +6,9 @@ let state = {
 			level: 1,
 			point: 0,
 			name: '扬沙',
-			desc: '抓起一把沙子扬过去，对敌方造成42点风属性伤害，并减少对方22%命中，持续两回合',
+			desc: '抓起一把沙子扬过去，对敌方造成34点风属性伤害，并减少对方24%命中，持续两回合',
 			buffType: 1,
-			consume: 65,
+			consume: 50,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -20,13 +20,13 @@ let state = {
 						name: '风'
 					},
 					ignoring: false,
-					value: 42
+					value: 34
 				},
 				target: 2,
 				buff: [{
 					type: 1,
 					position: ['extraAttributes', 'hit'],
-					value: 0.78,
+					value: 0.76,
 					valueType: 'percentage'
 				}],
 				round: 3
@@ -38,8 +38,8 @@ let state = {
 			level: 5,
 			point: 2,
 			name: '素质对话',
-			desc: '与敌方单体进行文明交流，敌方素质明显提高然后受到85点物理伤害。',
-			consume: 50,
+			desc: '与敌方单体进行文明交流，敌方素质明显提高然后受到68点物理伤害。',
+			consume: 55,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -51,7 +51,7 @@ let state = {
 						name: '物理'
 					},
 					ignoring: false,
-					value: 85
+					value: 68
 				}
 			}
 		},
@@ -61,9 +61,9 @@ let state = {
 			level: 20,
 			point: 5,
 			name: '素质三连',
-			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到328点无视魔防的物理伤害，物防降低28%，持续三回合',
+			desc: '与敌方单体长时间进行文明交流，敌方热泪盈眶，受到255点无视魔防的物理伤害，物防降低28%，持续三回合',
 			buffType: 1,
-			consume: 180,
+			consume: 155,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -76,7 +76,7 @@ let state = {
 						name: '物理'
 					},
 					ignoring: true,
-					value: 328
+					value: 255
 				},
 				target: 2,
 				buff: [{
@@ -94,7 +94,7 @@ let state = {
 			level: 12,
 			point: 4,
 			name: '飞痰',
-			desc: '一口老痰吐到敌方脸上，使敌方单体受到110点冰属性伤害。',
+			desc: '一口老痰吐到敌方脸上，使敌方单体受到106点冰属性伤害。',
 			buffType: 1,
 			consume: 90,
 			consumeType: {
@@ -108,7 +108,7 @@ let state = {
 						name: '冰'
 					},
 					ignoring: false,
-					value: 100
+					value: 106
 				}
 			}
 		},
@@ -118,9 +118,9 @@ let state = {
 			level: 17,
 			point: 4,
 			name: '蝌蚪',
-			desc: '喷射出大量白色蝌蚪，对敌方全体造成195点毒属性伤害并降低毒属性24%，持续3回合',
+			desc: '喷射出大量白色蝌蚪，对敌方全体造成185点毒属性伤害并降低毒属性26%，持续3回合',
 			buffType: 1,
-			consume: 125,
+			consume: 117,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -132,13 +132,13 @@ let state = {
 						name: '毒'
 					},
 					ignoring: false,
-					value: 195
+					value: 185
 				},
 				target: 2,
 				buff: [{
 					type: 1,
 					position: ['elements', 'toxic'],
-					value: 0.78,
+					value: 0.74,
 					valueType: 'percentage'
 				}],
 				round: 4
@@ -150,9 +150,9 @@ let state = {
 			level: 24,
 			point: 5,
 			name: '纵火',
-			desc: '使用打火机点燃敌方的jj，敌方受到254点火属性伤害并降低魔防33%，持续四回合。',
+			desc: '使用打火机点燃敌方的jj，敌方受到272点火属性伤害并降低魔防33%，持续四回合。',
 			buffType: 1,
-			consume: 158,
+			consume: 168,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -165,7 +165,7 @@ let state = {
 						name: '火'
 					},
 					ignoring: false,
-					value: 254
+					value: 272
 				},
 				target: 2,
 				buff: [{
@@ -185,15 +185,15 @@ let state = {
 			level: 2,
 			point: 1,
 			name: '+1',
-			desc: '+1使我神清气爽，恢复78点生命。',
-			consume: 72,
+			desc: '+1使我神清气爽，恢复82点生命。',
+			consume: 44,
 			consumeType: {
 				name: '魔法',
 				value: 1
 			},
 			effect: {
 				cure: {
-					value: 78
+					value: 82
 				}
 			}
 		},
@@ -203,15 +203,15 @@ let state = {
 			level: 6,
 			point: 2,
 			name: '剁手',
-			desc: '没钱了但又控制不住欲望，只能把手剁了，失去74点生命恢复150点魔法。',
-			consume: 74,
+			desc: '没钱了但又控制不住欲望，只能把手剁了，失去74点生命恢复140点魔法。',
+			consume: 66,
 			consumeType: {
 				name: '生命',
 				value: 2
 			},
 			effect: {
 				cure: {
-					value: 150
+					value: 140
 				}
 			}
 		},
@@ -229,7 +229,7 @@ let state = {
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12',
 			buffType: 1,
-			consume: 55,
+			consume: 62,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -290,7 +290,7 @@ let state = {
 			name: '素质提升',
 			desc: '提升自己素质，使物攻、魔攻、暴击提升20%，毒属性提升15%，并使素质三连伤害提高30%',
 			buffType: 1,
-			consume: 96,
+			consume: 94,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -339,7 +339,7 @@ let state = {
 			name: '可惜没如果',
 			desc: '召唤沉默术士，使对方群体沉默',
 			buffType: 2,
-			consume: 188,
+			consume: 178,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -409,7 +409,7 @@ let state = {
 			name: '传销三连',
 			desc: '71附体，疯狂搞敌方，物攻、物防、魔攻、魔防降低30%',
 			buffType: 1,
-			consume: 165,
+			consume: 128,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -463,7 +463,16 @@ let state = {
 	}
 }
 
+const mutations = {
+	loadData(state, payload) {
+		Object.keys(state).forEach(e => {
+			state[e] = payload.data[e];
+		});
+	}
+}
+
 export default {
 	state,
+	mutations,
 	namespaced: true
 }

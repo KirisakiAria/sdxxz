@@ -763,13 +763,14 @@
                 let escapeRate = (playerSpdCache + 100) / (enemySpdCache + 100) * .8;
                 let random = Math.random();
                 if (random > escapeRate) {
-                    alert('逃跑失败！');
+                    this.openTips('逃跑失败');
                 } else {
                     //重置怪物的状态
-                    let enemyNamespace = this.enemyNamespace;
                     let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
-                    this.resetStatus(enemyNamespace, emaxhp, emaxmp);
-                    this.$emit('closeBattle');
+                    this.resetStatus('enemy',
+                        emaxhp, emaxmp);
+                    this.tips.close = true;
+                    this.openTips('逃跑成功');
                 }
             },
             auto: function () {
@@ -854,7 +855,8 @@
             }
         },
         props: [
-            'enemy'
+            'enemy',
+            'mode'
         ],
         computed: {
             //取得命名空间用来commit
@@ -923,6 +925,7 @@
                         //重置怪物的状态
                         let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
                         this.resetStatus('enemy', emaxhp, emaxmp);
+                        //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭模块
                         this.tips.close = true;
                         //经验获取、升级
                         let gotValue = this.enemy.baseAttributes.exp.value;

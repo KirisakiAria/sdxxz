@@ -188,8 +188,11 @@
 				return arr;
 			},
 			save: function () {
-				let data = this.$store.state.player;
-				let blob = new Blob([JSON.stringify(data)], {
+				let arr = [];
+				let playerData = this.$store.state.player;
+				let skillsData = this.$store.state.playerSkills;
+				arr.push(playerData, skillsData);
+				let blob = new Blob([JSON.stringify(arr)], {
 					type: ""
 				});
 				FileSaver.saveAs(blob, "save.json");

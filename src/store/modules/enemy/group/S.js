@@ -1,22 +1,22 @@
 let state = {
 	baseAttributes: {
-		eid: 0,
-		namespace: 'villageB',
+		eid: 3,
+		namespace: 'groupS',
 		name: {
 			decs: '姓名',
-			value: '傻屌村中傻屌'
+			value: '傻屌群精英傻屌'
 		},
 		description: {
 			decs: '描述',
-			value: '倒数第二辣鸡的傻屌，打不过你就退群吧'
+			value: '稍微有点实力的傻屌，打不过你退群也不过分'
 		},
 		level: {
 			decs: '等级',
-			value: 3
+			value: 8
 		},
 		hp: {
 			decs: '生命',
-			value: 180
+			value: 375
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 180
+			value: 375
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -32,13 +32,13 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 68
+			value: 125
 		}
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 32
+			value: 62
 		},
 		mga: {
 			decs: '魔攻',
@@ -46,15 +46,15 @@ let state = {
 		},
 		def: {
 			decs: '物防',
-			value: 18
+			value: 39
 		},
 		res: {
 			decs: '魔防',
-			value: 20
+			value: 40
 		},
 		crt: {
 			decs: '暴击',
-			value: 9
+			value: 16
 		},
 		mul: {
 			decs: '暴击系数',
@@ -62,33 +62,33 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 40
+			value: 78
 		},
 		spd: {
 			decs: '速度',
-			value: 3
+			value: 14
 		}
 	},
 	elements: {
 		fire: {
 			decs: '火属性',
-			value: 0
+			value: 4
 		},
 		ice: {
 			decs: '冰属性',
-			value: 0
+			value: 4
 		},
 		toxic: {
 			decs: '毒属性',
-			value: 0
+			value: 4
 		},
 		wind: {
 			decs: '风属性',
-			value: 0
+			value: 4
 		},
 		earth: {
 			decs: '土属性',
-			value: 0
+			value: 4
 		}
 	},
 	buff: []
