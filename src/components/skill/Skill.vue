@@ -68,7 +68,7 @@
 				</div>
 			</transition>
 			<transition name="scale-fade">
-				<Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips()"></Tips>
+				<Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips"></Tips>
 			</transition>
 		</section>
 	</section>

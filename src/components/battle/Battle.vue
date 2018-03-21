@@ -157,7 +157,7 @@
             </section>
         </transition>
         <transition name="scale-fade">
-            <Tips :content="tips.data" v-show="show.tips" @closeTips="closeTips()" @click.native="closeBattle()"></Tips>
+            <Tips :content="tips.data" v-show="show.tips" @closeTips="closeTips" @click.native="closeBattle"></Tips>
         </transition>
     </section>
 </template>
@@ -858,7 +858,6 @@
                     value: this.nowExp + gotValue
                 });
                 if (this.levelUpExp <= this.nowExp) {
-                    console.log(1)
                     this.$store.commit('player/levelup');
                 }
             }
@@ -972,8 +971,8 @@
                             //任务奖励
                             if (this.mode === 'mission') {
                                 this.rewardPlayer(this.reward);
+                                this.$emit('done');
                             }
-
                             this.openTips('获胜！');
                         }
                     } else if (newValue.enemy) {

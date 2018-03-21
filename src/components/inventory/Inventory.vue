@@ -1,5 +1,5 @@
 <template>
-	<section class="backpack mainSection">
+	<section class="inventory mainSection">
 		此模块尚未开发
 	</section>
 </template>
@@ -7,7 +7,7 @@
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
 
-	.backpack {
+	.inventory {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -18,7 +18,7 @@
 
 <script>
 	export default {
-		name: 'Backpack',
+		name: 'Inventory',
 		computed: {
 
 		},

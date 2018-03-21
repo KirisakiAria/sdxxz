@@ -1,6 +1,6 @@
 <template>
 	<section class="tips mainSection">
-		<div class="mask" @click="closeTips()"></div>
+		<div class="mask" @click="closeTips"></div>
 		<div class="wrapper">
 			<p>{{content}}</p>
 		</div>

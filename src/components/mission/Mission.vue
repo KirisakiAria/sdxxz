@@ -10,7 +10,7 @@
 								<span class="title">{{item.name}}</span>
 								<span class="level">等级：{{item.level}}</span>
 								<p>{{item.des}}</p>
-								<p class="reward">任务奖励：</p>
+								<p class="reward">任务奖励：经验：{{item.reward.exp}} 物品：{{item.reward.items?item.reward.items:'无'}}</p>
 							</div>
 							<button class="notyet" @click="take(item)">接受</button>
 						</li>
@@ -20,7 +20,7 @@
 					<h4 class="tac">支线任务</h4>
 				</section>
 			</section>
-			<Battle :enemy="enemy" mode="mission" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle()"></Battle>
+			<Battle :enemy="enemy" mode="mission" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle" @done="ifDone"></Battle>
 		</transition>
 	</section>
 </template>
@@ -78,12 +78,14 @@
 					list: true,
 					battle: false
 				},
+				mission: null,
 				enemy: null,
 				reward: null,
 				times: 1
 			}
 		},
 		methods: {
+			//等级不够的和完成的任务都不会显示
 			ifShow: function (missionLevel, ifDone) {
 				if (missionLevel <= this.playerLevel) {
 					if (!ifDone) {
@@ -96,6 +98,7 @@
 				}
 			},
 			take: function (item) {
+				this.mission = item;
 				this.reward = item.reward;
 				this.enemy = this.$store.state[item.enemy.namespace];
 				this.times = item.enemy.times;
@@ -106,6 +109,14 @@
 				this.show.list = true;
 				this.show.battle = false;
 				this.enemy = null;
+			},
+			//完成任务
+			ifDone: function () {
+				this.$store.commit('mission/done', {
+					type: this.mission.type,
+					mid: this.mission.mid
+				});
+				this.mission = null;
 			}
 		},
 		computed: {

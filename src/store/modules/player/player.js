@@ -26,7 +26,7 @@ let state = {
 		},
 		hp: {
 			decs: '当前生命',
-			value: 190,
+			value: 180,
 			grow: 30
 		},
 		mp: {
@@ -36,7 +36,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 190,
+			value: 180,
 			grow: 30
 		},
 		maxmp: {
@@ -49,7 +49,7 @@ let state = {
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 2800,
+			value: 28,
 			grow: 6
 		},
 		mga: {

@@ -79,7 +79,7 @@
 					isActive: false,
 					title: '背包',
 					fontClass: 'iconfont icon-backpack',
-					show: 'backpack'
+					show: 'inventory'
 				}, {
 					isActive: false,
 					title: '个人',
@@ -100,8 +100,8 @@
 				})
 			}
 		},
-		//在战斗时限制能够载入的页面
 		computed: {
+			//在战斗时限制能够载入的页面
 			ifBattle: function () {
 				return this.$store.state.global.battle;
 			}

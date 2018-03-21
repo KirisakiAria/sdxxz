@@ -4,6 +4,7 @@ import global from './modules/global';
 import mission from './modules/player/mission';
 import player from './modules/player/player';
 import playerSkills from './modules/player/skills';
+import items from './modules/player/items';
 import groupC from './modules/enemy/group/C';
 import groupB from './modules/enemy/group/B';
 import groupA from './modules/enemy/group/A';

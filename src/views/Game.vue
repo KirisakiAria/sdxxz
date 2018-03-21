@@ -5,7 +5,7 @@
 				<Mission v-if="showList[0]"></Mission>
 				<Practice v-if="showList[1]"></Practice>
 				<Skill v-if="showList[2]"></Skill>
-				<Backpack v-if="showList[3]"></Backpack>
+				<Inventory v-if="showList[3]"></Inventory>
 				<My v-if="showList[4]"></My>
 			</keep-alive>
 		</transition>
@@ -22,7 +22,7 @@
 	import Mission from '../components/mission/Mission';
 	import Practice from '../components/practice/Practice';
 	import Skill from '../components/skill/Skill';
-	import Backpack from '../components/backpack/Backpack';
+	import Inventory from '../components/inventory/Inventory';
 	import My from '../components/my/My';
 
 	export default {
@@ -43,7 +43,7 @@
 			Mission,
 			Practice,
 			Skill,
-			Backpack,
+			Inventory,
 			My
 		}
 	}

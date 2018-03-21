@@ -3,7 +3,7 @@ const state = {
 		mission: true,
 		practice: false,
 		skill: false,
-		backpack: false,
+		inventory: false,
 		my: false
 	},
 	battle: false
