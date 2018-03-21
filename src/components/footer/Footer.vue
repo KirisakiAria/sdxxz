@@ -1,14 +1,16 @@
 <template>
-	<footer class="footer">
-		<ul>
-			<li :key="item.title" v-for="item in footerData">
-				<button :disabled="item.disabled" :class="{active:item.isActive}" @click="changeClass(item)">
-					<i :class="item.fontClass"></i>
-					<span>{{item.title}}</span>
-				</button>
-			</li>
-		</ul>
-	</footer>
+	<transition name="slideY-fade">
+		<footer v-if="!ifBattle" class="footer">
+			<ul>
+				<li :key="item.title" v-for="item in footerData">
+					<button :class="{active:item.isActive}" @click="changeClass(item)">
+						<i :class="item.fontClass"></i>
+						<span>{{item.title}}</span>
+					</button>
+				</li>
+			</ul>
+		</footer>
+	</transition>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
@@ -62,32 +64,27 @@
 					isActive: true,
 					title: '任务',
 					fontClass: 'iconfont icon-mission',
-					show: 'mission',
-					disabled: false
+					show: 'mission'
 				}, {
 					isActive: false,
 					title: '修炼场',
 					fontClass: 'iconfont icon-practice',
-					show: 'practice',
-					disabled: false
+					show: 'practice'
 				}, {
 					isActive: false,
 					title: '技能',
 					fontClass: 'iconfont icon-skill',
-					show: 'skill',
-					disabled: false
+					show: 'skill'
 				}, {
 					isActive: false,
 					title: '背包',
 					fontClass: 'iconfont icon-backpack',
-					show: 'backpack',
-					disabled: false
+					show: 'backpack'
 				}, {
 					isActive: false,
 					title: '个人',
 					fontClass: 'iconfont icon-my',
-					show: 'my',
-					disabled: false
+					show: 'my'
 				}]
 			}
 		},
@@ -107,13 +104,6 @@
 		computed: {
 			ifBattle: function () {
 				return this.$store.state.global.battle;
-			}
-		},
-		watch: {
-			ifBattle: function () {
-				this.footerData[0].disabled = !this.footerData[0].disabled
-				this.footerData[2].disabled = !this.footerData[2].disabled
-				this.footerData[3].disabled = !this.footerData[3].disabled
 			}
 		}
 	}

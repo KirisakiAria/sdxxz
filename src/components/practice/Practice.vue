@@ -23,7 +23,7 @@
 				</div>
 			</section>
 			<!-- 传入点击挑战按钮对应的敌人的数据 -->
-			<Battle :enemy="enemy" mode="practice" v-if="show.battle" @closeBattle="closeBattle"></Battle>
+			<Battle :enemy="enemy" mode="practice" v-if="show.battle" @closeBattle="closeBattle()"></Battle>
 		</transition>
 	</section>
 </template>
@@ -98,10 +98,9 @@
 				return arr;
 			},
 			battle: function (enemy) {
-				this.$store.commit('global/toggleBattle');
+				this.enemy = enemy;
 				this.show.list = false;
 				this.show.battle = true;
-				this.enemy = enemy;
 			},
 			closeBattle: function () {
 				this.show.list = true;

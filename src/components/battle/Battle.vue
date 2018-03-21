@@ -249,8 +249,6 @@
     }
 
     .battle {
-        padding-bottom: 0.71rem;
-
         .control {
             font-size: 0.12rem;
             padding: 0.1rem;
@@ -852,11 +850,24 @@
                 this.$store.dispatch(`${namespace}/changeRound`, {
                     ifDecrease: false
                 });
+            },
+            rewardPlayer: function (reward) {
+                let gotValue = reward.exp;
+                this.$store.commit('player/changeBaseAttributesValue', {
+                    propety: 'exp',
+                    value: this.nowExp + gotValue
+                });
+                if (this.levelUpExp <= this.nowExp) {
+                    console.log(1)
+                    this.$store.commit('player/levelup');
+                }
             }
         },
         props: [
             'enemy',
-            'mode'
+            'mode',
+            'reward',
+            'times'
         ],
         computed: {
             //取得命名空间用来commit
@@ -906,7 +917,10 @@
             enemyBuffList: function () {
                 return this.enemy.buff;
             },
-            levelUpExp() {
+            nowExp: function () {
+                return this.player.baseAttributes.exp.value
+            },
+            levelUpExp: function () {
                 return this.$store.getters['player/levelUpExp'];
             }
         },
@@ -929,14 +943,13 @@
                         this.tips.close = true;
                         //经验获取、升级
                         let gotValue = this.enemy.baseAttributes.exp.value;
-                        let nowValue = this.player.baseAttributes.exp.value;
                         if (!pHp) {
+                            //失败后会掉经验
                             this.$store.commit('player/changeBaseAttributesValue', {
                                 propety: 'exp',
-                                value: nowValue - gotValue
+                                value: this.nowExp - gotValue
                             });
-                            //失败后会掉经验
-                            let nowExp = this.player.baseAttributes.exp.value;
+                            //经验最多降到当前等级开始
                             let prevlevel = this.player.baseAttributes.level.value - 1;
                             let prevLevelUpExp = prevlevel * (prevlevel + 5) * 10;
                             if (this.prevLevelUpExp >= nowExp) {
@@ -950,13 +963,17 @@
                             //获得经验
                             this.$store.commit('player/changeBaseAttributesValue', {
                                 propety: 'exp',
-                                value: nowValue + gotValue
+                                value: this.nowExp + gotValue
                             });
-                            let nowExp = this.player.baseAttributes.exp.value;
                             //升级
-                            if (this.levelUpExp <= nowExp) {
+                            if (this.levelUpExp <= this.nowExp) {
                                 this.$store.commit('player/levelup');
                             }
+                            //任务奖励
+                            if (this.mode === 'mission') {
+                                this.rewardPlayer(this.reward);
+                            }
+
                             this.openTips('获胜！');
                         }
                     } else if (newValue.enemy) {
@@ -970,6 +987,7 @@
             Tips
         },
         mounted() {
+            this.$store.commit('global/toggleBattle');
             this.battleStart();
         }
     };

@@ -124,7 +124,6 @@
     justify-content: center;
 }
 
-
 .slide-fade-enter-active,
 .slide-fade-leave-active {
     .transition(.2s);
@@ -133,6 +132,17 @@
 .slide-fade-enter,
 .slide-fade-leave-to {
     transform: translateX(80px);
+    opacity: 0;
+}
+
+.slideY-fade-enter-active,
+.slideY-fade-leave-active {
+    .transition(.3s);
+}
+
+.slideY-fade-enter,
+.slideY-fade-leave-to {
+    transform: translateY(40px);
     opacity: 0;
 }
 

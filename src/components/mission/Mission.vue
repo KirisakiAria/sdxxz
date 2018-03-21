@@ -1,22 +1,27 @@
 <template>
 	<section class="mission mainSection">
-		<section class="mainQuests">
-			<h4 class="tac">主线任务</h4>
-			<ul>
-				<li :key="item.mid" v-for="item in mainQuestsList" v-if="ifShow(item.level,item.ifDone)">
-					<div class="ib">
-						<span class="title">{{item.name}}</span>
-						<span class="level">等级：{{item.level}}</span>
-						<p>{{item.des}}</p>
-						<p class="reward">任务奖励：</p>
-					</div>
-					<button class="notyet" @click="take()">接受</button>
-				</li>
-			</ul>
-		</section>
-		<section class="sideQuests">
-			<h4 class="tac">支线任务</h4>
-		</section>
+		<transition name="slide-fade" mode="out-in">
+			<section v-if="show.list" class="list">
+				<section class="mainQuests">
+					<h4 class="tac">主线任务</h4>
+					<ul>
+						<li :key="item.mid" v-for="item in mainQuestsList" v-if="ifShow(item.level,item.ifDone)">
+							<div class="ib">
+								<span class="title">{{item.name}}</span>
+								<span class="level">等级：{{item.level}}</span>
+								<p>{{item.des}}</p>
+								<p class="reward">任务奖励：</p>
+							</div>
+							<button class="notyet" @click="take(item)">接受</button>
+						</li>
+					</ul>
+				</section>
+				<section class="sideQuests">
+					<h4 class="tac">支线任务</h4>
+				</section>
+			</section>
+			<Battle :enemy="enemy" mode="mission" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle()"></Battle>
+		</transition>
 	</section>
 </template>
 
@@ -63,8 +68,21 @@
 </style>
 
 <script>
+	import Battle from '../battle/Battle';
+
 	export default {
 		name: 'Mission',
+		data() {
+			return {
+				show: {
+					list: true,
+					battle: false
+				},
+				enemy: null,
+				reward: null,
+				times: 1
+			}
+		},
 		methods: {
 			ifShow: function (missionLevel, ifDone) {
 				if (missionLevel <= this.playerLevel) {
@@ -77,8 +95,17 @@
 					return false;
 				}
 			},
-			take:function(){
-				
+			take: function (item) {
+				this.reward = item.reward;
+				this.enemy = this.$store.state[item.enemy.namespace];
+				this.times = item.enemy.times;
+				this.show.list = false;
+				this.show.battle = true;
+			},
+			closeBattle: function () {
+				this.show.list = true;
+				this.show.battle = false;
+				this.enemy = null;
 			}
 		},
 		computed: {
@@ -91,6 +118,9 @@
 			playerLevel: function () {
 				return this.$store.state.player.baseAttributes.level.value;
 			}
+		},
+		components: {
+			Battle
 		}
 	}
 </script>
