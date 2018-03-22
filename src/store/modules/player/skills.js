@@ -463,16 +463,7 @@ let state = {
 	}
 }
 
-const mutations = {
-	loadData(state, payload) {
-		Object.keys(state).forEach(e => {
-			state[e] = payload.data[e];
-		});
-	}
-}
-
 export default {
 	state,
-	mutations,
 	namespaced: true
 }

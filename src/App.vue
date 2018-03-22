@@ -24,9 +24,12 @@
 					</li>
 				</ul>
 				<footer class="footer">
-					<p>伟大鱼塘</p>
+					<p>
+						<a href="https://weibo.com/KanzakiHAria">伟大鱼塘</a>
+					</p>
 				</footer>
 			</section> -->
+
 			<router-view></router-view>
 		</transition>
 	</main>
@@ -107,11 +110,8 @@
 				reader.readAsText(file, 'utf-8');
 				reader.onload = function () {
 					let data = JSON.parse(this.result);
-					vm.$store.commit('player/loadData', {
-						data: data[0]
-					});
-					vm.$store.commit('playerSkills/loadData', {
-						data: data[1]
+					vm.$store.dispatch('player/loadData', {
+						data: data
 					});
 					vm.$router.push('game');
 				}

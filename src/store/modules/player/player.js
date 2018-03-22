@@ -198,12 +198,6 @@ const mutations = {
 			return e.sid === payload.sid;
 		}), 1);
 	},
-	loadData(state, payload) {
-		Object.keys(state).forEach(e => {
-			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
-				state[e] = payload['data'][e];
-		});
-	}
 }
 
 const actions = {
@@ -241,6 +235,18 @@ const actions = {
 	changeSkillValue: function (context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
 		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
+	},
+	loadData: function (context, payload) {
+		Object.keys(context.state).forEach(e => {
+			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
+				context.state[e] = payload.data.playerData[e];
+		});
+		Object.keys(context.rootState.playerSkills).forEach(e => {
+			context.rootState.playerSkills[e] = payload.data.skillsData[e];
+		});
+		Object.keys(context.rootState.mission).forEach(e => {
+			context.rootState.mission[e] = payload.data.missionData[e];
+		});
 	}
 }
 
