@@ -762,6 +762,7 @@
                 let random = Math.random();
                 if (random > escapeRate) {
                     this.openTips('逃跑失败');
+                    this.roundCount();
                 } else {
                     //重置怪物的状态
                     let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
