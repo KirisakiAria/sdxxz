@@ -97,7 +97,7 @@
                         <transition name="slide-fade" mode="out-in">
                             <div key="damageSkillsList" v-if="show.skillPanleList.damage" class="damageSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy','damageSkillsList',item.sid)">
+                                    <li :key="item.sid" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy','damageSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i1">伤害量：{{item.effect.damage.value}}</span>
@@ -112,7 +112,7 @@
                             </div>
                             <div key="cureSkillsList" v-if="show.skillPanleList.cure" class="cureSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player','cureSkillsList',item.sid)">
+                                    <li :key="item.sid" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player','cureSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i1">治疗量：{{item.effect.cure.value}}</span>
@@ -126,7 +126,7 @@
                             </div>
                             <div key="buffSkillsList" v-if="show.skillPanleList.buff" class="buffSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkill('player','buffSkillsList',item.sid)">
+                                    <li :key="item.sid" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkill('player','buffSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                             <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -140,7 +140,7 @@
                             </div>
                             <div key="passiveSkillsList" v-if="show.skillPanleList.passive" class="passiveSkillsList">
                                 <ul>
-                                    <li :key="item.name" v-if="item.learned" v-for="item in passiveSkillsList">
+                                    <li :key="item.sid" v-if="item.learned" v-for="item in passiveSkillsList">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
                                         </div>

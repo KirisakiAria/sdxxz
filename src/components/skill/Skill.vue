@@ -9,9 +9,9 @@
 		<section class="content">
 			<p class="tips">tips：深色背景为尚未学习的技能，点击学习</p>
 			<transition name="slide-fade" mode="out-in">
-				<div key="damageSkillsList" v-if="show.damage" class="damageSkillsList">
+				<div key="damageSkillsList" v-if="show.damage">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in damageSkillsList" @click="learn(item)">
+						<li :key="item.sid" :class="{no:!item.learned}" v-for="item in damageSkillsList" @click="learn(item)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">伤害量：{{item.effect.damage.value}}</span>
@@ -24,9 +24,9 @@
 						</li>
 					</ul>
 				</div>
-				<div key="cureSkillsList" v-if="show.cure" class="cureSkillsList">
+				<div key="cureSkillsList" v-if="show.cure">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in cureSkillsList" @click="learn(item)">
+						<li :key="item.sid" :class="{no:!item.learned}" v-for="item in cureSkillsList" @click="learn(item)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
@@ -39,9 +39,9 @@
 						</li>
 					</ul>
 				</div>
-				<div key="buffSkillsList" v-if="show.buff" class="buffSkillsList">
+				<div key="buffSkillsList" v-if="show.buff">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in buffSkillsList" @click="learn(item)">
+						<li :key="item.sid" :class="{no:!item.learned}" v-for="item in buffSkillsList" @click="learn(item)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
@@ -54,9 +54,9 @@
 						</li>
 					</ul>
 				</div>
-				<div key="passiveSkillsList" v-if="show.passive" class="passiveSkillsList">
+				<div key="passiveSkillsList" v-if="show.passive">
 					<ul>
-						<li :key="item.name" :class="{no:!item.learned}" v-for="item in passiveSkillsList" @click="learn(item)">
+						<li :key="item.sid" :class="{no:!item.learned}" v-for="item in passiveSkillsList" @click="learn(item)">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 							</div>
@@ -115,6 +115,7 @@
 				padding: .12rem;
 				border-top: 1px solid #a5b1c2;
 				border-bottom: 1px solid #a5b1c2;
+				.transition(.3s);
 
 				.name {
 					display: block;

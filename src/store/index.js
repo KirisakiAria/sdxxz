@@ -20,6 +20,7 @@ export default new Vuex.Store({
 		mission,
 		player,
 		playerSkills,
+		items,
 		groupC,
 		groupB,
 		groupA,
