@@ -1,5 +1,5 @@
 <template>
-	<section class="game mainSection">
+	<section class="game">
 		<transition name="slide-fade" mode="out-in">
 			<keep-alive>
 				<Mission v-if="showList[0]"></Mission>

@@ -157,6 +157,62 @@
             </section>
         </transition>
         <transition name="scale-fade">
+            <section v-if="show.inventory" class="inventory">
+                <section class="tab">
+                    <button :class="{active:show.inventoryList.cure}" @click="changeInventory('cure')">治愈类</button>
+                    <button :class="{active:show.inventoryList.concealed}" @click="changeInventory('concealed')">暗器类</button>
+                    <button :class="{active:show.inventoryList.buff}" @click="changeInventory('buff')">效果类</button>
+                </section>
+                <section class="content">
+                    <transition name="slide-fade" mode="out-in">
+                        <div key="cureItemsList" v-if="show.inventoryList.cure">
+                            <ul>
+                                <li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList" @click="useCureItem('player','cureItemsList',item.iid)">
+                                    <div class="top">
+                                        <span class="name">{{item.name}}</span>
+                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
+                                        <span class="i2">数量：{{item.amount}}</span>
+                                    </div>
+                                    <div class="bottom">
+                                        <p>道具介绍：{{item.desc}}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div key="concealedItemsList" v-if="show.inventoryList.concealed">
+                            <ul>
+                                <li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList" @click="useConcealedItem()">
+                                    <div class="top">
+                                        <span class="name">{{item.name}}</span>
+                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
+                                        <span class="i2">数量：{{item.amount}}</span>
+                                    </div>
+                                    <div class="bottom">
+                                        <p>道具介绍：{{item.desc}}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div key="buffItemsList" v-if="show.inventoryList.buff">
+                            <ul>
+                                <li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
+                                    <div class="top" @click="useBuffItem()">
+                                        <span class="name">{{item.name}}</span>
+                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
+                                        <span class="i2">数量：{{item.amount}}</span>
+                                    </div>
+                                    <div class="bottom">
+                                        <p>道具介绍：{{item.desc}}</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </transition>
+                    <button @click="toggleInventory">返回</button>
+                </section>
+            </section>
+        </transition>
+        <transition name="scale-fade">
             <Tips :content="tips.data" v-show="show.tips" @closeTips="closeTips" @click.native="closeBattle"></Tips>
         </transition>
     </section>
@@ -164,7 +220,8 @@
 <style scoped lang="less" rel="stylesheet/less">
     @import "../../style/style";
 
-    .skillPanel {
+    .skillPanel,
+    .inventory {
         position: fixed;
         width: 100vw;
         height: 100vh;
@@ -193,6 +250,14 @@
                     background: #ff6b81;
                     .bor(#ff6b81);
                     .cw;
+                }
+            }
+        }
+        &.inventory {
+            .tab {
+                button {
+                    width: 30%;
+                    margin-top: 0;
                 }
             }
         }
@@ -360,7 +425,13 @@
                         buff: false,
                         passive: false
                     },
+                    inventoryList: {
+                        cure: true,
+                        concealed: false,
+                        buff: false
+                    },
                     skillPanel: false,
+                    inventory: false,
                     tips: false
                 },
                 disabled: {
@@ -430,7 +501,7 @@
             },
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
-            calculateDamage: function (type, attacker, target, skill) {
+            calculateDamage: function (type, attacker, target, object) {
                 let atkRegularData = this[`${attacker}RegularData`];
                 let atkNamespace = this[`${attacker}Namespace`];
                 let tarRegularData = this[`${target}RegularData`];
@@ -454,10 +525,10 @@
                         losingValue = atkValue - defValue;
                     }
                 } else {
-                    //首先计算是否有足够血量/魔法能发动技能，如果此技能会施加负面状态则在计算状态时已经判断过消耗
+                    //首先计算是否有足够血量/魔法能发动技能，如果此技能会施加负面状态则在计算状态时已经判断过消耗，如果能计算到此步说明足够消耗。
                     let ifEnough = false;
-                    if (!skill.effect.buff) {
-                        ifEnough = this.consume(skill, atkRegularData, atkNamespace);
+                    if (!object.effect.buff) {
+                        ifEnough = this.consume(object, atkRegularData, atkNamespace);
                     } else {
                         ifEnough = true;
                     }
@@ -480,9 +551,9 @@
                                 'elements', 'earth'),
                         }
                         //伤害数值、伤害元素类型、是否无视魔防
-                        let damage = skill.effect.damage.value;
-                        let damageTypeValue = skill.effect.damage.type.value;
-                        let ifIgnoring = skill.effect.damage.ignoring;
+                        let damage = object.effect.damage.value;
+                        let damageTypeValue = object.effect.damage.type.value;
+                        let ifIgnoring = object.effect.damage.ignoring;
                         let elementsDamage = 0;
                         if (!ifIgnoring) {
                             //判断技能伤害类型，结算附加伤害
@@ -541,19 +612,23 @@
             },
             //计算治疗量
             //参数为发动技能者，技能
-            calculateCure: function (target, skill) {
+            calculateCure: function (target, object) {
                 let [regularData, namespace] = [this[`${target}RegularData`], this[`${target}Namespace`]];
-                let ifEnough = this.consume(skill, regularData, namespace);
+                let ifEnough = true;
+                //如果传入的是技能则会计算是否足够消耗
+                if (object.sid) {
+                    let ifEnough = this.consume(object, regularData, namespace);
+                }
                 let cache = 0;
                 let property = '';
                 if (ifEnough) {
                     //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
-                    if (skill.consumeType.value === 1) {
+                    if (object.consumeType.value === 1) {
                         property = 'hp';
-                        cache = this.changeValue(1, regularData.hp, skill.effect.cure.value, regularData.maxhp)
+                        cache = this.changeValue(1, regularData.hp, object.effect.cure.value, regularData.maxhp)
                     } else {
                         property = 'mp';
-                        cache = this.changeValue(1, regularData.mp, skill.effect.cure.value, regularData.maxmp)
+                        cache = this.changeValue(1, regularData.mp, object.effect.cure.value, regularData.maxmp)
                     }
                     this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                         propety: property,
@@ -562,17 +637,21 @@
                 } else {
                     return false;
                 }
-                this.toggleSkillsPanel();
+                if (object.sid) {
+                    this.toggleSkillsPanel();
+                } else {
+                    this.toggleInventory();
+                }
                 this.roundCount();
             },
             //添加buff的相关逻辑
-            calculateBuff: function (user, skill, other) {
+            calculateBuff: function (user, object, other) {
                 let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
-                let ifEnough = this.consume(skill, regularData, userNamespace);
+                let ifEnough = this.consume(object, regularData, userNamespace);
                 if (ifEnough) {
-                    let [vm, buff, target] = [this, skill.effect.buff, ''];
+                    let [vm, buff, target] = [this, object.effect.buff, ''];
                     //首先判断施放buff的目标对象
-                    if (skill.effect.target === 1) {
+                    if (object.effect.target === 1) {
                         target = user;
                     } else {
                         if (user === 'enemy') {
@@ -586,7 +665,7 @@
                     ];
                     //同一种类型的buff只能存在一个,push新的buff之前需pop已存在相同类型的buff
                     let ifIdentical = this[`${target}BuffList`].findIndex(e => {
-                        return e.buffType === skill.buffType;
+                        return e.buffType === object.buffType;
                     });
                     if (ifIdentical !== -1) {
                         this.$store.commit(`${namespace}/changeRoundToZero`, {
@@ -597,7 +676,7 @@
                         });
                     }
                     //若技能是提升一定数值的类型则先缓存原始值到originalValue数组中
-                    if (skill.buffType === 1) {
+                    if (object.buffType === 1) {
                         buff.forEach(e => {
                             let value = 0;
                             //缓存自身属性值
@@ -620,10 +699,10 @@
                     //将buff push进目标的buff数组中
                     this.$store.commit(`${namespace}/pushBuff`, {
                         buff: {
-                            sid: skill.sid,
-                            name: skill.name,
-                            round: skill.effect.round,
-                            buffType: skill.buffType,
+                            sid: object.sid,
+                            name: object.name,
+                            round: object.effect.round,
+                            buffType: object.buffType,
                             originalValue
                         }
                     });
@@ -665,25 +744,27 @@
                             });
                         }
                     });
+                    //other代表是否从其他攻击方式调用此方法（如伤害技能附加的buff），如果是则无需再切换和跳回合
+                    console.log(this.enemy)
+                    if (!other) {
+                        this.toggleSkillsPanel();
+                        this.roundCount();
+                    }
                     return true;
                 } else {
                     return false;
                 }
-                if (!other) {
-                    this.toggleSkillsPanel();
-                    this.roundCount();
-                }
             },
-            findSkill: function (list, sid) {
-                let skill = null;
-                let skillList = this[list];
-                skillList.forEach(e => {
-                    if (e.sid === sid) {
-                        skill = e;
+            findList: function (list, id, sign) {
+                let object = null;
+                let objectList = this[list];
+                objectList.forEach(e => {
+                    if (e[`${sign}id`] === id) {
+                        object = e;
                         return;
                     }
                 });
-                return skill;
+                return object;
             },
             //施放技能后的魔法/生命消耗操作
             consume: function (skill, regularData, namespace) {
@@ -736,7 +817,7 @@
             },
             //发动伤害技能
             useDamageSkill: function (attacker, target, list, sid) {
-                let skill = this.findSkill(list, sid);
+                let skill = this.findList(list, sid, 's');
                 let ifConsume = this.calculateBuff(attacker, skill, true);
                 if (ifConsume) {
                     this.calculateDamage(2, attacker, target, skill);
@@ -744,16 +825,26 @@
             },
             //发动治疗技能
             useCureSkill: function (target, list, sid) {
-                let skill = this.findSkill(list, sid);
+                let skill = this.findList(list, sid, 's');
                 this.calculateCure(target, skill);
             },
             //发动增/减益技能
             useBuffSkill: function (user, list, sid) {
-                let skill = this.findSkill(list, sid);
+                let skill = this.findList(list, sid, 's');
                 this.calculateBuff(user, skill, false);
             },
             items: function () {
-                this.roundCount();
+                this.toggleInventory();
+            },
+            useCureItem: function (target, list, iid) {
+                let item = this.findList(list, iid, 'i');
+                this.calculateCure(target, item);
+            },
+            useConcealedItem: function () {
+                let item = this.findList(list, iid, 'i');
+            },
+            useBuffItem: function () {
+                let item = this.findList(list, iid, 'i');
             },
             escape: function () {
                 let enemySpdCache = this.getValue('enemy', 'extraAttributes', 'spd');
@@ -775,6 +866,16 @@
             auto: function () {
                 this.roundCount();
             },
+            //展开/收起道具面板 
+            toggleInventory: function () {
+                this.show.inventory = !this.show.inventory;
+            },
+            changeInventory: function (tab) {
+                Object.keys(this.show.inventoryList).forEach(e => {
+                    this.show.inventoryList[e] = false;
+                });
+                this.show.inventoryList[tab] = true;
+            },
             //展开/收起技能面板
             toggleSkillsPanel: function () {
                 this.show.skillPanel = !this.show.skillPanel;
@@ -794,6 +895,10 @@
                     arr.push(e);
                 });
                 return arr;
+            },
+            //获取道具列表
+            getItemsArr: function (origin) {
+                return this.$store.state.items[origin];
             },
             //获取数据
             getValue: function (target, type, property) {
@@ -863,12 +968,12 @@
                 }
             }
         },
-        props: [
-            'enemy',
-            'mode',
-            'reward',
-            'times'
-        ],
+        // props: [
+        //     'enemy', //敌人
+        //     'mode', //模式
+        //     'reward', //奖励
+        //     'times' //次数
+        // ],
         computed: {
             //取得命名空间用来commit
             playerNamespace: function () {
@@ -879,6 +984,9 @@
             },
             player: function () {
                 return this.$store.state.player;
+            },
+            enemy: function () {
+                return this.$store.state.groupC;
             },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
@@ -911,15 +1019,28 @@
             passiveSkillsList: function () {
                 return this.getSkillsArr('passiveSkills');
             },
+            //道具列表
+            cureItemsList: function () {
+                return this.getItemsArr('cureItems');
+            },
+            concealedItemsList: function () {
+                return this.getItemsArr('concealedItems');
+            },
+            buffItemsList: function () {
+                return this.getItemsArr('buffItems');
+            },
+            //buff列表
             playerBuffList: function () {
                 return this.player.buff;
             },
             enemyBuffList: function () {
                 return this.enemy.buff;
             },
+            //当前经验
             nowExp: function () {
                 return this.player.baseAttributes.exp.value
             },
+            //升级经验
             levelUpExp: function () {
                 return this.$store.getters['player/levelUpExp'];
             }
@@ -939,7 +1060,7 @@
                         //重置怪物的状态
                         let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
                         this.resetStatus('enemy', emaxhp, emaxmp);
-                        //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭模块
+                        //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭tips
                         this.tips.close = true;
                         //经验获取、升级
                         let gotValue = this.enemy.baseAttributes.exp.value;

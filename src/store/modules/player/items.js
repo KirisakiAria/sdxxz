@@ -3,23 +3,29 @@ let state = {
     cureItems: [{
         iid: 0,
         name: '馒头',
-        desc: '增加60点生命',
+        desc: '恢复45点生命',
         amount: 1,
+        consumeType: {
+            value: 1
+        },
         effect: {
-            target: 1,
             cure: {
-                value: 140
+                type: 1,
+                value: 45
             }
         }
     }, {
         iid: 1,
         name: '包子',
-        desc: '增加100点生命',
+        desc: '恢复70点生命',
         amount: 1,
+        consumeType: {
+            value: 1
+        },
         effect: {
-            target: 1,
             cure: {
-                value: 140
+                type: 1,
+                value: 70
             }
         }
     }],

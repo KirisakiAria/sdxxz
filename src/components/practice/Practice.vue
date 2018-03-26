@@ -32,13 +32,16 @@
 	@import "../../style/style";
 
 	.practice {
-		padding-bottom: .7rem;
+
 		.head {
 			padding: .15rem;
 
 			background: #a5b1c2;
 
 			.cw;
+		}
+		.list {
+			padding-bottom: .7rem;
 		}
 
 		.content {
@@ -81,8 +84,8 @@
 		data() {
 			return {
 				show: {
-					list: true,
-					battle: false
+					list: false,
+					battle: true
 				},
 				enemy: null
 			}

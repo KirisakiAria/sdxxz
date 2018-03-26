@@ -10,56 +10,56 @@
 			<transition name="slide-fade" mode="out-in">
 				<div key="cureItemsList" v-if="show.cure">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList" @click="learn(item)">
+						<li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
-								<p>技能介绍：{{item.desc}}</p>
+								<p>道具介绍：{{item.desc}}</p>
 							</div>
 						</li>
 					</ul>
 				</div>
 				<div key="concealedItemsList" v-if="show.concealed">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList" @click="learn(item)">
+						<li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
-								<p>技能介绍：{{item.desc}}</p>
+								<p>道具介绍：{{item.desc}}</p>
 							</div>
 						</li>
 					</ul>
 				</div>
 				<div key="buffItemsList" v-if="show.buff">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList" @click="learn(item)">
+						<li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
-								<p>技能介绍：{{item.desc}}</p>
+								<p>道具介绍：{{item.desc}}</p>
 							</div>
 						</li>
 					</ul>
 				</div>
 				<div key="equipmentsItemList" v-if="show.equipments">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in equipmentsItemsList" @click="learn(item)">
+						<li :key="item.iid" v-if="item.amount" v-for="item in equipmentsItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
 								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
-								<p>技能介绍：{{item.desc}}</p>
+								<p>道具介绍：{{item.desc}}</p>
 							</div>
 						</li>
 					</ul>
