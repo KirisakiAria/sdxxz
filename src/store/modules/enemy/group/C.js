@@ -16,7 +16,7 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 140
+			value: 100
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 140
+			value: 100
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -116,10 +116,10 @@ const mutations = {
 
 const actions = {
 	changeRound(context, payload) {
-		let [buff, length, ifDecrease] = [context.state.buff, context.state.buff.length, payload.ifDecrease];
+		let [buff, length, ifNotToZero] = [context.state.buff, context.state.buff.length, payload.ifNotToZero];
 		if (length) {
 			buff.forEach(e => {
-				if (ifDecrease) {
+				if (ifNotToZero) {
 					e.round--;
 				}
 				if (!e.round) {
@@ -146,7 +146,7 @@ const actions = {
 		}
 		//console.log(context.state.buff);
 	},
-	changeSkillValue: function (context, payload) {
+	changeSkillValue(context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
 		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
 	}

@@ -446,7 +446,7 @@
                 },
                 tips: {
                     data: '',
-                    close: false
+                    close: false //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭tips
                 }
             };
         },
@@ -477,12 +477,13 @@
                 //正常情况下的一回合
                 if (!(this.round.num % 2)) {
                     let enemy = this.enemyNamespace;
-                    //敌我双方buff持续时间各减少一回合
+                    //敌我双方debuff持续时间各减少一回合
+                    //ifNotToZero为true时代表根据战斗回合减少而不是直接清零从而清除buff
                     this.$store.dispatch('player/changeRound', {
-                        ifDecrease: true
+                        ifNotToZero: true
                     });
                     this.$store.dispatch(`${enemy}/changeRound`, {
-                        ifDecrease: true
+                        ifNotToZero: true
                     });
                     this.deBuff('player', 'slient');
                     this.deBuff('enemy', 'slient');
@@ -490,6 +491,7 @@
                     this.deBuff('enemy', 'disarm');
                 }
             },
+            //检测目标的buff中是否存在沉默、缴械等状态，没有则还原相关状态
             deBuff: function (target, debuffName) {
                 let buffList = this[`${target}BuffList`];
                 let ifDebuff = buffList.findIndex(e => {
@@ -556,10 +558,10 @@
                         let ifIgnoring = object.effect.damage.ignoring;
                         let elementsDamage = 0;
                         if (!ifIgnoring) {
-                            //判断技能伤害类型，结算附加伤害
+                            //判断技能伤害类型，结算附加伤害，在这里物理伤害类型也当做元素伤害类型来计算
                             switch (damageTypeValue) {
                                 case 1:
-                                    elementsDamage = mgaCache * 0.6 - defCache * 0.8;
+                                    elementsDamage = mgaCache * 0.8 - defCache * 0.6;
                                     break;
                                 case 2:
                                     elementsDamage = mgaCache * 0.3 * (attackerElements.fire * 1.1 - targetElements
@@ -672,7 +674,7 @@
                             index: ifIdentical
                         });
                         this.$store.dispatch(`${namespace}/changeRound`, {
-                            ifDecrease: false
+                            ifNotToZero: false
                         });
                     }
                     //若技能是提升一定数值的类型则先缓存原始值到originalValue数组中
@@ -745,7 +747,6 @@
                         }
                     });
                     //other代表是否从其他攻击方式调用此方法（如伤害技能附加的buff），如果是则无需再切换和跳回合
-                    console.log(this.enemy)
                     if (!other) {
                         this.toggleSkillsPanel();
                         this.roundCount();
@@ -818,7 +819,10 @@
             //发动伤害技能
             useDamageSkill: function (attacker, target, list, sid) {
                 let skill = this.findList(list, sid, 's');
-                let ifConsume = this.calculateBuff(attacker, skill, true);
+                let ifConsume = true;
+                if (skill.effect.buff) {
+                    ifConsume = this.calculateBuff(attacker, skill, true);
+                }
                 if (ifConsume) {
                     this.calculateDamage(2, attacker, target, skill);
                 }
@@ -839,12 +843,27 @@
             useCureItem: function (target, list, iid) {
                 let item = this.findList(list, iid, 'i');
                 this.calculateCure(target, item);
+                this.$store.commit('items/changeValue', {
+                    type: 'cureItems',
+                    iid: item.iid,
+                    amount: item.amount - 1
+                });
             },
             useConcealedItem: function () {
                 let item = this.findList(list, iid, 'i');
+                this.$store.commit('items/changeValue', {
+                    type: 'concealedItem',
+                    iid: item.iid,
+                    amount: item.amount - 1
+                });
             },
             useBuffItem: function () {
                 let item = this.findList(list, iid, 'i');
+                this.$store.commit('items/changeValue', {
+                    type: 'buffItem',
+                    iid: item.iid,
+                    amount: item.amount - 1
+                });
             },
             escape: function () {
                 let enemySpdCache = this.getValue('enemy', 'extraAttributes', 'spd');
@@ -889,12 +908,7 @@
             },
             //获取技能列表
             getSkillsArr: function (origin) {
-                let arr = [];
-                let skills = this.$store.state.playerSkills[origin];
-                Object.values(skills).forEach(e => {
-                    arr.push(e);
-                });
-                return arr;
+                return this.$store.state.playerSkills[origin];
             },
             //获取道具列表
             getItemsArr: function (origin) {
@@ -954,7 +968,7 @@
                     });
                 });
                 this.$store.dispatch(`${namespace}/changeRound`, {
-                    ifDecrease: false
+                    ifNotToZero: false
                 });
             },
             rewardPlayer: function (reward) {
@@ -966,14 +980,21 @@
                 if (this.levelUpExp <= this.nowExp) {
                     this.$store.commit('player/levelup');
                 }
+                reward.items.forEach(e => {
+                    this.$store.commit('items/addValue', {
+                        type: e.type,
+                        iid: e.iid,
+                        amount: e.amount
+                    });
+                });
             }
         },
-        // props: [
-        //     'enemy', //敌人
-        //     'mode', //模式
-        //     'reward', //奖励
-        //     'times' //次数
-        // ],
+        props: [
+            'enemy', //敌人
+            'mode', //模式
+            'reward', //奖励
+            'times' //次数
+        ],
         computed: {
             //取得命名空间用来commit
             playerNamespace: function () {
@@ -985,9 +1006,9 @@
             player: function () {
                 return this.$store.state.player;
             },
-            enemy: function () {
-                return this.$store.state.groupC;
-            },
+            // enemy: function () {
+            //     return this.$store.state.groupC;
+            // },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
                 return {
@@ -1060,7 +1081,6 @@
                         //重置怪物的状态
                         let [emaxhp, emaxmp] = [this.enemy.baseAttributes.maxhp.value, this.enemy.baseAttributes.maxmp.value];
                         this.resetStatus('enemy', emaxhp, emaxmp);
-                        //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭tips
                         this.tips.close = true;
                         //经验获取、升级
                         let gotValue = this.enemy.baseAttributes.exp.value;

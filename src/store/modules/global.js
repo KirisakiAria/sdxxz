@@ -1,7 +1,7 @@
 const state = {
 	show: {
-		mission: false,
-		practice: true,
+		mission: true,
+		practice: false,
 		skill: false,
 		inventory: false,
 		my: false

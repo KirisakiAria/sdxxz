@@ -1,22 +1,22 @@
 let state = {
 	baseAttributes: {
-		eid: 2,
-		namespace: 'groupA',
+		eid: 0,
+		namespace: 'groupC',
 		name: {
 			decs: '姓名',
-			value: '傻屌群大傻屌'
+			value: '傻屌群小傻屌'
 		},
 		description: {
 			decs: '描述',
-			value: '倒数第三辣鸡的傻屌，打不过你就退群吧'
+			value: '最辣鸡的傻屌，打不过你就退群吧'
 		},
 		level: {
 			decs: '等级',
-			value: 5
+			value: 2
 		},
 		hp: {
 			decs: '生命',
-			value: 260
+			value: 100
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 260
+			value: 100
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -32,13 +32,13 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 78
+			value: 40
 		}
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 41
+			value: 25
 		},
 		mga: {
 			decs: '魔攻',
@@ -46,15 +46,15 @@ let state = {
 		},
 		def: {
 			decs: '物防',
-			value: 26
+			value: 10
 		},
 		res: {
 			decs: '魔防',
-			value: 24
+			value: 14
 		},
 		crt: {
 			decs: '暴击',
-			value: 11
+			value: 6
 		},
 		mul: {
 			decs: '暴击系数',
@@ -62,33 +62,33 @@ let state = {
 		},
 		hit: {
 			decs: '命中',
-			value: 50
+			value: 32
 		},
 		spd: {
 			decs: '速度',
-			value: 5
+			value: 1
 		}
 	},
 	elements: {
 		fire: {
 			decs: '火属性',
-			value: 2
+			value: 0
 		},
 		ice: {
 			decs: '冰属性',
-			value: 2
+			value: 0
 		},
 		toxic: {
 			decs: '毒属性',
-			value: 2
+			value: 0
 		},
 		wind: {
 			decs: '风属性',
-			value: 2
+			value: 0
 		},
 		earth: {
 			decs: '土属性',
-			value: 2
+			value: 0
 		}
 	},
 	buff: []
@@ -116,10 +116,10 @@ const mutations = {
 
 const actions = {
 	changeRound(context, payload) {
-		let [buff, length, ifDecrease] = [context.state.buff, context.state.buff.length, payload.ifDecrease];
+		let [buff, length, ifNotToZero] = [context.state.buff, context.state.buff.length, payload.ifNotToZero];
 		if (length) {
 			buff.forEach(e => {
-				if (ifDecrease) {
+				if (ifNotToZero) {
 					e.round--;
 				}
 				if (!e.round) {
@@ -146,7 +146,7 @@ const actions = {
 		}
 		//console.log(context.state.buff);
 	},
-	changeSkillValue: function (context, payload) {
+	changeSkillValue(context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
 		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
 	}

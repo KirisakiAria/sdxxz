@@ -1,7 +1,6 @@
 let state = {
-	damageSkills: {
-		sand: {
-			sid: '0000',
+	damageSkills: [{
+			sid: 0,
 			learned: true,
 			level: 1,
 			point: 0,
@@ -32,9 +31,9 @@ let state = {
 				round: 3
 			}
 		},
-		cnm: {
-			sid: '0001',
-			learned: false,
+		{
+			sid: 1,
+			learned: true,
 			level: 5,
 			point: 2,
 			name: '素质对话',
@@ -55,9 +54,9 @@ let state = {
 				}
 			}
 		},
-		cnmnmbngsb: {
-			sid: '0002',
-			learned: false,
+		{
+			sid: 2,
+			learned: true,
 			level: 20,
 			point: 5,
 			name: '素质三连',
@@ -88,9 +87,9 @@ let state = {
 				round: 4
 			}
 		},
-		sputum: {
-			sid: '0003',
-			learned: false,
+		{
+			sid: 3,
+			learned: true,
 			level: 12,
 			point: 4,
 			name: '飞痰',
@@ -112,9 +111,9 @@ let state = {
 				}
 			}
 		},
-		cumming: {
-			sid: '0004',
-			learned: false,
+		{
+			sid: 4,
+			learned: true,
 			level: 17,
 			point: 4,
 			name: '蝌蚪',
@@ -144,9 +143,9 @@ let state = {
 				round: 4
 			}
 		},
-		arson: {
-			sid: '0005',
-			learned: false,
+		{
+			sid: 5,
+			learned: true,
 			level: 24,
 			point: 5,
 			name: '纵火',
@@ -177,11 +176,10 @@ let state = {
 				round: 5
 			}
 		},
-	},
-	cureSkills: {
-		buy: {
-			sid: '1000',
-			learned: false,
+	],
+	cureSkills: [{
+			sid: 0,
+			learned: true,
 			level: 2,
 			point: 1,
 			name: '+1',
@@ -197,9 +195,9 @@ let state = {
 				}
 			}
 		},
-		cut: {
-			sid: '1001',
-			learned: false,
+		{
+			sid: 1,
+			learned: true,
 			level: 6,
 			point: 2,
 			name: '剁手',
@@ -214,16 +212,15 @@ let state = {
 					value: 140
 				}
 			}
-		},
-	},
+		}
+	],
 	//target：1为己方，2为敌方
 	//技能类的buffType：1为增加一定数值的技能，2为沉默、缴械等类型的技能
 	//每种buff的type：1为增加自身属性，2为增加技能的值，3为沉默、缴械等debuff
 	//实际持续回合数要把回合数-1，因为施放技能的那一回合也算入在内
-	buffSkills: {
-		login: {
-			sid: '2000',
-			learned: false,
+	buffSkills: [{
+			sid: 0,
+			learned: true,
 			level: 4,
 			point: 1,
 			name: 'Steam，登录！',
@@ -282,9 +279,9 @@ let state = {
 				round: 4
 			}
 		},
-		moralityUp: {
-			sid: '2001',
-			learned: false,
+		{
+			sid: 1,
+			learned: true,
 			level: 10,
 			point: 2,
 			name: '素质提升',
@@ -323,7 +320,7 @@ let state = {
 					},
 					{
 						type: 2,
-						position: ['damageSkills', 'cnmnmbngsb', 'effect', 'damage'],
+						position: ['damageSkills', 2, 'effect', 'damage'],
 						value: 1.3,
 						valueType: 'percentage'
 					}
@@ -331,9 +328,9 @@ let state = {
 				round: 4
 			}
 		},
-		JJ: {
-			sid: '2002',
-			learned: false,
+		{
+			sid: 2,
+			learned: true,
 			level: 12,
 			point: 3,
 			name: '可惜没如果',
@@ -354,9 +351,9 @@ let state = {
 				round: 4
 			}
 		},
-		gabe: {
-			sid: '2003',
-			learned: false,
+		{
+			sid: 3,
+			learned: true,
 			level: 15,
 			point: 4,
 			name: 'g胖',
@@ -371,16 +368,16 @@ let state = {
 				target: 1,
 				buff: [{
 					type: 2,
-					position: ['cureSkills', 'buy', 'effect', 'cure'],
+					position: ['cureSkills', 0, 'effect', 'cure'],
 					value: 3,
 					valueType: 'percentage'
 				}],
 				round: 5
 			}
 		},
-		reverseCut: {
-			sid: '2004',
-			learned: false,
+		{
+			sid: 4,
+			learned: true,
 			level: 12,
 			point: 3,
 			name: '反向剁手',
@@ -401,9 +398,9 @@ let state = {
 				round: 3
 			}
 		},
-		pyramid: {
-			sid: '2005',
-			learned: false,
+		{
+			sid: 5,
+			learned: true,
 			level: 12,
 			point: 3,
 			name: '传销三连',
@@ -444,23 +441,22 @@ let state = {
 				round: 5
 			}
 		}
-	},
-	passiveSkills: {
-		steamer: {
-			sid: '3000',
+	],
+	passiveSkills: [{
+			sid: 0,
 			learned: true,
 			name: 'Steamer',
 			desc: '你是一名steam玩家，不过这个被动现在好像没什么用。',
 			effect: {}
 		},
-		dotaplus: {
-			sid: '3001',
+		{
+			sid: 1,
 			learned: true,
 			name: 'Dota2Plus会员',
 			desc: '你开了五千年的Dota2Plus会员，自带血崩光环',
 			effect: {}
-		},
-	}
+		}
+	]
 }
 
 export default {

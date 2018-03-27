@@ -185,12 +185,7 @@
 				this.show[tab] = true;
 			},
 			getSkillsArr: function (origin) {
-				let arr = [];
-				let skills = this.$store.state.playerSkills[origin];
-				Object.values(skills).forEach(e => {
-					arr.push(e);
-				});
-				return arr;
+				return this.$store.state.playerSkills[origin];
 			},
 			learn: function (item) {
 				if (item.learned) {
