@@ -1,7 +1,7 @@
 <template>
 	<main class="main">
 		<transition name="slide-fade" mode="out-in">
-			<!-- <section v-if="show.main" class="menu mainSection">
+			<section v-if="show.main" class="menu mainSection">
 				<div class="link">
 					<a href="https://github.com/KirisakiAria/sdxxz" target="_blank" title="github">
 						<i class="iconfont icon-github"></i>
@@ -25,11 +25,10 @@
 				</ul>
 				<footer class="footer">
 					<p>
-						<a href="https://weibo.com/KanzakiHAria">伟大鱼塘</a>
+						<a href="https://weibo.com/KanzakiHAria" target="_blank" title="微博">伟大鱼塘</a>
 					</p>
 				</footer>
-			</section> -->
-
+			</section>
 			<router-view></router-view>
 		</transition>
 	</main>

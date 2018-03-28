@@ -716,8 +716,6 @@
                             });
                         }
                     });
-                } else {
-                    return false;
                 }
             },
             findList: function (list, id, sign) {
@@ -792,8 +790,6 @@
                     this.calculateDamage(2, attacker, target, skill);
                     this.toggleSkillsPanel();
                     this.roundCount();
-                } else {
-                    return false;
                 }
             },
             //发动治疗技能
@@ -805,8 +801,6 @@
                     this.calculateCure(regularData, namespace, skill);
                     this.toggleSkillsPanel();
                     this.roundCount();
-                } else {
-                    return false;
                 }
             },
             //发动增/减益技能
@@ -816,11 +810,9 @@
                 let ifEnough = this.consume(skill,
                     regularData, userNamespace);
                 if (ifEnough) {
-                    this.calculateBuff(user, skill, false);
+                    this.calculateBuff(user, skill);
                     this.toggleSkillsPanel();
                     this.roundCount();
-                } else {
-                    return false;
                 }
             },
             useCureItem: function (target, list, iid) {
