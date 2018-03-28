@@ -33,7 +33,7 @@ let state = {
 		},
 		{
 			sid: 1,
-			learned: true,
+			learned: false,
 			level: 5,
 			point: 2,
 			name: '素质对话',
@@ -56,7 +56,7 @@ let state = {
 		},
 		{
 			sid: 2,
-			learned: true,
+			learned: false,
 			level: 20,
 			point: 5,
 			name: '素质三连',
@@ -89,7 +89,7 @@ let state = {
 		},
 		{
 			sid: 3,
-			learned: true,
+			learned: false,
 			level: 12,
 			point: 4,
 			name: '飞痰',
@@ -113,7 +113,7 @@ let state = {
 		},
 		{
 			sid: 4,
-			learned: true,
+			learned: false,
 			level: 17,
 			point: 4,
 			name: '蝌蚪',
@@ -145,7 +145,7 @@ let state = {
 		},
 		{
 			sid: 5,
-			learned: true,
+			learned: false,
 			level: 24,
 			point: 5,
 			name: '纵火',
@@ -179,7 +179,7 @@ let state = {
 	],
 	cureSkills: [{
 			sid: 0,
-			learned: true,
+			learned: false,
 			level: 2,
 			point: 1,
 			name: '+1',
@@ -197,7 +197,7 @@ let state = {
 		},
 		{
 			sid: 1,
-			learned: true,
+			learned: false,
 			level: 6,
 			point: 2,
 			name: '剁手',
@@ -220,7 +220,7 @@ let state = {
 	//实际持续回合数要把回合数-1，因为施放技能的那一回合也算入在内
 	buffSkills: [{
 			sid: 0,
-			learned: true,
+			learned: false,
 			level: 4,
 			point: 1,
 			name: 'Steam，登录！',
@@ -281,7 +281,7 @@ let state = {
 		},
 		{
 			sid: 1,
-			learned: true,
+			learned: false,
 			level: 10,
 			point: 2,
 			name: '素质提升',
@@ -330,7 +330,7 @@ let state = {
 		},
 		{
 			sid: 2,
-			learned: true,
+			learned: false,
 			level: 12,
 			point: 3,
 			name: '可惜没如果',
@@ -353,7 +353,7 @@ let state = {
 		},
 		{
 			sid: 3,
-			learned: true,
+			learned: false,
 			level: 15,
 			point: 4,
 			name: 'g胖',
@@ -377,7 +377,7 @@ let state = {
 		},
 		{
 			sid: 4,
-			learned: true,
+			learned: false,
 			level: 12,
 			point: 3,
 			name: '反向剁手',
@@ -400,7 +400,7 @@ let state = {
 		},
 		{
 			sid: 5,
-			learned: true,
+			learned: false,
 			level: 12,
 			point: 3,
 			name: '传销三连',
@@ -444,14 +444,14 @@ let state = {
 	],
 	passiveSkills: [{
 			sid: 0,
-			learned: true,
+			learned: false,
 			name: 'Steamer',
 			desc: '你是一名steam玩家，不过这个被动现在好像没什么用。',
 			effect: {}
 		},
 		{
 			sid: 1,
-			learned: true,
+			learned: false,
 			name: 'Dota2Plus会员',
 			desc: '你开了五千年的Dota2Plus会员，自带血崩光环',
 			effect: {}
