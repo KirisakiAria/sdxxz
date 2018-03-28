@@ -1,6 +1,8 @@
 # 傻屌修仙传
 
-![](https://img.shields.io/badge/language-vue-4fc08d.svg)  [![](https://img.shields.io/badge/weibo-@伟大鱼塘-red.svg)](https://weibo.com/KanzakiHAria)  [![](https://img.shields.io/badge/twitter-@伟大鱼塘-blue.svg)](https://twitter.com/KirisakiAria)
+[![](https://img.shields.io/badge/language-vue-4fc08d.svg)](https://cn.vuejs.org/)
+[![](https://img.shields.io/badge/weibo-@伟大鱼塘-red.svg)](https://weibo.com/KanzakiHAria)
+[![](https://img.shields.io/badge/twitter-@伟大鱼塘-blue.svg)](https://twitter.com/KirisakiAria)
 
 ## 介绍
 小圈子自嗨MUD游戏，正在开发中..
