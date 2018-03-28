@@ -74,11 +74,11 @@
                         <button :class="{disabled:round.enemy||disabled.player.disarm}" :disabled="round.enemy||disabled.player.disarm" class="btn"
                             @click="attack('player','enemy')">攻击</button>
                         <button :class="{disabled:round.enemy||disabled.player.slient}" :disabled="round.enemy||disabled.player.slient" class="btn"
-                            @click="toggleSkillsPanel()">技能</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="items(1)">道具</button>
+                            @click="toggleSkillsPanel">技能</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="toggleInventory">道具</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn">占位</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape(1)">逃跑</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="auto(1)">自动</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape">逃跑</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="auto">自动</button>
                     </div>
                 </div>
             </div>
@@ -518,7 +518,7 @@
                     let random = Math.random();
                     if (random > hitRate) {
                         console.log('攻击落空');
-                        return this.roundCount();
+                        return false;
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
                         let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
@@ -528,81 +528,70 @@
                     }
                 } else {
                     //首先计算是否有足够血量/魔法能发动技能，如果此技能会施加负面状态则在计算状态时已经判断过消耗，如果能计算到此步说明足够消耗。
-                    let ifEnough = false;
-                    if (!object.effect.buff) {
-                        ifEnough = this.consume(object, atkRegularData, atkNamespace);
-                    } else {
-                        ifEnough = true;
+                    let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
+                    let resCache = this.getValue(target, 'extraAttributes', 'res');
+                    let attackerElements = {
+                        fire: this.getValue(attacker, 'elements', 'fire'),
+                        ice: this.getValue(attacker, 'elements', 'ice'),
+                        toxic: this.getValue(attacker, 'elements', 'toxic'),
+                        wind: this.getValue(attacker, 'elements', 'wind'),
+                        earth: this.getValue(attacker, 'elements', 'earth'),
                     }
-                    if (ifEnough) {
-                        let mgaCache = this.getValue(attacker, 'extraAttributes', 'mga');
-                        let resCache = this.getValue(target, 'extraAttributes', 'res');
-                        let attackerElements = {
-                            fire: this.getValue(attacker, 'elements', 'fire'),
-                            ice: this.getValue(attacker, 'elements', 'ice'),
-                            toxic: this.getValue(attacker, 'elements', 'toxic'),
-                            wind: this.getValue(attacker, 'elements', 'wind'),
-                            earth: this.getValue(attacker, 'elements', 'earth'),
+                    let targetElements = {
+                        fire: this.getValue(target, 'elements', 'fire'),
+                        ice: this.getValue(target, 'elements', 'ice'),
+                        toxic: this.getValue(target, 'elements', 'toxic'),
+                        wind: this.getValue(target, 'elements', 'wind'),
+                        earth: this.getValue(target,
+                            'elements', 'earth'),
+                    }
+                    //伤害数值、伤害元素类型、是否无视魔防
+                    let damage = object.effect.damage.value;
+                    let damageTypeValue = object.effect.damage.type.value;
+                    let ifIgnoring = object.effect.damage.ignoring;
+                    let elementsDamage = 0;
+                    if (!ifIgnoring) {
+                        //判断技能伤害类型，结算附加伤害，在这里物理伤害类型也当做元素伤害类型来计算
+                        switch (damageTypeValue) {
+                            case 1:
+                                elementsDamage = mgaCache * 0.8 - defCache * 0.6;
+                                break;
+                            case 2:
+                                elementsDamage = mgaCache * 0.3 * (attackerElements.fire * 1.1 - targetElements
+                                    .fire *
+                                    0.8);
+                                break;
+                            case 3:
+                                elementsDamage = mgaCache * 0.3 * (attackerElements.ice * 1.1 - targetElements
+                                    .ice *
+                                    0.8);
+                                break;
+                            case 4:
+                                elementsDamage = mgaCache * 0.3 * (attackerElements.toxic * 1.1 -
+                                    targetElements
+                                    .toxic *
+                                    0.8);
+                                break;
+                            case 5:
+                                elementsDamage = mgaCache * 0.3 * (attackerElements.wind * 1.1 -
+                                    targetElements.wind *
+                                    0.8);
+                                break;
+                            case 6:
+                                elementsDamage = mgaCache * 0.3 * (attackerElements.earth * 1.1 -
+                                    targetElements
+                                    .earth *
+                                    0.8);
+                                break;
                         }
-                        let targetElements = {
-                            fire: this.getValue(target, 'elements', 'fire'),
-                            ice: this.getValue(target, 'elements', 'ice'),
-                            toxic: this.getValue(target, 'elements', 'toxic'),
-                            wind: this.getValue(target, 'elements', 'wind'),
-                            earth: this.getValue(target,
-                                'elements', 'earth'),
-                        }
-                        //伤害数值、伤害元素类型、是否无视魔防
-                        let damage = object.effect.damage.value;
-                        let damageTypeValue = object.effect.damage.type.value;
-                        let ifIgnoring = object.effect.damage.ignoring;
-                        let elementsDamage = 0;
-                        if (!ifIgnoring) {
-                            //判断技能伤害类型，结算附加伤害，在这里物理伤害类型也当做元素伤害类型来计算
-                            switch (damageTypeValue) {
-                                case 1:
-                                    elementsDamage = mgaCache * 0.8 - defCache * 0.6;
-                                    break;
-                                case 2:
-                                    elementsDamage = mgaCache * 0.3 * (attackerElements.fire * 1.1 - targetElements
-                                        .fire *
-                                        0.8);
-                                    break;
-                                case 3:
-                                    elementsDamage = mgaCache * 0.3 * (attackerElements.ice * 1.1 - targetElements
-                                        .ice *
-                                        0.8);
-                                    break;
-                                case 4:
-                                    elementsDamage = mgaCache * 0.3 * (attackerElements.toxic * 1.1 -
-                                        targetElements
-                                        .toxic *
-                                        0.8);
-                                    break;
-                                case 5:
-                                    elementsDamage = mgaCache * 0.3 * (attackerElements.wind * 1.1 -
-                                        targetElements.wind *
-                                        0.8);
-                                    break;
-                                case 6:
-                                    elementsDamage = mgaCache * 0.3 * (attackerElements.earth * 1.1 -
-                                        targetElements
-                                        .earth *
-                                        0.8);
-                                    break;
-                            }
-                            //实际造成的魔法伤害
-                            let mgaValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
-                                elementsDamage);
-                            let resValue = parseInt(resCache * 0.3);
-                            losingValue = mgaValue - resValue;
-                        } else {
-                            losingValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
-                                elementsDamage);
-                        }
-                        this.toggleSkillsPanel();
+                        //实际造成的魔法伤害
+                        let mgaValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
+                            elementsDamage);
+                        let resValue = parseInt(resCache * 0.3);
+                        losingValue = mgaValue - resValue;
                     } else {
-                        return false;
+                        losingValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
+                            elementsDamage);
                     }
                 }
                 let hpCache = this.changeValue(0, tarRegularData.hp, losingValue);
@@ -610,48 +599,29 @@
                     propety: 'hp',
                     value: hpCache
                 });
-                this.roundCount();
             },
             //计算治疗量
             //参数为发动技能者，技能
-            calculateCure: function (target, object) {
-                let [regularData, namespace] = [this[`${target}RegularData`], this[`${target}Namespace`]];
-                let ifEnough = true;
-                //如果传入的是技能则会计算是否足够消耗
-                if (object.sid) {
-                    let ifEnough = this.consume(object, regularData, namespace);
-                }
-                let cache = 0;
+            calculateCure: function (regularData, namespace, object) {
+                let addCache = 0;
                 let property = '';
-                if (ifEnough) {
-                    //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
-                    if (object.consumeType.value === 1) {
-                        property = 'hp';
-                        cache = this.changeValue(1, regularData.hp, object.effect.cure.value, regularData.maxhp)
-                    } else {
-                        property = 'mp';
-                        cache = this.changeValue(1, regularData.mp, object.effect.cure.value, regularData.maxmp)
-                    }
-                    this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
-                        propety: property,
-                        value: cache
-                    });
+                //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
+                if (object.consumeType.value === 1) {
+                    property = 'hp';
+                    addCache = this.changeValue(1, regularData.hp, object.effect.cure.value, regularData.maxhp)
                 } else {
-                    return false;
+                    property = 'mp';
+                    addCache = this.changeValue(1, regularData.mp, object.effect.cure.value, regularData.maxmp)
                 }
-                if (object.sid) {
-                    this.toggleSkillsPanel();
-                } else {
-                    this.toggleInventory();
-                }
-                this.roundCount();
+                this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
+                    propety: property,
+                    value: addCache
+                });
             },
             //添加buff的相关逻辑
-            calculateBuff: function (user, object, other) {
-                let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
-                let ifEnough = this.consume(object, regularData, userNamespace);
-                if (ifEnough) {
-                    let [vm, buff, target] = [this, object.effect.buff, ''];
+            calculateBuff: function (user, object) {
+                let [vm, buff, target] = [this, object.effect.buff, ''];
+                if (buff) {
                     //首先判断施放buff的目标对象
                     if (object.effect.target === 1) {
                         target = user;
@@ -746,12 +716,6 @@
                             });
                         }
                     });
-                    //other代表是否从其他攻击方式调用此方法（如伤害技能附加的buff），如果是则无需再切换和跳回合
-                    if (!other) {
-                        this.toggleSkillsPanel();
-                        this.roundCount();
-                    }
-                    return true;
                 } else {
                     return false;
                 }
@@ -815,39 +779,62 @@
             //物理攻击
             attack: function (attacker, target) {
                 this.calculateDamage(1, attacker, target);
+                this.roundCount();
             },
             //发动伤害技能
             useDamageSkill: function (attacker, target, list, sid) {
                 let skill = this.findList(list, sid, 's');
-                let ifConsume = true;
-                if (skill.effect.buff) {
-                    ifConsume = this.calculateBuff(attacker, skill, true);
-                }
-                if (ifConsume) {
+                let atkRegularData = this[`${attacker}RegularData`];
+                let atkNamespace = this[`${attacker}Namespace`];
+                let ifEnough = this.consume(skill, atkRegularData, atkNamespace);
+                if (ifEnough) {
+                    this.calculateBuff(attacker, skill);
                     this.calculateDamage(2, attacker, target, skill);
+                    this.toggleSkillsPanel();
+                    this.roundCount();
+                } else {
+                    return false;
                 }
             },
             //发动治疗技能
             useCureSkill: function (target, list, sid) {
                 let skill = this.findList(list, sid, 's');
-                this.calculateCure(target, skill);
+                let [regularData, namespace] = [this[`${target}RegularData`], this[`${target}Namespace`]];
+                let ifEnough = this.consume(skill, regularData, namespace);
+                if (ifEnough) {
+                    this.calculateCure(regularData, namespace, skill);
+                    this.toggleSkillsPanel();
+                    this.roundCount();
+                } else {
+                    return false;
+                }
             },
             //发动增/减益技能
             useBuffSkill: function (user, list, sid) {
                 let skill = this.findList(list, sid, 's');
-                this.calculateBuff(user, skill, false);
-            },
-            items: function () {
-                this.toggleInventory();
+                let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
+                let ifEnough = this.consume(skill,
+                    regularData, userNamespace);
+                if (ifEnough) {
+                    this.calculateBuff(user, skill, false);
+                    this.toggleSkillsPanel();
+                    this.roundCount();
+                } else {
+                    return false;
+                }
             },
             useCureItem: function (target, list, iid) {
-                let item = this.findList(list, iid, 'i');
-                this.calculateCure(target, item);
+                let [item, regularData, namespace] = [this.findList(list, iid, 'i'), this[`${target}RegularData`],
+                    this[`${target}Namespace`]
+                ];
+                this.calculateCure(regularData, namespace, item);
                 this.$store.commit('items/changeValue', {
                     type: 'cureItems',
                     iid: item.iid,
                     amount: item.amount - 1
                 });
+                this.toggleInventory();
+                this.roundCount();
             },
             useConcealedItem: function () {
                 let item = this.findList(list, iid, 'i');
@@ -856,6 +843,8 @@
                     iid: item.iid,
                     amount: item.amount - 1
                 });
+                this.toggleInventory();
+                this.roundCount();
             },
             useBuffItem: function () {
                 let item = this.findList(list, iid, 'i');
@@ -864,6 +853,8 @@
                     iid: item.iid,
                     amount: item.amount - 1
                 });
+                this.toggleInventory();
+                this.roundCount();
             },
             escape: function () {
                 let enemySpdCache = this.getValue('enemy', 'extraAttributes', 'spd');
@@ -883,7 +874,7 @@
                 }
             },
             auto: function () {
-                this.roundCount();
+
             },
             //展开/收起道具面板 
             toggleInventory: function () {
@@ -1093,7 +1084,7 @@
                             //经验最多降到当前等级开始
                             let prevlevel = this.player.baseAttributes.level.value - 1;
                             let prevLevelUpExp = prevlevel * (prevlevel + 5) * 10;
-                            if (this.prevLevelUpExp >= nowExp) {
+                            if (this.prevLevelUpExp >= this.nowExp) {
                                 this.$store.commit('player/changeBaseAttributesValue', {
                                     propety: 'exp',
                                     value: prevLevelUpExp

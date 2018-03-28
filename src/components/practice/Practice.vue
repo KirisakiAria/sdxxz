@@ -23,7 +23,7 @@
 				</div>
 			</section>
 			<!-- 传入点击挑战按钮对应的敌人的数据 -->
-			<Battle :enemy="enemy" mode="practice" v-if="show.battle" @closeBattle="closeBattle"></Battle>
+			<Battle mode="practice" :enemy="enemy" v-if="show.battle" @closeBattle="closeBattle"></Battle>
 		</transition>
 	</section>
 </template>

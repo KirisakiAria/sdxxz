@@ -38,7 +38,7 @@
 					</ul>
 				</section>
 			</section>
-			<Battle :enemy="enemy" mode="mission" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
+			<Battle mode="mission" :enemy="enemy" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
 		</transition>
 	</section>
 </template>
@@ -125,7 +125,7 @@
 			closeBattle: function () {
 				this.show.list = true;
 				this.show.battle = false;
-				this.enemy = null;
+				[this.enemy, this.mission, this.reward] = [null, null, null];
 			},
 			//完成任务
 			done: function () {
