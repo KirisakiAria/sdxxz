@@ -84,8 +84,8 @@
 		data() {
 			return {
 				show: {
-					list: true,
-					battle: false
+					list: false,
+					battle: true
 				},
 				enemy: null
 			}

@@ -27,7 +27,7 @@
 						<li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
-								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
+								<span class="i1">伤害量：{{item.effect.damage.value}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
@@ -41,7 +41,7 @@
 						<li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
 							<div class="top">
 								<span class="name">{{item.name}}</span>
-								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
+								<span class="i1">持续回合数：{{item.effect.round}}</span>
 								<span class="i2">数量：{{item.amount}}</span>
 							</div>
 							<div class="bottom">
@@ -153,8 +153,8 @@
 		data() {
 			return {
 				show: {
-					cure: true,
-					concealed: false,
+					cure: false,
+					concealed: true,
 					buff: false,
 					equipments: false,
 				},
@@ -198,6 +198,6 @@
 		},
 		components: {
 			Tips
-		},
+		}
 	}
 </script>

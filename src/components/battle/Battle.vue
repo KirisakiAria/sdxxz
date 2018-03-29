@@ -181,10 +181,10 @@
                         </div>
                         <div key="concealedItemsList" v-if="show.inventoryList.concealed">
                             <ul>
-                                <li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList" @click="useConcealedItem()">
+                                <li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList" @click="useConcealedItem('player','enemy','concealedItemsList',item.iid)">
                                     <div class="top">
                                         <span class="name">{{item.name}}</span>
-                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
+                                        <span class="i1">伤害量：{{item.effect.damage.value}}</span>
                                         <span class="i2">数量：{{item.amount}}</span>
                                     </div>
                                     <div class="bottom">
@@ -195,10 +195,10 @@
                         </div>
                         <div key="buffItemsList" v-if="show.inventoryList.buff">
                             <ul>
-                                <li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
-                                    <div class="top" @click="useBuffItem()">
+                                <li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList" @click="useBuffItem('player','buffItemsList',item.iid)">
+                                    <div class="top">
                                         <span class="name">{{item.name}}</span>
-                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
+                                        <span class="i1">持续回合数：{{item.effect.round}}</span>
                                         <span class="i2">数量：{{item.amount}}</span>
                                     </div>
                                     <div class="bottom">
@@ -521,9 +521,9 @@
                         return false;
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
-                        let atkValue = parseInt(this.randomNum(atkCache * 0.9, atkCache * 1.1));
+                        let atkValue = parseInt(this.randomNum(atkCache * 0.85, atkCache * 1.25));
                         let defValue = parseInt(defCache *
-                            0.4);
+                            0.65);
                         losingValue = atkValue - defValue;
                     }
                 } else {
@@ -554,7 +554,7 @@
                         //判断技能伤害类型，结算附加伤害，在这里物理伤害类型也当做元素伤害类型来计算
                         switch (damageTypeValue) {
                             case 1:
-                                elementsDamage = mgaCache * 0.8 - defCache * 0.6;
+                                elementsDamage = mgaCache * 0.85 - defCache * 0.57;
                                 break;
                             case 2:
                                 elementsDamage = mgaCache * 0.3 * (attackerElements.fire * 1.1 - targetElements
@@ -585,12 +585,12 @@
                                 break;
                         }
                         //实际造成的魔法伤害
-                        let mgaValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
+                        let mgaValue = parseInt(this.randomNum(damage * 0.88, damage * 1.12)) + parseInt(
                             elementsDamage);
-                        let resValue = parseInt(resCache * 0.3);
+                        let resValue = parseInt(resCache * 0.6);
                         losingValue = mgaValue - resValue;
                     } else {
-                        losingValue = parseInt(this.randomNum(damage * 0.9, damage * 1.1)) + parseInt(
+                        losingValue = parseInt(this.randomNum(damage * 0.88, damage * 1.12)) + parseInt(
                             elementsDamage);
                     }
                 }
@@ -820,30 +820,35 @@
                     this[`${target}Namespace`]
                 ];
                 this.calculateCure(regularData, namespace, item);
-                this.$store.commit('items/changeValue', {
+                this.$store.commit('items/minusValue', {
                     type: 'cureItems',
                     iid: item.iid,
-                    amount: item.amount - 1
+                    amount: item.amount
+                });
+                this.toggleInventory();
+                this.roundCount();
+
+            },
+            useConcealedItem: function (attacker, target, list, iid) {
+                let item = this.findList(list, iid, 'i');
+                this.calculateBuff(attacker, item);
+                this.calculateDamage(2, attacker, target,
+                    item);
+                this.$store.commit('items/minusValue', {
+                    type: 'concealedItems',
+                    iid: item.iid,
+                    amount: item.amount
                 });
                 this.toggleInventory();
                 this.roundCount();
             },
-            useConcealedItem: function () {
+            useBuffItem: function (user, list, iid) {
                 let item = this.findList(list, iid, 'i');
-                this.$store.commit('items/changeValue', {
-                    type: 'concealedItem',
+                this.calculateBuff(user, item);
+                this.$store.commit('items/minusValue', {
+                    type: 'buffItems',
                     iid: item.iid,
-                    amount: item.amount - 1
-                });
-                this.toggleInventory();
-                this.roundCount();
-            },
-            useBuffItem: function () {
-                let item = this.findList(list, iid, 'i');
-                this.$store.commit('items/changeValue', {
-                    type: 'buffItem',
-                    iid: item.iid,
-                    amount: item.amount - 1
+                    amount: item.amount
                 });
                 this.toggleInventory();
                 this.roundCount();
@@ -972,12 +977,12 @@
                 });
             }
         },
-        props: [
-            'enemy', //敌人
-            'mode', //模式
-            'reward', //奖励
-            'times' //次数
-        ],
+        // props: [
+        //     'enemy', //敌人
+        //     'mode', //模式
+        //     'reward', //奖励
+        //     'times' //次数
+        // ],
         computed: {
             //取得命名空间用来commit
             playerNamespace: function () {
@@ -989,9 +994,9 @@
             player: function () {
                 return this.$store.state.player;
             },
-            // enemy: function () {
-            //     return this.$store.state.groupC;
-            // },
+            enemy: function () {
+                return this.$store.state.groupC;
+            },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
                 return {
