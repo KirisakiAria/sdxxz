@@ -32,44 +32,12 @@
 	@import "../../style/style";
 
 	.practice {
-
-		.head {
-			padding: .15rem;
-
-			background: #a5b1c2;
-
-			.cw;
-		}
-		.list {
-			padding-bottom: .7rem;
-		}
-
 		.content {
 			li {
-				padding: .15rem;
-
-				border-bottom: 1px solid #a5b1c2;
-
-				div.ib {
-					width: calc(~'100% - 1.05rem');
-					padding-right: .1rem;
-
-					.top {
-						margin-bottom: .15rem;
-						span {
-							margin-right: .15rem;
-						}
-					}
-
-					p {
-						line-height: 1.5;
-
-						text-align: justify;
-					}
-				}
-				button {
-					.ib;
-					.br(8px);
+				margin-bottom: 0;
+				.ib {
+					width: calc(~'100% - 1.08rem');
+					padding-right: .08rem;
 				}
 			}
 		}
@@ -108,16 +76,15 @@
 			closeBattle: function () {
 				this.show.list = true;
 				this.show.battle = false;
-				this.enemy = null;
 			}
 		},
 		computed: {
 			/*获取敌人列表*/
 			level0_5EnemyList: function () {
-				return this.pushArr('groupC', 'groupB', 'groupA');
+				return this.pushArr('groupC');
 			},
 			level6_10EnemyList: function () {
-				return this.pushArr('groupS', 'groupSS');
+				//return this.pushArr('groupS', 'groupSS');
 			},
 			enemyList: function () {
 				return [{

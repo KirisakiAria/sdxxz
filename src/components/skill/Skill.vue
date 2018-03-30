@@ -17,6 +17,7 @@
 								<span class="i1">伤害量：{{item.effect.damage.value}}</span>
 								<span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
 								<span class="i3">技能点：{{item.point}}</span>
+								<span class="i4">等级需求：{{item.level}}</span>
 							</div>
 							<div class="bottom">
 								<p>技能介绍：{{item.desc}}</p>
@@ -76,83 +77,10 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
-
 	.skill {
-
-		padding-bottom: .7rem;
-
-		.tab {
-
-			padding: .15rem;
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
-
-			button {
-				width: 45%;
-				margin-top: .075rem;
-				display: block;
-				&:nth-of-type(1),
-				&:nth-of-type(2) {
-					margin-top: 0;
-				}
-				&.active {
-					background: #ff6b81;
-					.bor(#ff6b81);
-					.cw;
-				}
-			}
-		}
-
 		.content {
-			>p {
-				text-align: center;
-				margin-bottom: .15rem;
-				color: #ff6348;
-			}
 			li {
-				margin-bottom: .1rem;
-				padding: .12rem;
-				border-top: 1px solid #a5b1c2;
-				border-bottom: 1px solid #a5b1c2;
-				.transition(.3s);
-
-				.name {
-					display: block;
-					margin-bottom: .1rem;
-					font-weight: bold;
-				}
-				.i1 {
-					color: #ff6b81;
-				}
-				.i2 {
-					color: #1e90ff;
-				}
-				.i3 {
-					color: #487eb0;
-				}
-				&.no {
-					.cw;
-					background: #747d8c;
-					border-color: #747d8c;
-					.i1,
-					.i2,
-					.i3 {
-						color: #fff;
-					}
-				}
-				.top {
-					margin-bottom: .1rem;
-					span {
-						margin-right: .1rem;
-					}
-				}
-
-				.bottom {
-					p {
-						line-height: 1.5;
-					}
-				}
+ border-bottom: 1px solid #706fd3;
 			}
 		}
 	}

@@ -226,7 +226,7 @@ let state = {
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12',
 			buffType: 1,
-			consume: 62,
+			consume: 1,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -336,7 +336,7 @@ let state = {
 			name: '可惜没如果',
 			desc: '召唤沉默术士，使对方群体沉默',
 			buffType: 2,
-			consume: 178,
+			consume: 1,
 			consumeType: {
 				name: '魔法',
 				value: 1

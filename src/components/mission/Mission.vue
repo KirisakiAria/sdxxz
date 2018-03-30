@@ -30,7 +30,7 @@
 								<p>{{item.des}}</p>
 								<p class="reward">任务奖励：经验：{{item.reward.exp}}
 									<span>物品：</span>
-									<span :key="key.name" v-for="key in items.reward">{{key.name}}x{{key.amount}}</span>
+									<span :key="key.name" v-for="key in item.reward.items">{{key.name}}x{{key.amount}}</span>
 								</p>
 							</div>
 							<button class="notyet" @click="take(item)">接受</button>
@@ -47,6 +47,7 @@
 	@import "../../style/style";
 	.mission {
 		padding-bottom: .7rem;
+
 		h4 {
 			padding: .12rem;
 			border-bottom: 1px solid #e1e1e1;
@@ -55,6 +56,7 @@
 			color: #57606f;
 
 		}
+
 		li {
 			padding: .12rem;
 			border-bottom: 1px solid #e1e1e1;
@@ -66,6 +68,7 @@
 			.ib {
 				width: calc(~'100% - .9rem');
 				width: -webkit-calc(~'100% - .9rem');
+				padding-right: .08rem;
 			}
 			.title {
 				margin-right: .15rem;
@@ -125,7 +128,6 @@
 			closeBattle: function () {
 				this.show.list = true;
 				this.show.battle = false;
-				[this.enemy, this.mission, this.reward] = [null, null, null];
 			},
 			//完成任务
 			done: function () {
@@ -137,7 +139,6 @@
 					type: this.mission.type,
 					mid: this.mission.mid
 				});
-				this.mission = null;
 			}
 		},
 		computed: {

@@ -233,26 +233,6 @@
         .wrapper {
             padding-bottom: .5rem;
         }
-        .tab {
-            padding: .15rem;
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            button {
-                width: 45%;
-                margin-top: .075rem;
-                display: block;
-                &:nth-of-type(1),
-                &:nth-of-type(2) {
-                    margin-top: 0;
-                }
-                &.active {
-                    background: #ff6b81;
-                    .bor(#ff6b81);
-                    .cw;
-                }
-            }
-        }
         &.inventory {
             .tab {
                 button {
@@ -262,10 +242,8 @@
             }
         }
         .content {
-            >p {
-                text-align: center;
-                margin-bottom: .15rem;
-                color: #ff6348;
+            li {
+                border-bottom: 1px solid #706fd3;
             }
             button {
                 display: block;
@@ -278,37 +256,6 @@
                 position: fixed;
                 border: none;
                 background: #f1f1f1;
-            }
-            li {
-                margin-bottom: .1rem;
-                padding: .12rem;
-                border-top: 1px solid #a5b1c2;
-                border-bottom: 1px solid #a5b1c2;
-                .name {
-                    display: block;
-                    margin-bottom: .1rem;
-                    font-weight: bold;
-                }
-                .i1 {
-                    color: #ff6b81;
-                }
-                .i2 {
-                    color: #1e90ff;
-                }
-                .i3 {
-                    color: #487eb0;
-                }
-                .top {
-                    margin-bottom: .1rem;
-                    span {
-                        margin-right: .1rem;
-                    }
-                }
-                .bottom {
-                    p {
-                        line-height: 1.5;
-                    }
-                }
             }
         }
     }

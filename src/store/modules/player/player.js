@@ -205,7 +205,7 @@ const actions = {
 		let [buff, length, ifNotToZero] = [context.state.buff, context.state.buff.length, payload.ifNotToZero];
 		if (length) {
 			buff.forEach(e => {
-				if (ifNotToZero) {	
+				if (ifNotToZero) {
 					e.round--;
 				}
 				if (!e.round) {
@@ -229,8 +229,7 @@ const actions = {
 					buff.splice(position, 1);
 				}
 			}
-		}
-		//console.log(context.state.buff);
+		}''
 	},
 	changeSkillValue(context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];

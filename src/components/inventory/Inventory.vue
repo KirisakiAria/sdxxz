@@ -8,7 +8,7 @@
 		</section>
 		<section class="content">
 			<transition name="slide-fade" mode="out-in">
-				<div key="cureItemsList" v-if="show.cure">
+				<div key="cureItemsList" v-if="show.cure" class="cureItemsList">
 					<ul>
 						<li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList">
 							<div class="top">
@@ -22,7 +22,7 @@
 						</li>
 					</ul>
 				</div>
-				<div key="concealedItemsList" v-if="show.concealed">
+				<div key="concealedItemsList" v-if="show.concealed" class="concealedItemsList">
 					<ul>
 						<li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList">
 							<div class="top">
@@ -36,7 +36,7 @@
 						</li>
 					</ul>
 				</div>
-				<div key="buffItemsList" v-if="show.buff">
+				<div key="buffItemsList" v-if="show.buff" class="buffItemsList">
 					<ul>
 						<li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
 							<div class="top">
@@ -50,19 +50,23 @@
 						</li>
 					</ul>
 				</div>
-				<div key="equipmentsItemList" v-if="show.equipments">
-					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in equipmentsItemsList">
-							<div class="top">
-								<span class="name">{{item.name}}</span>
-								<span class="i1">治疗量：{{item.effect.cure.value}}</span>
-								<span class="i2">数量：{{item.amount}}</span>
-							</div>
-							<div class="bottom">
-								<p>道具介绍：{{item.desc}}</p>
-							</div>
-						</li>
-					</ul>
+				<div key="equipmentsItemsList" v-if="show.equipments" class="equipmentsItemsList">
+					<div :key="item.desc" class="item" v-for="item in equipmentsItemsList">
+						<div class="head">{{item.desc}}</div>
+						<div class="content">
+							<ul>
+								<li :key="key.iid" v-if="key.own" v-for="key in item.list" @click="equip(item)" :class="{no:playerLevel<key.level?true:false}">
+									<div class="top">
+										<span class="name">{{key.name}}</span>
+										<span class="i2">等级需求：{{key.level}}</span>
+									</div>
+									<div class="bottom">
+										<p>装备介绍：{{key.desc}}</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 			</transition>
 			<transition name="scale-fade">
@@ -74,75 +78,6 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
-
-	.inventory {
-
-		padding-bottom: .7rem;
-
-		.tab {
-
-			padding: .15rem;
-			display: flex;
-			justify-content: space-around;
-			flex-wrap: wrap;
-
-			button {
-				width: 45%;
-				margin-top: .075rem;
-				display: block;
-				&:nth-of-type(1),
-				&:nth-of-type(2) {
-					margin-top: 0;
-				}
-				&.active {
-					background: #ff6b81;
-					.bor(#ff6b81);
-					.cw;
-				}
-			}
-		}
-
-		.content {
-			>p {
-				text-align: center;
-				margin-bottom: .15rem;
-				color: #ff6348;
-			}
-			li {
-				margin-bottom: .1rem;
-				padding: .12rem;
-				border-top: 1px solid #a5b1c2;
-				border-bottom: 1px solid #a5b1c2;
-
-				.name {
-					display: block;
-					margin-bottom: .1rem;
-					font-weight: bold;
-				}
-				.i1 {
-					color: #ff6b81;
-				}
-				.i2 {
-					color: #1e90ff;
-				}
-				.i3 {
-					color: #487eb0;
-				}
-				.top {
-					margin-bottom: .1rem;
-					span {
-						margin-right: .1rem;
-					}
-				}
-
-				.bottom {
-					p {
-						line-height: 1.5;
-					}
-				}
-			}
-		}
-	}
 </style>
 
 <script>
@@ -180,6 +115,9 @@
 			},
 			closeTips: function () {
 				this.tips.show = false;
+			},
+			equip: function () {
+
 			}
 		},
 		computed: {
@@ -194,6 +132,9 @@
 			},
 			equipmentsItemsList: function () {
 				return this.getItemsArr('equipmentsItems');
+			},
+			playerLevel: function () {
+				return this.$store.state.player.baseAttributes.level.value;
 			}
 		},
 		components: {

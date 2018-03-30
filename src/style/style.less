@@ -119,8 +119,8 @@
 
 .col {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
 }
 
@@ -155,4 +155,97 @@
 .scale-fade-leave-to {
     transform: scale(0);
     opacity: 0;
+}
+
+.practice,
+.inventory,
+.skill,
+.skillPanel {
+    padding-bottom: .7rem;
+    .head {
+        padding: .15rem;
+        background: #706fd3;
+        .cw;
+    }
+    .tab {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: .15rem;
+        button {
+            display: block;
+            width: 45%;
+            margin-top: .075rem;
+            &:nth-of-type(1),
+            &:nth-of-type(2) {
+                margin-top: 0;
+            }
+            .bor(#706fd3);
+            &.active {
+                background: #ff6b81;
+                .bor(#ff6b81);
+                .cw;
+            }
+        }
+    }
+    .equipmentsItemsList {
+        .content {
+            li {
+                margin-bottom: 0;
+            }
+        }
+    }
+    .content {
+        >p {
+            margin-bottom: .15rem;
+            text-align: center;
+            color: #ff6348;
+        }
+        li {
+            margin-bottom: .1rem;
+            padding: .12rem;
+            border-top: 1px solid #706fd3;
+            border-bottom: 1px solid #706fd3;
+            &+li {
+                border-top: none;
+            }
+            .name {
+                display: block;
+                margin-bottom: .1rem;
+                font-size: .14rem;
+                font-weight: bold;
+            }
+            &.no {
+                border-color: #57606f;
+                background: #57606f;
+                .cw;
+                .i1,
+                .i2,
+                .i3 {
+                    color: #fff;
+                }
+            }
+            .i1 {
+                color: #ff6b81;
+            }
+            .i2 {
+                color: #1e90ff;
+            }
+            .i3 {
+                color: #487eb0;
+            }
+            .top {
+                margin-bottom: .1rem;
+                span {
+                    margin-right: .1rem;
+                    font-size: .12rem;
+                }
+            }
+            .bottom {
+                p {
+                    line-height: 1.5;
+                }
+            }
+        }
+    }
 }

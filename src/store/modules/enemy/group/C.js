@@ -144,7 +144,6 @@ const actions = {
 				}
 			}
 		}
-		//console.log(context.state.buff);
 	},
 	changeSkillValue(context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
