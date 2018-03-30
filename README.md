@@ -8,7 +8,7 @@
 小圈子自嗨MUD游戏，正在开发中..
 
 ## 使用方法
-运行dist文件夹中的index.html即可
+运行dist文件夹中的index.html即可，建议使用chrome浏览器，并将浏览器窗口调整至手机大小。
 
 ## 运行命令
 * npm run dev 使用webpack-dev-server在开发环境下运行项目
