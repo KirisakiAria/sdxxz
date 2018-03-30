@@ -977,12 +977,12 @@
                 });
             }
         },
-        // props: [
-        //     'enemy', //敌人
-        //     'mode', //模式
-        //     'reward', //奖励
-        //     'times' //次数
-        // ],
+        props: [
+            'enemy', //敌人
+            'mode', //模式
+            'reward', //奖励
+            'times' //次数
+        ],
         computed: {
             //取得命名空间用来commit
             playerNamespace: function () {
@@ -994,9 +994,9 @@
             player: function () {
                 return this.$store.state.player;
             },
-            enemy: function () {
-                return this.$store.state.groupC;
-            },
+            // enemy: function () {
+            //     return this.$store.state.groupC;
+            // },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData: function () {
                 return {
