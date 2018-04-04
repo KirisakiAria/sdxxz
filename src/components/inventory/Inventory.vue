@@ -7,6 +7,7 @@
 			<button :class="{active:show.equipments}" @click="changeTab('equipments')">装备类</button>
 		</section>
 		<section class="content">
+			<p class="tips">tips：深色背景为等级需求不够的装备，无法使用</p>
 			<transition name="slide-fade" mode="out-in">
 				<div key="cureItemsList" v-if="show.cure" class="cureItemsList">
 					<ul>
@@ -52,10 +53,15 @@
 				</div>
 				<div key="equipmentsItemsList" v-if="show.equipments" class="equipmentsItemsList">
 					<div :key="item.desc" class="item" v-for="item in equipmentsItemsList">
-						<div class="head">{{item.desc}}</div>
-						<div class="content">
+						<div class="head" @click="expand(item)">{{item.desc}}</div>
+						<div class="content" v-show="item.eid===index">
 							<ul>
-								<li :key="key.iid" v-if="key.own" v-for="key in item.list" @click="equip(item)" :class="{no:playerLevel<key.level?true:false}">
+								<li :key="key.iid" v-if="key.own" v-for="key in item.list" @click="equip(item,key)" :class="{no:playerLevel<key.level?true:false}">
+									<transition name="scale-fade">
+										<div class="equip" v-if="key.equip">
+											<i class="iconfont icon-round"></i>
+										</div>
+									</transition>
 									<div class="top">
 										<span class="name">{{key.name}}</span>
 										<span class="i2">等级需求：{{key.level}}</span>
@@ -78,6 +84,21 @@
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
+
+	.inventory {
+		li {
+			position: relative;
+			.equip {
+				position: absolute;
+				top: 0.1rem;
+				right: 0.05rem;
+				i {
+					font-size: 0.2rem;
+					color: #2ed573;
+				}
+			}
+		}
+	}
 </style>
 
 <script>
@@ -89,52 +110,107 @@
 			return {
 				show: {
 					cure: false,
-					concealed: true,
+					concealed: false,
 					buff: false,
-					equipments: false,
+					equipments: true,
 				},
 				tips: {
 					data: '',
 					show: false
-				}
+				},
+				index: 0
 			}
 		},
 		methods: {
-			changeTab: function (tab) {
+			changeTab(tab) {
 				Object.keys(this.show).forEach(e => {
 					this.show[e] = false;
 				});
 				this.show[tab] = true;
 			},
-			getItemsArr: function (origin) {
+			getItemsArr(origin) {
 				return this.$store.state.items[origin];
 			},
-			openTips: function (content) {
+			openTips(content) {
 				this.tips.show = true;
 				this.tips.data = content;
 			},
-			closeTips: function () {
+			closeTips() {
 				this.tips.show = false;
 			},
-			equip: function () {
+			expand(item) {
+				this.index = item.eid;
+			},
+			equip(item, key) {
+				if (this.playerLevel < key.level) {
+					this.openTips('等级不足，无法装备')
+				} else {
+					this.$store.commit('items/equip', {
+						eid: item.eid,
+						iid: key.iid
+					});
+					this.calculateBuff(item, key);
+				}
+			},
+			calculateBuff(item, key) {
+				let [vm, buff, list, originalValue, pType] = [this, key.effect
+					.buff, this.playerPermanentlyBuffList, [], item.type,
+				];
+				this.$store.commit('player/clearPermanentlyBuff', {
+					pType,
+				});
+				buff.forEach(e => {
+					let value = 0;
+					let [p1, p2] = [e.position[0], e.position[1]];
+					value = this.$store.state.player[p1][p2]['value'];
+					originalValue.push({
+						position: e.position,
+						value: value
+					});
+				});
+				this.$store.commit('player/updatePermanentlyBuff', {
+					pType,
+					buff: {
+						iid: key.iid,
+						name: key.name,
+						originalValue
+					}
+				});
+				buff.forEach(e => {
+					let [p1, p2] = [e.position[0], e.position[1]];
+					let [changeValue, originValue] = [0, this.$store.state.player[p1][p2]['value']];
+					if (e.valueType === 'percentage') {
+						changeValue = Math.ceil(originValue * e.value);
+					} else {
+						changeValue = Math.ceil(originValue + e.value);
+					}
+					this.$store.commit('player/changeExtraAttributesOrElementsValue', {
+						type: e.position[0],
+						propety: e.position[1],
+						value: changeValue
+					});
 
-			}
+				});
+			},
 		},
 		computed: {
-			cureItemsList: function () {
+			cureItemsList() {
 				return this.getItemsArr('cureItems');
 			},
-			concealedItemsList: function () {
+			concealedItemsList() {
 				return this.getItemsArr('concealedItems');
 			},
-			buffItemsList: function () {
+			buffItemsList() {
 				return this.getItemsArr('buffItems');
 			},
-			equipmentsItemsList: function () {
+			equipmentsItemsList() {
 				return this.getItemsArr('equipmentsItems');
 			},
-			playerLevel: function () {
+			playerLevel() {
 				return this.$store.state.player.baseAttributes.level.value;
+			},
+			playerPermanentlyBuffList() {
+				return this.$store.state.player.permanentlyBuff;
 			}
 		},
 		components: {

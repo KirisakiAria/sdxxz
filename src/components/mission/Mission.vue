@@ -37,8 +37,27 @@
 						</li>
 					</ul>
 				</section>
+				<section class="events">
+					<h4 class="tac">事件</h4>
+					<ul>
+						<li :key="item.mid" v-for="item in eventsList" v-if="ifShow(item.level,item.ifDone,item.acceptable)">
+							<div class="ib">
+								<span class="title">{{item.name}}</span>
+								<span class="level">等级：{{item.level}}</span>
+								<p>{{item.des}}</p>
+								<p class="reward">
+									<span>任务奖励：经验：{{item.reward.exp}}</span>
+									<span>物品：</span>
+									<span :key="key.name" v-for="key in item.reward.items">{{key.name}}x{{key.amount}}</span>
+								</p>
+							</div>
+							<button class="notyet" @click="take(item)">接受</button>
+						</li>
+					</ul>
+				</section>
 			</section>
 			<Battle mode="mission" :enemy="enemy" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
+			<Interlocution :question="question" v-if="show.interlocution"></Interlocution>
 		</transition>
 	</section>
 </template>
@@ -78,7 +97,7 @@
 				color: #70a1ff;
 			}
 			.reward {
-				color: #5352ed;
+				color: #ff7f50;
 			}
 			.items {
 				margin-left: .05rem;
@@ -93,6 +112,7 @@
 
 <script>
 	import Battle from '../battle/Battle';
+	import Interlocution from '../interlocution/Interlocution';
 
 	export default {
 		name: 'Mission',
@@ -100,37 +120,43 @@
 			return {
 				show: {
 					list: true,
-					battle: false
+					battle: false,
+					interlocution: false
 				},
 				mission: null,
 				enemy: null,
+				question: null,
 				reward: null,
 				times: 1
 			}
 		},
 		methods: {
 			//等级不够的和完成的任务都不会显示
-			ifShow: function (missionLevel, ifDone, acceptable) {
+			ifShow(missionLevel, ifDone, acceptable) {
 				if (missionLevel <= this.playerLevel && !ifDone && acceptable) {
 					return true;
 				} else {
 					return false;
 				}
 			},
-			take: function (item) {
-				this.mission = item;
-				this.reward = item.reward;
-				this.enemy = this.$store.state[item.enemy.namespace];
-				this.times = item.enemy.times;
-				this.show.list = false;
-				this.show.battle = true;
+			take(item) {
+				if (item.execute === 'battle') {
+					this.mission = item;
+					this.reward = item.reward;
+					this.enemy = this.$store.state[item.enemy.namespace];
+					this.times = item.enemy.times;
+					this.show.list = false;
+					this.show.battle = true;
+				} else {
+
+				}
 			},
-			closeBattle: function () {
+			closeBattle() {
 				this.show.list = true;
 				this.show.battle = false;
 			},
 			//完成任务
-			done: function () {
+			done() {
 				this.$store.commit('mission/done', {
 					type: this.mission.type,
 					mid: this.mission.mid
@@ -142,18 +168,22 @@
 			}
 		},
 		computed: {
-			mainQuestsList: function () {
+			mainQuestsList() {
 				return this.$store.state.mission.mainQuests;
 			},
-			sideQuestsList: function () {
+			sideQuestsList() {
 				return this.$store.state.mission.sideQuests;
 			},
-			playerLevel: function () {
+			eventsList() {
+				return this.$store.state.mission.events;
+			},
+			playerLevel() {
 				return this.$store.state.player.baseAttributes.level.value;
 			}
 		},
 		components: {
-			Battle
+			Battle,
+			Interlocution
 		}
 	}
 </script>

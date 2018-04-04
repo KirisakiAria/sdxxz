@@ -5,9 +5,11 @@
             <p>此模块尚未开发</p>
         </section>
         <section class="enemy section">
-            <div v-if="round.enemy" class="round">
-                <i class="iconfont icon-round"></i>
-            </div>
+            <transition name="scale-fade">
+                <div v-if="round.enemy" class="round">
+                    <i class="iconfont icon-round"></i>
+                </div>
+            </transition>
             <h4 class="tac">
                 <span>等级{{enemy.baseAttributes.level.value}}</span>
                 {{enemy.baseAttributes.name.value}}
@@ -38,9 +40,11 @@
             </div>
         </section>
         <section class="player section">
-            <div v-if="round.player" class="round">
-                <i class="iconfont icon-round"></i>
-            </div>
+            <transition name="scale-fade">
+                <div v-if="round.player" class="round">
+                    <i class="iconfont icon-round"></i>
+                </div>
+            </transition>
             <h4 class="tac">
                 <span>等级{{player.baseAttributes.level.value}}</span>
                 {{player.baseAttributes.name.value}}
@@ -243,7 +247,7 @@
         }
         .content {
             li {
-                border-bottom: 1px solid #706fd3;
+                border-bottom: 1px solid #a4b0be;
             }
             button {
                 display: block;
@@ -399,12 +403,12 @@
         },
         methods: {
             //初始化战斗
-            battleStart: function () {
+            battleStart() {
                 this.initSpeed();
                 this.initBuff();
             },
             //初始化双方速度
-            initSpeed: function () {
+            initSpeed() {
                 let [pSpd, eSpd] = [this.getValue('player', 'extraAttributes', 'spd'), this.getValue('enemy',
                     'extraAttributes', 'spd')];
                 if (eSpd > pSpd) {
@@ -413,11 +417,11 @@
                 }
             },
             //初始化状态
-            initBuff: function () {
+            initBuff() {
 
             },
             //回合变化
-            roundCount: function () {
+            roundCount() {
                 this.round.num++;
                 this.round.enemy = !this.round.enemy;
                 this.round.player = !this.round.player;
@@ -439,7 +443,7 @@
                 }
             },
             //检测目标的buff中是否存在沉默、缴械等状态，没有则还原相关状态
-            deBuff: function (target, debuffName) {
+            deBuff(target, debuffName) {
                 let buffList = this[`${target}BuffList`];
                 let ifDebuff = buffList.findIndex(e => {
                     return e.type === debuffName;
@@ -450,7 +454,7 @@
             },
             //计算伤害
             //四个参数分别为攻击类型（物理，技能）、发起攻击者、被攻击者、技能
-            calculateDamage: function (type, attacker, target, object) {
+            calculateDamage(type, attacker, target, object) {
                 let atkRegularData = this[`${attacker}RegularData`];
                 let atkNamespace = this[`${attacker}Namespace`];
                 let tarRegularData = this[`${target}RegularData`];
@@ -549,7 +553,7 @@
             },
             //计算治疗量
             //参数为发动技能者，技能
-            calculateCure: function (regularData, namespace, object) {
+            calculateCure(regularData, namespace, object) {
                 let addCache = 0;
                 let property = '';
                 //消耗蓝就加血、消耗血就加蓝，技能设定总是如此。
@@ -566,7 +570,7 @@
                 });
             },
             //添加buff的相关逻辑
-            calculateBuff: function (user, object) {
+            calculateBuff(user, object) {
                 let [vm, buff, target] = [this, object.effect.buff, ''];
                 if (buff) {
                     //首先判断施放buff的目标对象
@@ -665,7 +669,7 @@
                     });
                 }
             },
-            findList: function (list, id, sign) {
+            findList(list, id, sign) {
                 let object = null;
                 let objectList = this[list];
                 objectList.forEach(e => {
@@ -677,7 +681,7 @@
                 return object;
             },
             //施放技能后的魔法/生命消耗操作
-            consume: function (skill, regularData, namespace) {
+            consume(skill, regularData, namespace) {
                 if (skill.consumeType.value === 1) {
                     if (regularData.mp - skill.consume >= 0) {
                         let consumeValue = regularData.mp - skill.consume;
@@ -705,7 +709,7 @@
                 }
             },
             //改变量，并判断超出最大、最小数值，1为增0为减
-            changeValue: function (type, now, increment, edge) {
+            changeValue(type, now, increment, edge) {
                 if (type) {
                     if (now + increment <= edge) {
                         now += increment;
@@ -722,12 +726,12 @@
                 return now;
             },
             //物理攻击
-            attack: function (attacker, target) {
+            attack(attacker, target) {
                 this.calculateDamage(1, attacker, target);
                 this.roundCount();
             },
             //发动伤害技能
-            useDamageSkill: function (attacker, target, list, sid) {
+            useDamageSkill(attacker, target, list, sid) {
                 let skill = this.findList(list, sid, 's');
                 let atkRegularData = this[`${attacker}RegularData`];
                 let atkNamespace = this[`${attacker}Namespace`];
@@ -740,7 +744,7 @@
                 }
             },
             //发动治疗技能
-            useCureSkill: function (target, list, sid) {
+            useCureSkill(target, list, sid) {
                 let skill = this.findList(list, sid, 's');
                 let [regularData, namespace] = [this[`${target}RegularData`], this[`${target}Namespace`]];
                 let ifEnough = this.consume(skill, regularData, namespace);
@@ -751,7 +755,7 @@
                 }
             },
             //发动增/减益技能
-            useBuffSkill: function (user, list, sid) {
+            useBuffSkill(user, list, sid) {
                 let skill = this.findList(list, sid, 's');
                 let [regularData, userNamespace] = [this[`${user}RegularData`], this[`${user}Namespace`]];
                 let ifEnough = this.consume(skill,
@@ -762,7 +766,7 @@
                     this.roundCount();
                 }
             },
-            useCureItem: function (target, list, iid) {
+            useCureItem(target, list, iid) {
                 let [item, regularData, namespace] = [this.findList(list, iid, 'i'), this[`${target}RegularData`],
                     this[`${target}Namespace`]
                 ];
@@ -776,7 +780,7 @@
                 this.roundCount();
 
             },
-            useConcealedItem: function (attacker, target, list, iid) {
+            useConcealedItem(attacker, target, list, iid) {
                 let item = this.findList(list, iid, 'i');
                 this.calculateBuff(attacker, item);
                 this.calculateDamage(2, attacker, target,
@@ -789,7 +793,7 @@
                 this.toggleInventory();
                 this.roundCount();
             },
-            useBuffItem: function (user, list, iid) {
+            useBuffItem(user, list, iid) {
                 let item = this.findList(list, iid, 'i');
                 this.calculateBuff(user, item);
                 this.$store.commit('items/minusValue', {
@@ -800,7 +804,7 @@
                 this.toggleInventory();
                 this.roundCount();
             },
-            escape: function () {
+            escape() {
                 let enemySpdCache = this.getValue('enemy', 'extraAttributes', 'spd');
                 let playerSpdCache = this.getValue('player', 'extraAttributes', 'spd');
                 let escapeRate = (playerSpdCache + 100) / (enemySpdCache + 100) * .8;
@@ -817,50 +821,50 @@
                     this.openTips('逃跑成功');
                 }
             },
-            auto: function () {
+            auto() {
 
             },
             //展开/收起道具面板 
-            toggleInventory: function () {
+            toggleInventory() {
                 this.show.inventory = !this.show.inventory;
             },
-            changeInventory: function (tab) {
+            changeInventory(tab) {
                 Object.keys(this.show.inventoryList).forEach(e => {
                     this.show.inventoryList[e] = false;
                 });
                 this.show.inventoryList[tab] = true;
             },
             //展开/收起技能面板
-            toggleSkillsPanel: function () {
+            toggleSkillsPanel() {
                 this.show.skillPanel = !this.show.skillPanel;
             },
             //切换技能面板
-            changeSkillsTab: function (tab) {
+            changeSkillsTab(tab) {
                 Object.keys(this.show.skillPanleList).forEach(e => {
                     this.show.skillPanleList[e] = false;
                 });
                 this.show.skillPanleList[tab] = true;
             },
             //获取技能列表
-            getSkillsArr: function (origin) {
+            getSkillsArr(origin) {
                 return this.$store.state.playerSkills[origin];
             },
             //获取道具列表
-            getItemsArr: function (origin) {
+            getItemsArr(origin) {
                 return this.$store.state.items[origin];
             },
             //获取数据
-            getValue: function (target, type, property) {
+            getValue(target, type, property) {
                 return this[target][type][property].value;
             },
-            enemyAction: function () {
+            enemyAction() {
                 let vm = this;
                 setTimeout(function () {
                     vm.attack('enemy', 'player');
                 }, 1000);
             },
             //随机数
-            randomNum: function (minNum, maxNum) {
+            randomNum(minNum, maxNum) {
                 switch (arguments.length) {
                     case 1:
                         return parseInt(Math.random() * minNum + 1);
@@ -873,20 +877,20 @@
                         break;
                 }
             },
-            openTips: function (content) {
+            openTips(content) {
                 this.tips.data = content;
                 this.show.tips = true;
             },
-            closeTips: function () {
+            closeTips() {
                 this.show.tips = false;
             },
-            closeBattle: function () {
+            closeBattle() {
                 if (this.tips.close) {
                     this.$store.commit('global/toggleBattle');
                     this.$emit('closeBattle');
                 }
             },
-            resetStatus: function (target, maxhp, maxmp) {
+            resetStatus(target, maxhp, maxmp) {
                 let namespace = this[`${target}Namespace`];
                 this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
                     propety: 'hp',
@@ -906,7 +910,7 @@
                     ifNotToZero: false
                 });
             },
-            rewardPlayer: function (reward) {
+            rewardPlayer(reward) {
                 let gotValue = reward.exp;
                 this.$store.commit('player/changeBaseAttributesValue', {
                     propety: 'exp',
@@ -915,13 +919,15 @@
                 if (this.levelUpExp <= this.nowExp) {
                     this.$store.commit('player/levelup');
                 }
-                reward.items.forEach(e => {
-                    this.$store.commit('items/addValue', {
-                        type: e.type,
-                        iid: e.iid,
-                        amount: e.amount
+                if (reward.items) {
+                    reward.items.forEach(e => {
+                        this.$store.commit('items/addValue', {
+                            type: e.type,
+                            iid: e.iid,
+                            amount: e.amount
+                        });
                     });
-                });
+                }
             }
         },
         props: [
@@ -932,20 +938,20 @@
         ],
         computed: {
             //取得命名空间用来commit
-            playerNamespace: function () {
+            playerNamespace() {
                 return this.$store.state.player.baseAttributes.namespace;
             },
-            enemyNamespace: function () {
+            enemyNamespace() {
                 return this.enemy.baseAttributes.namespace;
             },
-            player: function () {
+            player() {
                 return this.$store.state.player;
             },
-            // enemy: function () {
+            // enemy () {
             //     return this.$store.state.groupC;
             // },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
-            playerRegularData: function () {
+            playerRegularData() {
                 return {
                     hp: this.getValue('player', 'baseAttributes', 'hp'),
                     mp: this.getValue('player', 'baseAttributes', 'mp'),
@@ -954,7 +960,7 @@
                 };
             },
             //敌人生命、魔法信息
-            enemyRegularData: function () {
+            enemyRegularData() {
                 return {
                     hp: this.getValue('enemy', 'baseAttributes', 'hp'),
                     mp: this.getValue('enemy', 'baseAttributes', 'mp'),
@@ -963,41 +969,41 @@
                 };
             },
             //技能列表
-            damageSkillsList: function () {
+            damageSkillsList() {
                 return this.getSkillsArr('damageSkills');
             },
-            cureSkillsList: function () {
+            cureSkillsList() {
                 return this.getSkillsArr('cureSkills');
             },
-            buffSkillsList: function () {
+            buffSkillsList() {
                 return this.getSkillsArr('buffSkills');
             },
-            passiveSkillsList: function () {
+            passiveSkillsList() {
                 return this.getSkillsArr('passiveSkills');
             },
             //道具列表
-            cureItemsList: function () {
+            cureItemsList() {
                 return this.getItemsArr('cureItems');
             },
-            concealedItemsList: function () {
+            concealedItemsList() {
                 return this.getItemsArr('concealedItems');
             },
-            buffItemsList: function () {
+            buffItemsList() {
                 return this.getItemsArr('buffItems');
             },
             //buff列表
-            playerBuffList: function () {
+            playerBuffList() {
                 return this.player.buff;
             },
-            enemyBuffList: function () {
+            enemyBuffList() {
                 return this.enemy.buff;
             },
             //当前经验
-            nowExp: function () {
+            nowExp() {
                 return this.player.baseAttributes.exp.value
             },
             //升级经验
-            levelUpExp: function () {
+            levelUpExp() {
                 return this.$store.getters['player/levelUpExp'];
             }
         },

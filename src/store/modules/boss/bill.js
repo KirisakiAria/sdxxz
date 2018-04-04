@@ -1,34 +1,34 @@
 let state = {
 	baseAttributes: {
-		eid: '0000',
-		namespace: 'groupC',
+		eid: '1999',
+		namespace: 'bill',
 		name: {
 			decs: '姓名',
-			value: '傻屌群小傻屌'
+			value: '比尔·盖真'
 		},
 		description: {
 			decs: '描述',
-			value: '最辣鸡的傻屌，打不过你就退群吧'
+			value: '世界首富，福州全栈王，TI8冠军12345号位，至高节奏大师'
 		},
 		level: {
 			decs: '等级',
-			value: 2
+			value: 9999999999
 		},
 		hp: {
 			decs: '生命',
-			value: 100
+			value: 99999999999999
 		},
 		mp: {
 			decs: '魔法',
-			value: 0
+			value: 9999999999999999
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 100
+			value: 99999
 		},
 		maxmp: {
 			decs: '魔法总量',
-			value: 0
+			value: 99999
 		},
 		exp: {
 			desc: '击杀经验',

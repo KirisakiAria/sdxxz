@@ -98,7 +98,7 @@
 					value: this.username
 				});
 			},
-			setSpeciality: function (speciality, spid) {
+			setSpeciality(speciality, spid) {
 				this.$store.commit('player/changeBaseAttributesValue', {
 					propety: 'spid',
 					value: spid
@@ -113,16 +113,16 @@
 					this.openTips('请输入角色名');
 				}
 			},
-			goStart: function () {
+			goStart() {
 				this.$router.push({
 					path: 'game'
 				});
 			},
-			openTips: function (content) {
+			openTips(content) {
 				this.tips.data = content;
 				this.tips.show = true;
 			},
-			closeTips: function () {
+			closeTips() {
 				this.tips.show = false;
 			},
 		},

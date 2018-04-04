@@ -1,7 +1,7 @@
 <template>
 	<main class="main">
 		<transition name="slide-fade" mode="out-in">
-			<section v-if="show.main" class="menu mainSection">
+			<!-- <section v-if="show.main" class="menu mainSection">
 				<div class="link">
 					<a href="https://github.com/KirisakiAria/sdxxz" target="_blank" title="github">
 						<i class="iconfont icon-github"></i>
@@ -28,7 +28,7 @@
 						<a href="https://weibo.com/KanzakiHAria" target="_blank" title="微博">伟大鱼塘</a>
 					</p>
 				</footer>
-			</section>
+			</section> -->
 			<router-view></router-view>
 		</transition>
 	</main>
@@ -102,7 +102,7 @@
 		},
 		methods: {
 			//读档
-			load: function () {
+			load() {
 				let vm = this;
 				let file = this.$refs.file.files[0];
 				let reader = new FileReader();
@@ -117,7 +117,7 @@
 			}
 		},
 		watch: {
-			'$route': function (to, from) {
+			'$route' (to, from) {
 				if (to.path == '/') {
 					this.show.main = true;
 				} else {

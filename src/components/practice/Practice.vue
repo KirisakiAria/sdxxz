@@ -59,7 +59,7 @@
 			}
 		},
 		methods: {
-			pushArr: function (target) {
+			pushArr(target) {
 				let [arr, state] = [
 					[], this.$store.state
 				];
@@ -68,25 +68,25 @@
 				});
 				return arr;
 			},
-			battle: function (enemy) {
+			battle(enemy) {
 				this.enemy = enemy;
 				this.show.list = false;
 				this.show.battle = true;
 			},
-			closeBattle: function () {
+			closeBattle() {
 				this.show.list = true;
 				this.show.battle = false;
 			}
 		},
 		computed: {
 			/*获取敌人列表*/
-			level0_5EnemyList: function () {
+			level0_5EnemyList() {
 				return this.pushArr('groupC');
 			},
-			level6_10EnemyList: function () {
+			level6_10EnemyList() {
 				//return this.pushArr('groupS', 'groupSS');
 			},
-			enemyList: function () {
+			enemyList() {
 				return [{
 					id: 1,
 					level: '0~5级',

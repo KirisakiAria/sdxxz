@@ -89,7 +89,7 @@
 			}
 		},
 		methods: {
-			changeClass: function (item) {
+			changeClass(item) {
 				this.footerData.forEach(e => {
 					e.isActive = false;
 				});
@@ -102,7 +102,7 @@
 		},
 		computed: {
 			//在战斗时限制能够载入的页面
-			ifBattle: function () {
+			ifBattle() {
 				return this.$store.state.global.battle;
 			}
 		}

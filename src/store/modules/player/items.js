@@ -98,6 +98,7 @@ let state = {
     }],
     //装备
     equipmentsItems: [{
+            eid: 0,
             type: 'weapon',
             desc: '武器',
             list: [{
@@ -110,77 +111,99 @@ let state = {
                 effect: {
                     target: 1,
                     buff: [{
-                            type: 1,
                             position: ['extraAttributes', 'atk'],
                             value: 6,
                             valueType: 'constant'
                         },
                         {
-                            type: 1,
                             position: ['extraAttributes', 'mga'],
                             value: 4,
                             valueType: 'constant'
                         },
-                    ],
-                    round: Infinity
+                    ]
                 }
             }, {
                 iid: 1,
-                name: 'K120',
-                desc: '物攻增加27点，魔攻增加10点。K120，肯定比三块钱的键盘好',
+                name: '裸鸡K021',
+                desc: '物攻增加16点，魔攻增加10点。裸鸡K021，肯定比三块钱的键盘好',
+                own: true,
+                equip: false,
+                level: 1,
+                effect: {
+                    target: 1,
+                    buff: [{
+                            position: ['extraAttributes', 'atk'],
+                            value: 16,
+                            valueType: 'constant'
+                        },
+                        {
+                            position: ['extraAttributes', 'mga'],
+                            value: 10,
+                            valueType: 'constant'
+                        },
+                    ]
+                }
+            }]
+        },
+        {
+            eid: 1,
+            type: 'armor',
+            desc: '防具',
+            list: [{
+                iid: 0,
+                name: '辣鸡机箱',
+                desc: '物防魔防各增加4点。辣鸡机箱，勉强能穿',
                 own: true,
                 equip: false,
                 level: 3,
                 effect: {
                     target: 1,
                     buff: [{
-                            type: 1,
-                            position: ['extraAttributes', 'atk'],
-                            value: 27,
+                            position: ['extraAttributes', 'def'],
+                            value: 4,
                             valueType: 'constant'
                         },
                         {
-                            type: 1,
-                            position: ['extraAttributes', 'mga'],
-                            value: 10,
+                            position: ['extraAttributes', 'res'],
+                            value: 4,
                             valueType: 'constant'
                         },
-                    ],
-                    round: Infinity
+                    ]
                 }
             }]
         },
         {
-            type: 'armor',
-            desc: '防具',
-            list: []
-        },
-        {
+            eid: 2,
             type: 'belt',
             desc: '腰带',
             list: []
         },
         {
+            eid: 3,
             type: 'gloves',
             desc: '手套',
             list: []
         },
         {
+            eid: 4,
             type: 'shoes',
             desc: '鞋子',
             list: []
         },
         {
+            eid: 5,
             type: 'necklace',
             desc: '项链',
             list: []
         },
         {
+            eid: 6,
             type: 'ring',
             desc: '指环',
             list: []
         },
         {
+            eid: 7,
             type: 'arcana',
             desc: '秘宝',
             list: []
@@ -194,6 +217,14 @@ const mutations = {
     },
     addValue(state, payload) {
         state[payload.type][payload.iid]['amount'] += payload.amount;
+    },
+    equip(state, payload) {
+        state.equipmentsItems[payload.eid]['list'].forEach(e => {
+            if (e.iid !== payload.iid) {
+                e.equip = false;
+            }
+        });
+        state.equipmentsItems[payload.eid]['list'][payload.iid]['equip'] = true;
     }
 }
 

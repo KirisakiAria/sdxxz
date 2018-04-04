@@ -26,17 +26,17 @@
 			<ProgressBar :value="start" :max="end"></ProgressBar>
 			<div class="attributes">
 				<ul>
-					<li :key="items.decs" v-for="items in extraAttributes">{{items.decs}}：{{items.value}}</li>
+					<li :key="item.desc" v-for="item in extraAttributes">{{item.desc}}：{{item.value}}</li>
 				</ul>
 			</div>
 			<div class="equipments">
 				<ul>
-					<li :key="items.decs" v-for="items in equipments">{{items.decs}}：{{items.value}}</li>
+					<li :key="item.desc" v-for="item in equipments">{{item.type}}：{{item.which}}</li>
 				</ul>
 			</div>
 			<div class="elements">
 				<ul>
-					<li :key="items.decs" v-for="items in elements">{{items.decs}}：{{items.value}}</li>
+					<li :key="item.desc" v-for="item in elements">{{item.desc}}：{{item.value}}</li>
 				</ul>
 			</div>
 			<div class="buff">
@@ -178,7 +178,7 @@
 			}
 		},
 		methods: {
-			getPlayerArr: function (origin) {
+			getPlayerArr(origin) {
 				let [arr, attribute] = [
 					[], this.$store.state.player[origin]
 				];
@@ -187,7 +187,7 @@
 				});
 				return arr;
 			},
-			save: function () {
+			save() {
 				let profile = {
 					playerData: this.$store.state.player,
 					skillsData: this.$store.state.playerSkills,
@@ -200,31 +200,47 @@
 			}
 		},
 		computed: {
-			baseAttributes: function () {
+			baseAttributes() {
 				return this.getPlayerArr('baseAttributes');
 			},
-			extraAttributes: function () {
+			extraAttributes() {
 				return this.getPlayerArr('extraAttributes');
 			},
-			equipments: function () {
-				return this.getPlayerArr('equipments');
+			equipmentsList() {
+				return this.$store.state.items.equipmentsItems;
 			},
-			elements: function () {
+			equipments() {
+				let arr = [];
+				this.equipmentsList.forEach(e => {
+					let data = {
+						type: e.desc,
+						which: ''
+					};
+					e.list.forEach(k => {
+						if (k.equip) {
+							data.which = k.name;
+						}
+					});
+					arr.push(data);
+				});
+				return arr;
+			},
+			elements() {
 				return this.getPlayerArr('elements');
 			},
-			currentLevelExp: function () {
+			currentLevelExp() {
 				let prevlevel = this.baseAttributes[2]['value'] - 1;
 				return prevlevel * (prevlevel + 5) * 10;
 			},
-			start: function () {
+			start() {
 				return this.baseAttributes[3]['value'] - this.currentLevelExp;
 			},
-			end: function () {
+			end() {
 				return this.$store.getters['player/levelUpExp'] - this.currentLevelExp;
 			}
 		},
 		components: {
 			ProgressBar
-		},
+		}
 	}
 </script>

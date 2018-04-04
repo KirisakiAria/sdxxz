@@ -1,16 +1,16 @@
 const state = {
 	show: {
-		mission: true,
+		mission: false,
 		practice: false,
 		skill: false,
-		inventory: false,
+		inventory: true,
 		my: false
 	},
 	battle: false
 }
 
 const mutations = {
-	show: function (state, payload) {
+	show(state, payload) {
 		Object.keys(state.show).forEach(e => {
 			if (e !== payload.property) {
 				state.show[e] = false;
@@ -18,7 +18,7 @@ const mutations = {
 		});
 		state.show[payload.property] = true;
 	},
-	toggleBattle: function (state) {
+	toggleBattle(state) {
 		state.battle = !state.battle;
 	}
 }

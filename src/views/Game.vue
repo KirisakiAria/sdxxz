@@ -28,7 +28,7 @@
 	export default {
 		name: 'Game',
 		computed: {
-			showList: function () {
+			showList() {
 				let [arr, list] = [
 					[], this.$store.state.global.show
 				];

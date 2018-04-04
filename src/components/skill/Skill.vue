@@ -80,7 +80,7 @@
 	.skill {
 		.content {
 			li {
- border-bottom: 1px solid #706fd3;
+				border-bottom: 1px solid #a4b0be;
 			}
 		}
 	}
@@ -106,16 +106,16 @@
 			}
 		},
 		methods: {
-			changeTab: function (tab) {
+			changeTab(tab) {
 				Object.keys(this.show).forEach(e => {
 					this.show[e] = false;
 				});
 				this.show[tab] = true;
 			},
-			getSkillsArr: function (origin) {
+			getSkillsArr(origin) {
 				return this.$store.state.playerSkills[origin];
 			},
-			learn: function (item) {
+			learn(item) {
 				if (item.learned) {
 					this.openTips('该技能已经学习');
 				} else {
@@ -138,28 +138,28 @@
 					}
 				}
 			},
-			openTips: function (content) {
+			openTips(content) {
 				this.tips.show = true;
 				this.tips.data = content;
 			},
-			closeTips: function () {
+			closeTips() {
 				this.tips.show = false;
 			}
 		},
 		computed: {
-			damageSkillsList: function () {
+			damageSkillsList() {
 				return this.getSkillsArr('damageSkills');
 			},
-			cureSkillsList: function () {
+			cureSkillsList() {
 				return this.getSkillsArr('cureSkills');
 			},
-			buffSkillsList: function () {
+			buffSkillsList() {
 				return this.getSkillsArr('buffSkills');
 			},
-			passiveSkillsList: function () {
+			passiveSkillsList() {
 				return this.getSkillsArr('passiveSkills');
 			},
-			player: function () {
+			player() {
 				return this.$store.state.player;
 			}
 		},

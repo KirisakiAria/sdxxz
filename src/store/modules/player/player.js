@@ -1,46 +1,46 @@
 let state = {
 	baseAttributes: {
 		name: {
-			decs: '姓名',
+			desc: '姓名',
 			value: '测试'
 		},
 		title: {
-			decs: '称号',
+			desc: '称号',
 			value: '测试'
 		},
 		level: {
-			decs: '等级',
+			desc: '等级',
 			value: 1
 		},
 		exp: {
-			decs: '经验',
+			desc: '经验',
 			value: 0
 		},
 		speciality: {
-			decs: '特长',
+			desc: '特长',
 			value: ''
 		},
 		spid: {
-			decs: '特长ID',
+			desc: '特长ID',
 			value: 0
 		},
 		hp: {
-			decs: '当前生命',
+			desc: '当前生命',
 			value: 180,
 			grow: 30
 		},
 		mp: {
-			decs: '当前魔法',
+			desc: '当前魔法',
 			value: 120,
 			grow: 20
 		},
 		maxhp: {
-			decs: '生命总量',
+			desc: '生命总量',
 			value: 180,
 			grow: 30
 		},
 		maxmp: {
-			decs: '魔法总量',
+			desc: '魔法总量',
 			value: 120,
 			grow: 20
 		},
@@ -48,118 +48,102 @@ let state = {
 	},
 	extraAttributes: {
 		atk: {
-			decs: '物攻',
+			desc: '物攻',
 			value: 28,
 			grow: 6
 		},
 		mga: {
-			decs: '魔攻',
+			desc: '魔攻',
 			value: 21,
 			grow: 4
 		},
 		def: {
-			decs: '物防',
+			desc: '物防',
 			value: 14,
 			grow: 4
 		},
 		res: {
-			decs: '魔防',
+			desc: '魔防',
 			value: 12,
 			grow: 3
 		},
 		crt: {
-			decs: '暴击',
+			desc: '暴击',
 			value: 6,
 			grow: 1
 		},
 		mul: {
-			decs: '暴击系数',
+			desc: '暴击系数',
 			value: 1.5
 		},
 		hit: {
-			decs: '命中',
+			desc: '命中',
 			value: 48,
 			grow: 4
 		},
 		spd: {
-			decs: '速度',
+			desc: '速度',
 			value: 4,
 			grow: 1
 		},
 		chr: {
-			decs: '魅力',
+			desc: '魅力',
 			value: 12,
 			grow: 3
 		},
 		luk: {
-			decs: '幸运',
+			desc: '幸运',
 			value: 5,
 			grow: 5
 		},
 		gold: {
-			decs: '金钱',
+			desc: '金钱',
 			value: 0
 		},
 		sp: {
-			decs: '技能点',
+			desc: '技能点',
 			value: 0,
 			grow: 1
 		}
 	},
 	elements: {
 		fire: {
-			decs: '火属性',
+			desc: '火属性',
 			value: 5,
 			grow: 2
 		},
 		ice: {
-			decs: '冰属性',
+			desc: '冰属性',
 			value: 5,
 			grow: 2
 		},
 		toxic: {
-			decs: '毒属性',
+			desc: '毒属性',
 			value: 5,
 			grow: 2
 		},
 		wind: {
-			decs: '风属性',
+			desc: '风属性',
 			value: 5,
 			grow: 2
 		},
 		earth: {
-			decs: '土属性',
+			desc: '土属性',
 			value: 5,
 			grow: 2
 		}
 	},
-	equipments: {
-		weapon: {
-			decs: '武器',
-			value: ''
-		},
-		armor: {
-			decs: '防具',
-			value: ''
-		},
-		shoes: {
-			decs: '鞋',
-			value: ''
-		},
-		necklace: {
-			decs: '项链',
-			value: ''
-		},
-		ring: {
-			decs: '戒指',
-			value: ''
-		},
-		arcana: {
-			decs: '秘宝',
-			value: ''
-		}
+	permanentlyBuff: {
+		weapon: [],
+		armor: [],
+		belt: [],
+		gloves: [],
+		shoes: [],
+		necklace: [],
+		ring: [],
+		arcana: [],
+		passiveSkills: []
 	},
-	items: [],
 	buff: []
 }
 
@@ -189,6 +173,26 @@ const mutations = {
 	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
+	},
+	clearPermanentlyBuff(state, payload) {
+		let buffList = state.permanentlyBuff[payload.pType];
+		if (buffList.length) {
+			console.log(buffList[0].originalValue)
+			buffList[0].originalValue.forEach(item => {
+				let [p1, p2] = [item.position[0], item.position[1]];
+				if (item.type === 1) {
+					context.state[p1][p2]['value'] = item.value;
+				} else if (item.type === 2) {
+					let [p3, p4] = [item.position[2], item.position[3]];
+					context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
+				}
+			});
+			buffList.splice(0, 1);
+		}
+	},
+	updatePermanentlyBuff(state, payload) {
+		let buffList = state.permanentlyBuff[payload.pType];
+		buffList.push(payload.buff);
 	},
 	changeRoundToZero(state, payload) {
 		state.buff[payload.index].round = 0;
@@ -229,7 +233,7 @@ const actions = {
 					buff.splice(position, 1);
 				}
 			}
-		}''
+		}
 	},
 	changeSkillValue(context, payload) {
 		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];

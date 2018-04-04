@@ -5,7 +5,7 @@
 [![](https://img.shields.io/badge/twitter-@伟大鱼塘-blue.svg)](https://twitter.com/KirisakiAria)
 
 ## 介绍
-小圈子自嗨MUD游戏，正在开发中..
+以小圈子群文化为背景制作的自嗨MUD游戏，正在开发中..
 
 ## 使用方法
 运行dist文件夹中的index.html即可，建议使用chrome浏览器，并将浏览器窗口调整至手机大小。
