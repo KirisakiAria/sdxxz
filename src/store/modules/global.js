@@ -3,8 +3,8 @@ const state = {
 		mission: false,
 		practice: false,
 		skill: false,
-		inventory: true,
-		my: false
+		inventory: false,
+		my: true
 	},
 	battle: false
 }

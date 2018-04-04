@@ -1,5 +1,5 @@
 <template>
-	<section class="inventory mainSection">
+	<section class="shop mainSection">
 		<section class="tab">
 			<button :class="{active:show.equipments}" @click="changeTab('equipments')">装备类</button>
 			<button :class="{active:show.cure}" @click="changeTab('cure')">治愈类</button>
@@ -7,22 +7,25 @@
 			<button :class="{active:show.buff}" @click="changeTab('buff')">效果类</button>
 		</section>
 		<section class="content">
-			<p class="tips">tips:深色背景为等级需求不够的装备，无法使用</p>
+			<p class="tips">现任商店老板：一旁冷笑</p>
 			<transition name="slide-fade" mode="out-in">
 				<div key="equipmentsItemsList" v-if="show.equipments" class="equipmentsItemsList">
 					<div :key="item.desc" class="item" v-for="item in equipmentsItemsList">
 						<div class="head" @click="expand(item)">{{item.desc}}</div>
 						<div class="content" v-show="item.eid===index">
 							<ul>
-								<li :key="key.iid" v-if="key.own" v-for="key in item.list" @click="equip(item,key)" :class="{no:playerLevel<key.level?true:false}">
+								<li :key="key.iid" v-if="key.ifSale&&!key.own" v-for="key in item.list" @click="buy(item,key)">
 									<transition name="scale-fade">
 										<div class="equip" v-if="key.equip">
 											<i class="iconfont icon-round"></i>
 										</div>
 									</transition>
 									<div class="top">
-										<span class="name">{{key.name}}</span>
-										<span class="i2">等级需求:{{key.level}}</span>
+										<div class="ib left">
+											<span class="name">{{key.name}}</span>
+											<span class="i2">等级需求:{{key.level}}</span>
+											<span class="i3">价格:{{key.price}}</span>
+										</div>
 									</div>
 									<div class="bottom">
 										<p>装备介绍:{{key.desc}}</p>
@@ -34,11 +37,18 @@
 				</div>
 				<div key="cureItemsList" v-if="show.cure" class="cureItemsList">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList">
+						<li :key="item.iid" v-if="item.ifSale" v-for="item in cureItemsList">
 							<div class="top">
-								<span class="name">{{item.name}}</span>
-								<span class="i1">治疗量:{{item.effect.cure.value}}</span>
-								<span class="i2">数量:{{item.amount}}</span>
+								<div class="ib left">
+									<span class="name">{{item.name}}</span>
+									<span class="i1">治疗量:{{item.effect.cure.value}}</span>
+									<span class="i3">价格:{{item.price}}</span>
+								</div>
+								<div class="ib right">
+									<label for="number">购买数量</label>
+									<input id="number" type="number" v-model.number="number">
+									<button @click="buy(item)">购买</button>
+								</div>
 							</div>
 							<div class="bottom">
 								<p>道具介绍:{{item.desc}}</p>
@@ -48,11 +58,18 @@
 				</div>
 				<div key="concealedItemsList" v-if="show.concealed" class="concealedItemsList">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList">
+						<li :key="item.iid" v-if="item.ifSale" v-for="item in concealedItemsList">
 							<div class="top">
-								<span class="name">{{item.name}}</span>
-								<span class="i1">伤害量:{{item.effect.damage.value}}</span>
-								<span class="i2">数量:{{item.amount}}</span>
+								<div class="ib left">
+									<span class="name">{{item.name}}</span>
+									<span class="i1">伤害量:{{item.effect.damage.value}}</span>
+									<span class="i3">价格:{{item.price}}</span>
+								</div>
+								<div class="ib right">
+									<label for="number">购买数量</label>
+									<input id="number" type="number" v-model.number="number">
+									<button @click="buy(item)">购买</button>
+								</div>
 							</div>
 							<div class="bottom">
 								<p>道具介绍:{{item.desc}}</p>
@@ -62,11 +79,18 @@
 				</div>
 				<div key="buffItemsList" v-if="show.buff" class="buffItemsList">
 					<ul>
-						<li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList">
+						<li :key="item.iid" v-if="item.ifSale" v-for="item in buffItemsList">
 							<div class="top">
-								<span class="name">{{item.name}}</span>
-								<span class="i1">持续回合数:{{item.effect.round}}</span>
-								<span class="i2">数量:{{item.amount}}</span>
+								<div class="ib left">
+									<span class="name">{{item.name}}</span>
+									<span class="i1">持续回合数:{{item.effect.round}}</span>
+									<span class="i3">价格:{{item.price}}</span>
+								</div>
+								<div class="ib right">
+									<label for="number">购买数量</label>
+									<input id="number" type="number" v-model.number="number">
+									<button @click="buy(item)">购买</button>
+								</div>
 							</div>
 							<div class="bottom">
 								<p>道具介绍:{{item.desc}}</p>
@@ -79,13 +103,14 @@
 				<Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips"></Tips>
 			</transition>
 		</section>
+		<button class="return" @click="closeShop">返回</button>
 	</section>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
 
-	.inventory {
+	.shop {
 		li {
 			position: relative;
 			.equip {
@@ -97,6 +122,37 @@
 					color: #2ed573;
 				}
 			}
+			.left {
+				width: calc(~'100% - 0.99rem');
+			}
+			.right {
+				width: 0.94rem;
+				input {
+					text-align: center;
+					width: .3rem;
+					vertical-align: middle;
+					margin-top: .02rem;
+					color: #f6b93b;
+				}
+				button {
+					width: .8rem;
+					height: .25rem;
+					margin-top: .1rem;
+					.br(8px)
+				}
+			}
+		}
+		.return {
+			display: block;
+			margin: auto;
+			width: 100%;
+			.bw;
+			left: 0;
+			bottom: 0;
+			width: 100vw;
+			position: fixed;
+			border: none;
+			background: #f1f1f1;
 		}
 	}
 </style>
@@ -105,12 +161,12 @@
 	import Tips from '../tips/Tips';
 
 	export default {
-		name: 'Inventory',
+		name: 'Shop',
 		data() {
 			return {
 				show: {
-					equipments: true,
-					cure: false,
+					equipments: false,
+					cure: true,
 					concealed: false,
 					buff: false,
 				},
@@ -118,6 +174,7 @@
 					data: '',
 					show: false
 				},
+				number: 1,
 				index: 0
 			}
 		},
@@ -141,57 +198,30 @@
 			expand(item) {
 				this.index = item.eid;
 			},
-			equip(item, key) {
-				if (this.playerLevel < key.level) {
-					this.openTips('等级不足，无法装备');
+			buy(item, key) {
+				if (key) {
+
 				} else {
-					this.$store.commit('items/equip', {
-						eid: item.eid,
-						iid: key.iid
-					});
-					this.calculateBuff(item, key);
+					let price = item.price * this.number;
+					if (price > this.gold) {
+						this.openTips('金钱不足');
+					} else {
+						this.$store.commit('player/changeExtraAttributesOrElementsValue', {
+							type: 'extraAttributes',
+							propety: 'gold',
+							value: this.gold - price
+						});
+						this.$store.commit('items/addValue', {
+							type: item.itemType,
+							iid: item.iid,
+							amount: this.number
+						});
+					}
 				}
 			},
-			calculateBuff(item, key) {
-				let [vm, buff, list, originalValue, pType] = [this, key.effect
-					.buff, this.playerPermanentlyBuffList, [], item.itemType,
-				];
-				this.$store.commit('player/clearPermanentlyBuff', {
-					pType,
-				});
-				buff.forEach(e => {
-					let value = 0;
-					let [p1, p2] = [e.position[0], e.position[1]];
-					value = this.$store.state.player[p1][p2]['value'];
-					originalValue.push({
-						position: e.position,
-						value: value
-					});
-				});
-				this.$store.commit('player/updatePermanentlyBuff', {
-					pType,
-					buff: {
-						iid: key.iid,
-						name: key.name,
-						originalValue
-					}
-				});
-				buff.forEach(e => {
-					let [p1, p2] = [e.position[0], e.position[1]];
-					let [changeValue, originValue] = [0, this.$store.state.player[p1][p2]['value']];
-					if (e.valueType === 'percentage') {
-						changeValue = Math.ceil(originValue * e.value);
-					} else {
-						changeValue = Math.ceil(originValue + e.value);
-					}
-					this.$store.commit('player/changeExtraAttributesOrElementsValue', {
-						type: e.position[0],
-						propety: e.position[1],
-						value: changeValue
-					});
-
-				});
-			},
+			closeShop() {
+				this.$emit('closeShop');
+			}
 		},
 		computed: {
 			cureItemsList() {
@@ -206,11 +236,8 @@
 			equipmentsItemsList() {
 				return this.getItemsArr('equipmentsItems');
 			},
-			playerLevel() {
-				return this.$store.state.player.baseAttributes.level.value;
-			},
-			playerPermanentlyBuffList() {
-				return this.$store.state.player.permanentlyBuff;
+			gold() {
+				return this.$store.state.player.extraAttributes.gold.value;
 			}
 		},
 		components: {

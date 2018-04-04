@@ -16,7 +16,7 @@ let state = {
 		},
 		hp: {
 			decs: '生命',
-			value: 100
+			value: 125
 		},
 		mp: {
 			decs: '魔法',
@@ -24,7 +24,7 @@ let state = {
 		},
 		maxhp: {
 			decs: '生命总量',
-			value: 100
+			value: 125
 		},
 		maxmp: {
 			decs: '魔法总量',
@@ -32,13 +32,17 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 40
+			value: 45
+		},
+		gold: {
+			desc: '击杀所得金钱',
+			value: 25
 		}
 	},
 	extraAttributes: {
 		atk: {
 			decs: '物攻',
-			value: 25
+			value: 27
 		},
 		mga: {
 			decs: '魔攻',
@@ -46,7 +50,7 @@ let state = {
 		},
 		def: {
 			decs: '物防',
-			value: 10
+			value: 14
 		},
 		res: {
 			decs: '魔防',
@@ -54,15 +58,15 @@ let state = {
 		},
 		crt: {
 			decs: '暴击',
-			value: 6
+			value: 4
 		},
 		mul: {
 			decs: '暴击系数',
-			value: 1.5
+			value: 2
 		},
 		hit: {
 			decs: '命中',
-			value: 32
+			value: 40
 		},
 		spd: {
 			decs: '速度',
@@ -72,23 +76,23 @@ let state = {
 	elements: {
 		fire: {
 			decs: '火属性',
-			value: 0
+			value: 1
 		},
 		ice: {
 			decs: '冰属性',
-			value: 0
+			value: 1
 		},
 		toxic: {
 			decs: '毒属性',
-			value: 0
+			value: 1
 		},
 		wind: {
 			decs: '风属性',
-			value: 0
+			value: 1
 		},
 		earth: {
 			decs: '土属性',
-			value: 0
+			value: 1
 		}
 	},
 	buff: []
@@ -101,6 +105,16 @@ const mutations = {
 	changeExtraAttributesOrElementsValue(state, payload) {
 		state[payload.type][payload.propety]['value'] = payload.value;
 	},
+	levelup(state) {
+		state.baseAttributes.level.value++;
+		Object.keys(state).forEach(e => {
+			Object.keys(state[e]).forEach(e2 => {
+				if (state[e][e2]['grow']) {
+					state[e][e2]['value'] += state[e][e2]['grow'];
+				}
+			});
+		});
+	},
 	pushBuff(state, payload) {
 		state.buff.push(payload.buff);
 	},
@@ -111,7 +125,7 @@ const mutations = {
 		state.buff.splice(state.buff.findIndex(e => {
 			return e.sid === payload.sid;
 		}), 1);
-	}
+	},
 }
 
 const actions = {
@@ -145,9 +159,20 @@ const actions = {
 			}
 		}
 	},
-	changeSkillValue(context, payload) {
-		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
-		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
+	loadData(context, payload) {
+		Object.keys(context.state).forEach(e => {
+			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
+				context.state[e] = payload.data.playerData[e];
+		});
+		Object.keys(context.rootState.playerSkills).forEach(e => {
+			context.rootState.playerSkills[e] = payload.data.skillsData[e];
+		});
+		Object.keys(context.rootState.mission).forEach(e => {
+			context.rootState.mission[e] = payload.data.missionData[e];
+		});
+		Object.keys(context.rootState.items).forEach(e => {
+			context.rootState.items[e] = payload.data.itemsData[e];
+		});
 	}
 }
 

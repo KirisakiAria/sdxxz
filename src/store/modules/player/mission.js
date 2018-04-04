@@ -14,8 +14,7 @@ let state = {
             mid: 0
         }],
         enemy: {
-            namespace: 'groupC',
-            times: 1
+            namespace: 'groupC'
         },
         reward: {
             exp: 30,
@@ -24,7 +23,8 @@ let state = {
                 type: 'cureItems',
                 iid: 0,
                 amount: 2
-            }]
+            }],
+            gold: 35
         }
     }],
     sideQuests: [{
@@ -37,11 +37,11 @@ let state = {
         acceptable: false,
         ifDone: false,
         enemy: {
-            namespace: 'groupC',
-            times: 1
+            namespace: 'groupC'
         },
         reward: {
-            exp: 5
+            exp: 5,
+            gold: 15
         }
     }],
     events: [{
@@ -55,7 +55,8 @@ let state = {
         ifDone: false,
         reward: {
             exp: 70,
-            title:''
+            title: '',
+            gold: 300
         }
     }]
 }

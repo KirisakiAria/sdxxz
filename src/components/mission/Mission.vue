@@ -6,17 +6,22 @@
 					<h4 class="tac">主线任务</h4>
 					<ul>
 						<li :key="item.mid" v-for="item in mainQuestsList" v-if="ifShow(item.level,item.ifDone,item.acceptable)">
-							<div class="ib">
-								<span class="title">{{item.name}}</span>
-								<span class="level">等级：{{item.level}}</span>
-								<p>{{item.des}}</p>
-								<p class="reward">
-									<span>任务奖励：经验：{{item.reward.exp}}</span>
-									<span class="items">物品：</span>
-									<span :key="key.name" v-for="key in item.reward.items">{{key.name}}x{{key.amount}}</span>
-								</p>
+							<div class="top">
+								<div class="ib">
+									<span class="title">{{item.name}}</span>
+									<span class="level">等级:{{item.level}}</span>
+									<p>{{item.des}}</p>
+								</div>
+								<button class="notyet" @click="take(item)">接受</button>
 							</div>
-							<button class="notyet" @click="take(item)">接受</button>
+							<div class="reward">
+								<span>经验:{{item.reward.exp}}</span>
+								<span class="items">物品:</span>
+								<span :key="key.name" v-for="key in item.reward.items">{{key.name}}×{{key.amount}}</span>
+								<span v-if="!item.reward.items">无</span>
+								<span>金钱:{{item.reward.gold}}</span>
+							</div>
+
 						</li>
 					</ul>
 				</section>
@@ -24,16 +29,21 @@
 					<h4 class="tac">支线任务</h4>
 					<ul>
 						<li :key="item.mid" v-for="item in sideQuestsList" v-if="ifShow(item.level,item.ifDone,item.acceptable)">
-							<div class="ib">
-								<span class="title">{{item.name}}</span>
-								<span class="level">等级：{{item.level}}</span>
-								<p>{{item.des}}</p>
-								<p class="reward">任务奖励：经验：{{item.reward.exp}}
-									<span>物品：</span>
-									<span :key="key.name" v-for="key in item.reward.items">{{key.name}}x{{key.amount}}</span>
-								</p>
+							<div class="top">
+								<div class="ib">
+									<span class="title">{{item.name}}</span>
+									<span class="level">等级:{{item.level}}</span>
+									<p>{{item.des}}</p>
+								</div>
+								<button class="notyet" @click="take(item)">接受</button>
 							</div>
-							<button class="notyet" @click="take(item)">接受</button>
+							<div class="reward">
+								<span>经验:{{item.reward.exp}}</span>
+								<span class="items">物品:</span>
+								<span :key="key.name" v-for="key in item.reward.items">{{key.name}}×{{key.amount}}</span>
+								<span v-if="!item.reward.items">无</span>
+								<span>金钱:{{item.reward.gold}}</span>
+							</div>
 						</li>
 					</ul>
 				</section>
@@ -41,22 +51,26 @@
 					<h4 class="tac">事件</h4>
 					<ul>
 						<li :key="item.mid" v-for="item in eventsList" v-if="ifShow(item.level,item.ifDone,item.acceptable)">
-							<div class="ib">
-								<span class="title">{{item.name}}</span>
-								<span class="level">等级：{{item.level}}</span>
-								<p>{{item.des}}</p>
-								<p class="reward">
-									<span>任务奖励：经验：{{item.reward.exp}}</span>
-									<span>物品：</span>
-									<span :key="key.name" v-for="key in item.reward.items">{{key.name}}x{{key.amount}}</span>
-								</p>
+							<div class="top">
+								<div class="ib">
+									<span class="title">{{item.name}}</span>
+									<span class="level">等级:{{item.level}}</span>
+									<p>{{item.des}}</p>
+								</div>
+								<button class="notyet" @click="take(item)">接受</button>
 							</div>
-							<button class="notyet" @click="take(item)">接受</button>
+							<div class="reward">
+								<span>经验:{{item.reward.exp}}</span>
+								<span class="items">物品:</span>
+								<span :key="key.name" v-for="key in item.reward.items">{{key.name}}×{{key.amount}}</span>
+								<span v-if="!item.reward.items">无</span>
+								<span>金钱:{{item.reward.gold}}</span>
+							</div>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<Battle mode="mission" :enemy="enemy" :reward="reward" :times="times" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
+			<Battle mode="mission" :enemy="enemy" :reward="reward" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
 			<Interlocution :question="question" v-if="show.interlocution"></Interlocution>
 		</transition>
 	</section>
@@ -98,9 +112,13 @@
 			}
 			.reward {
 				color: #ff7f50;
-			}
-			.items {
-				margin-left: .05rem;
+				margin-top: .1rem;
+				span {
+					margin-right: .1rem;
+					&.items {
+						margin-right: 0;
+					}
+				}
 			}
 			p {
 				margin-top: .1rem;
@@ -126,8 +144,7 @@
 				mission: null,
 				enemy: null,
 				question: null,
-				reward: null,
-				times: 1
+				reward: null
 			}
 		},
 		methods: {
@@ -144,7 +161,6 @@
 					this.mission = item;
 					this.reward = item.reward;
 					this.enemy = this.$store.state[item.enemy.namespace];
-					this.times = item.enemy.times;
 					this.show.list = false;
 					this.show.battle = true;
 				} else {

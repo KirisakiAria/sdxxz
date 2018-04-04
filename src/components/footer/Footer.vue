@@ -61,7 +61,7 @@
 		data() {
 			return {
 				footerData: [{
-					isActive: true,
+					isActive: false,
 					title: '任务',
 					fontClass: 'iconfont icon-mission',
 					show: 'mission'
@@ -81,7 +81,7 @@
 					fontClass: 'iconfont icon-backpack',
 					show: 'inventory'
 				}, {
-					isActive: false,
+					isActive: true,
 					title: '个人',
 					fontClass: 'iconfont icon-my',
 					show: 'my'

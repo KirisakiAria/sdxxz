@@ -104,12 +104,12 @@
                                     <li :key="item.sid" v-if="item.learned" v-for="item in damageSkillsList" @click="useDamageSkill('player','enemy','damageSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
-                                            <span class="i1">伤害量：{{item.effect.damage.value}}</span>
-                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span class="i3">伤害类型：{{item.effect.damage.type.name}}</span>
+                                            <span class="i1">伤害量:{{item.effect.damage.value}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗:{{item.consume}}</span>
+                                            <span class="i3">伤害类型:{{item.effect.damage.type.name}}</span>
                                         </div>
                                         <div class="bottom">
-                                            <p>技能介绍：{{item.desc}}</p>
+                                            <p>技能介绍:{{item.desc}}</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -119,11 +119,11 @@
                                     <li :key="item.sid" v-if="item.learned" v-for="item in cureSkillsList" @click="useCureSkill('player','cureSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
-                                            <span class="i1">治疗量：{{item.effect.cure.value}}</span>
-                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
+                                            <span class="i1">治疗量:{{item.effect.cure.value}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗:{{item.consume}}</span>
                                         </div>
                                         <div class="bottom">
-                                            <p>技能介绍：{{item.desc}}</p>
+                                            <p>技能介绍:{{item.desc}}</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -133,11 +133,11 @@
                                     <li :key="item.sid" v-if="item.learned" v-for="item in buffSkillsList" @click="useBuffSkill('player','buffSkillsList',item.sid)">
                                         <div class="top">
                                             <span class="name">{{item.name}}</span>
-                                            <span class="i2">{{item.consumeType.name}}消耗：{{item.consume}}</span>
-                                            <span class="i3">持续回合数：{{item.effect.round - 1}}</span>
+                                            <span class="i2">{{item.consumeType.name}}消耗:{{item.consume}}</span>
+                                            <span class="i3">持续回合数:{{item.effect.round - 1}}</span>
                                         </div>
                                         <div class="bottom">
-                                            <p>技能介绍：{{item.desc}}</p>
+                                            <p>技能介绍:{{item.desc}}</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -149,7 +149,7 @@
                                             <span class="name">{{item.name}}</span>
                                         </div>
                                         <div class="bottom">
-                                            <p>技能介绍：{{item.desc}}</p>
+                                            <p>技能介绍:{{item.desc}}</p>
                                         </div>
                                     </li>
                                 </ul>
@@ -174,11 +174,11 @@
                                 <li :key="item.iid" v-if="item.amount" v-for="item in cureItemsList" @click="useCureItem('player','cureItemsList',item.iid)">
                                     <div class="top">
                                         <span class="name">{{item.name}}</span>
-                                        <span class="i1">治疗量：{{item.effect.cure.value}}</span>
-                                        <span class="i2">数量：{{item.amount}}</span>
+                                        <span class="i1">治疗量:{{item.effect.cure.value}}</span>
+                                        <span class="i2">数量:{{item.amount}}</span>
                                     </div>
                                     <div class="bottom">
-                                        <p>道具介绍：{{item.desc}}</p>
+                                        <p>道具介绍:{{item.desc}}</p>
                                     </div>
                                 </li>
                             </ul>
@@ -188,11 +188,11 @@
                                 <li :key="item.iid" v-if="item.amount" v-for="item in concealedItemsList" @click="useConcealedItem('player','enemy','concealedItemsList',item.iid)">
                                     <div class="top">
                                         <span class="name">{{item.name}}</span>
-                                        <span class="i1">伤害量：{{item.effect.damage.value}}</span>
-                                        <span class="i2">数量：{{item.amount}}</span>
+                                        <span class="i1">伤害量:{{item.effect.damage.value}}</span>
+                                        <span class="i2">数量:{{item.amount}}</span>
                                     </div>
                                     <div class="bottom">
-                                        <p>道具介绍：{{item.desc}}</p>
+                                        <p>道具介绍:{{item.desc}}</p>
                                     </div>
                                 </li>
                             </ul>
@@ -202,11 +202,11 @@
                                 <li :key="item.iid" v-if="item.amount" v-for="item in buffItemsList" @click="useBuffItem('player','buffItemsList',item.iid)">
                                     <div class="top">
                                         <span class="name">{{item.name}}</span>
-                                        <span class="i1">持续回合数：{{item.effect.round}}</span>
-                                        <span class="i2">数量：{{item.amount}}</span>
+                                        <span class="i1">持续回合数:{{item.effect.round}}</span>
+                                        <span class="i2">数量:{{item.amount}}</span>
                                     </div>
                                     <div class="bottom">
-                                        <p>道具介绍：{{item.desc}}</p>
+                                        <p>道具介绍:{{item.desc}}</p>
                                     </div>
                                 </li>
                             </ul>
@@ -462,6 +462,7 @@
                 let losingValue = 0;
                 let defCache = this.getValue(target, 'extraAttributes', 'def');
                 if (type === 1) {
+                    //计算闪避
                     let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
                     let spdCache = this.getValue(target, 'extraAttributes',
                         'spd');
@@ -475,6 +476,15 @@
                         let atkValue = parseInt(this.randomNum(atkCache * 0.85, atkCache * 1.25));
                         let defValue = parseInt(defCache *
                             0.65);
+                        //计算暴击
+                        let crtCache = this.getValue(attacker, 'extraAttributes', 'crt');
+                        let mulCache = this.getValue(attacker, 'extraAttributes', 'mul');
+                        let crtRate = crtCache / 350;
+                        let random = Math.random();
+                        if (random < crtRate) {
+                            console.log('暴击');
+                            atkValue *= mulCache;
+                        }
                         losingValue = atkValue - defValue;
                     }
                 } else {
@@ -773,8 +783,7 @@
                 this.calculateCure(regularData, namespace, item);
                 this.$store.commit('items/minusValue', {
                     type: 'cureItems',
-                    iid: item.iid,
-                    amount: item.amount
+                    iid: item.iid
                 });
                 this.toggleInventory();
                 this.roundCount();
@@ -787,8 +796,7 @@
                     item);
                 this.$store.commit('items/minusValue', {
                     type: 'concealedItems',
-                    iid: item.iid,
-                    amount: item.amount
+                    iid: item.iid
                 });
                 this.toggleInventory();
                 this.roundCount();
@@ -798,8 +806,7 @@
                 this.calculateBuff(user, item);
                 this.$store.commit('items/minusValue', {
                     type: 'buffItems',
-                    iid: item.iid,
-                    amount: item.amount
+                    iid: item.iid
                 });
                 this.toggleInventory();
                 this.roundCount();
@@ -928,13 +935,17 @@
                         });
                     });
                 }
+                this.$store.commit('player/changeExtraAttributesOrElementsValue', {
+                    type: 'extraAttributes',
+                    propety: 'gold',
+                    value: reward.gold
+                });
             }
         },
         props: [
             'enemy', //敌人
             'mode', //模式
             'reward', //奖励
-            'times' //次数
         ],
         computed: {
             //取得命名空间用来commit
@@ -1052,6 +1063,11 @@
                                 this.$store.commit('player/levelup');
                             }
                             //任务奖励
+                            this.$store.commit('player/changeExtraAttributesOrElementsValue', {
+                                type: 'extraAttributes',
+                                propety: 'gold',
+                                value: this.enemy.baseAttributes.gold.value
+                            });
                             if (this.mode === 'mission') {
                                 this.rewardPlayer(this.reward);
                                 this.$emit('done');

@@ -93,7 +93,7 @@ let state = {
 			level: 12,
 			point: 4,
 			name: '飞痰',
-			desc: '一口老痰吐到敌方脸上，使敌方单体受到106点冰属性伤害。',
+			desc: '一口老痰吐到敌方脸上，使敌方单体受到106点冰属性伤害,速度减少20%，持续3回合',
 			buffType: 1,
 			consume: 90,
 			consumeType: {
@@ -106,52 +106,28 @@ let state = {
 						value: 3,
 						name: '冰'
 					},
+					target: 2,
+					buff: [{
+						type: 1,
+						position: ['extraAttributes', 'spd'],
+						value: 0.8,
+						valueType: 'percentage'
+					}],
 					ignoring: false,
-					value: 106
+					value: 106,
+					round: 4
 				}
 			}
 		},
 		{
 			sid: 4,
 			learned: false,
-			level: 17,
-			point: 4,
-			name: '蝌蚪',
-			desc: '喷射出大量白色蝌蚪，对敌方全体造成185点毒属性伤害并降低毒属性26%，持续3回合',
-			buffType: 1,
-			consume: 117,
-			consumeType: {
-				name: '魔法',
-				value: 1
-			},
-			effect: {
-				damage: {
-					type: {
-						value: 4,
-						name: '毒'
-					},
-					ignoring: false,
-					value: 185
-				},
-				target: 2,
-				buff: [{
-					type: 1,
-					position: ['elements', 'toxic'],
-					value: 0.74,
-					valueType: 'percentage'
-				}],
-				round: 4
-			}
-		},
-		{
-			sid: 5,
-			learned: false,
 			level: 24,
 			point: 5,
 			name: '纵火',
-			desc: '使用打火机点燃敌方的jj，敌方受到272点火属性伤害并降低魔防33%，持续四回合。',
+			desc: '使用打火机点燃敌方的丁丁，敌方受到178点火属性伤害并降低魔防33%，持续四回合。',
 			buffType: 1,
-			consume: 168,
+			consume: 124,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -164,7 +140,7 @@ let state = {
 						name: '火'
 					},
 					ignoring: false,
-					value: 272
+					value: 178
 				},
 				target: 2,
 				buff: [{

@@ -6,7 +6,8 @@
 			</div>
 			<h4 class="tac">{{baseAttributes[0].value}}</h4>
 			<h6 class="tac">称号:{{baseAttributes[1].value}}</h6>
-			<button @click="save()">存档</button>
+			<button class="openShop" @click="toggleShop()">商店</button>
+			<button class="save" @click="save()">存档</button>
 		</section>
 		<section class="data">
 			<div class="card">
@@ -26,23 +27,26 @@
 			<ProgressBar :value="start" :max="end"></ProgressBar>
 			<div class="attributes">
 				<ul>
-					<li :key="item.desc" v-for="item in extraAttributes">{{item.desc}}：{{item.value}}</li>
+					<li :key="item.desc" v-for="item in extraAttributes">{{item.desc}}:{{item.value}}</li>
 				</ul>
 			</div>
 			<div class="equipments">
 				<ul>
-					<li :key="item.desc" v-for="item in equipments">{{item.type}}：{{item.which}}</li>
+					<li :key="item.desc" v-for="item in equipments">{{item.type}}:{{item.which}}</li>
 				</ul>
 			</div>
 			<div class="elements">
 				<ul>
-					<li :key="item.desc" v-for="item in elements">{{item.desc}}：{{item.value}}</li>
+					<li :key="item.desc" v-for="item in elements">{{item.desc}}:{{item.value}}</li>
 				</ul>
 			</div>
 			<div class="buff">
-				<span>状态：</span>
+				<span>状态:</span>
 			</div>
 		</section>
+		<transition name="scale-fade" mode="out-in">
+			<Shop v-show="show.shop" @closeShop="toggleShop" class="shop"></Shop>
+		</transition>
 	</section>
 </template>
 
@@ -60,14 +64,20 @@
 
 			button {
 				position: absolute;
-				right: .15rem;
 				top: .15rem;
 				width: .7rem;
 				height: .25rem;
 				font-size: .1rem;
 				.br;
-				.bor(#a29bfe);
-				background: #a29bfe;
+				border: none;
+				background: #00b894;
+				&.save {
+					right: .15rem;
+				}
+				&.openShop {
+					left: 0.15rem;
+					background: #0984e3;
+				}
 			}
 		}
 
@@ -160,10 +170,21 @@
 			color: #ff6348;
 			justify-content: center;
 		}
+
+		.shop {
+			position: fixed;
+			width: 100vw;
+			height: 100vh;
+			top: 0;
+			left: 0;
+			background: #fff;
+			z-index: 1000;
+		}
 	}
 </style>
 
 <script>
+	import Shop from '../shop/Shop'
 	import avatarImg from '../../assets/images/avatar.jpg'
 	import ProgressBar from '../progressbar/ProgressBar'
 	import FileSaver from 'file-saver'
@@ -174,6 +195,9 @@
 			return {
 				img: {
 					avatar: avatarImg
+				},
+				show: {
+					shop: true
 				}
 			}
 		},
@@ -191,12 +215,16 @@
 				let profile = {
 					playerData: this.$store.state.player,
 					skillsData: this.$store.state.playerSkills,
-					missionData: this.$store.state.mission
+					missionData: this.$store.state.mission,
+					itemsData: this.$store.state.items
 				}
 				let blob = new Blob([JSON.stringify(profile)], {
 					type: ""
 				});
 				FileSaver.saveAs(blob, "save.json");
+			},
+			toggleShop() {
+				this.show.shop = !this.show.shop;
 			}
 		},
 		computed: {
@@ -240,7 +268,8 @@
 			}
 		},
 		components: {
-			ProgressBar
+			ProgressBar,
+			Shop
 		}
 	}
 </script>

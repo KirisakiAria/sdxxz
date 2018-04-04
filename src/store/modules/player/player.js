@@ -47,63 +47,63 @@ let state = {
 		namespace: 'player'
 	},
 	extraAttributes: {
-		atk: {
-			desc: '物攻',
-			value: 28,
-			grow: 6
-		},
-		mga: {
-			desc: '魔攻',
-			value: 21,
-			grow: 4
-		},
-		def: {
-			desc: '物防',
-			value: 14,
-			grow: 4
-		},
-		res: {
-			desc: '魔防',
-			value: 12,
-			grow: 3
-		},
-		crt: {
-			desc: '暴击',
-			value: 6,
-			grow: 1
-		},
-		mul: {
-			desc: '暴击系数',
-			value: 1.5
-		},
-		hit: {
-			desc: '命中',
-			value: 48,
-			grow: 4
-		},
-		spd: {
-			desc: '速度',
-			value: 4,
-			grow: 1
-		},
-		chr: {
-			desc: '魅力',
-			value: 12,
-			grow: 3
-		},
-		luk: {
-			desc: '幸运',
-			value: 5,
-			grow: 5
-		},
 		gold: {
 			desc: '金钱',
-			value: 0
+			value: 10000
 		},
 		sp: {
 			desc: '技能点',
 			value: 0,
 			grow: 1
+		},
+		atk: {
+			desc: '物攻',
+			value: 30,
+			grow: 6
+		},
+		mga: {
+			desc: '魔攻',
+			value: 22,
+			grow: 4
+		},
+		def: {
+			desc: '物防',
+			value: 17,
+			grow: 4
+		},
+		res: {
+			desc: '魔防',
+			value: 14,
+			grow: 3
+		},
+		crt: {
+			desc: '暴击',
+			value: 8,
+			grow: 1
+		},
+		mul: {
+			desc: '暴击系数',
+			value: 2
+		},
+		hit: {
+			desc: '命中',
+			value: 52,
+			grow: 4
+		},
+		spd: {
+			desc: '速度',
+			value: 5,
+			grow: 1
+		},
+		chr: {
+			desc: '魅力',
+			value: 14,
+			grow: 3
+		},
+		luk: {
+			desc: '幸运',
+			value: 8,
+			grow: 5
 		}
 	},
 	elements: {
@@ -177,15 +177,9 @@ const mutations = {
 	clearPermanentlyBuff(state, payload) {
 		let buffList = state.permanentlyBuff[payload.pType];
 		if (buffList.length) {
-			console.log(buffList[0].originalValue)
 			buffList[0].originalValue.forEach(item => {
 				let [p1, p2] = [item.position[0], item.position[1]];
-				if (item.type === 1) {
-					context.state[p1][p2]['value'] = item.value;
-				} else if (item.type === 2) {
-					let [p3, p4] = [item.position[2], item.position[3]];
-					context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
-				}
+				state[p1][p2]['value'] = item.value;
 			});
 			buffList.splice(0, 1);
 		}
@@ -249,6 +243,9 @@ const actions = {
 		});
 		Object.keys(context.rootState.mission).forEach(e => {
 			context.rootState.mission[e] = payload.data.missionData[e];
+		});
+		Object.keys(context.rootState.items).forEach(e => {
+			context.rootState.items[e] = payload.data.itemsData[e];
 		});
 	}
 }

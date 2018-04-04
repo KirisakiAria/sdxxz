@@ -10,7 +10,7 @@
 								<div class="ib">
 									<div class="top">
 										<span>{{key.baseAttributes.name.value}}</span>
-										<span>等级：{{key.baseAttributes.level.value}}</span>
+										<span>等级:{{key.baseAttributes.level.value}}</span>
 									</div>
 									<div class="bottom">
 										<p>{{key.baseAttributes.description.value}}</p>
