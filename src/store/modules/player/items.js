@@ -8,6 +8,25 @@ let state = {
         amount: 2,
         ifSale: true,
         price: 20,
+        buyNum: 1,
+        itemType: 'cureItems',
+        //这里使用consumeType为了区别是回血还是回蓝
+        consumeType: {
+            value: 1
+        },
+        effect: {
+            cure: {
+                value: 42
+            }
+        }
+    }, {
+        iid: 1,
+        name: '米饭',
+        desc: '真香！',
+        amount: 0,
+        ifSale: true,
+        price: 42,
+        buyNum: 1,
         itemType: 'cureItems',
         //这里使用consumeType为了区别是回血还是回蓝
         consumeType: {
@@ -27,6 +46,7 @@ let state = {
         amount: 2,
         ifSale: true,
         price: 20,
+        buyNum: 1,
         itemType: 'concealedItems',
         effect: {
             damage: {
@@ -45,6 +65,7 @@ let state = {
         amount: 0,
         ifSale: true,
         price: 35,
+        buyNum: 1,
         itemType: 'concealedItems',
         effect: {
             damage: {
@@ -65,6 +86,7 @@ let state = {
         amount: 2,
         ifSale: true,
         price: 10,
+        buyNum: 1,
         buffType: 1,
         itemType: 'buffItems',
         effect: {
@@ -91,6 +113,7 @@ let state = {
         amount: 0,
         ifSale: true,
         price: 20,
+        buyNum: 1,
         buffType: 1,
         itemType: 'buffItems',
         effect: {
@@ -145,7 +168,7 @@ let state = {
                 desc: '物攻增加16点，魔攻增加10点。裸鸡K021，肯定比三块钱的键盘好',
                 own: false,
                 equip: false,
-                ifSale: true,
+                ifSale: false,
                 price: 0,
                 level: 1,
                 effect: {
@@ -234,10 +257,16 @@ let state = {
 
 const mutations = {
     minusValue(state, payload) {
-        state[payload.type][payload.iid]['amount'] -=1;
+        state[payload.type][payload.iid]['amount'] -= 1;
     },
     addValue(state, payload) {
         state[payload.type][payload.iid]['amount'] += payload.amount;
+    },
+    changeBuyValue(state, payload) {
+        state[payload.type][payload.iid]['buyNum'] = payload.value;
+    },
+    addEquipment(state, payload) {
+        state.equipmentsItems[payload.eid]['list'][payload.iid]['own'] = true;
     },
     equip(state, payload) {
         state.equipmentsItems[payload.eid]['list'].forEach(e => {

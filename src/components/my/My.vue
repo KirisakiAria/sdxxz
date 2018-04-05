@@ -197,7 +197,7 @@
 					avatar: avatarImg
 				},
 				show: {
-					shop: true
+					shop: false
 				}
 			}
 		},

@@ -24,7 +24,7 @@
 										<div class="ib left">
 											<span class="name">{{key.name}}</span>
 											<span class="i2">等级需求:{{key.level}}</span>
-											<span class="i3">价格:{{key.price}}</span>
+											<span class="i3">总价格:{{key.price}}</span>
 										</div>
 									</div>
 									<div class="bottom">
@@ -42,11 +42,11 @@
 								<div class="ib left">
 									<span class="name">{{item.name}}</span>
 									<span class="i1">治疗量:{{item.effect.cure.value}}</span>
-									<span class="i3">价格:{{item.price}}</span>
+									<span class="i3">总价格:{{item.price*item.buyNum}}</span>
 								</div>
 								<div class="ib right">
 									<label for="number">购买数量</label>
-									<input id="number" type="number" v-model.number="number">
+									<input id="number" type="number" :value='item.buyNum' @input="changeBuyNum(item.itemType,item.iid,$event)">
 									<button @click="buy(item)">购买</button>
 								</div>
 							</div>
@@ -63,11 +63,11 @@
 								<div class="ib left">
 									<span class="name">{{item.name}}</span>
 									<span class="i1">伤害量:{{item.effect.damage.value}}</span>
-									<span class="i3">价格:{{item.price}}</span>
+									<span class="i3">总价格:{{item.price*item.buyNum}}</span>
 								</div>
 								<div class="ib right">
 									<label for="number">购买数量</label>
-									<input id="number" type="number" v-model.number="number">
+									<input id="number" type="number" :value='item.buyNum' @input="changeBuyNum(item.itemType,item.iid,$event)">
 									<button @click="buy(item)">购买</button>
 								</div>
 							</div>
@@ -84,11 +84,11 @@
 								<div class="ib left">
 									<span class="name">{{item.name}}</span>
 									<span class="i1">持续回合数:{{item.effect.round}}</span>
-									<span class="i3">价格:{{item.price}}</span>
+									<span class="i3">总价格:{{item.price*item.buyNum}}</span>
 								</div>
 								<div class="ib right">
 									<label for="number">购买数量</label>
-									<input id="number" type="number" v-model.number="number">
+									<input id="number" type="number" :value='item.buyNum' @input="changeBuyNum(item.itemType,item.iid,$event)">
 									<button @click="buy(item)">购买</button>
 								</div>
 							</div>
@@ -165,8 +165,8 @@
 		data() {
 			return {
 				show: {
-					equipments: false,
-					cure: true,
+					equipments: true,
+					cure: false,
 					concealed: false,
 					buff: false,
 				},
@@ -174,7 +174,6 @@
 					data: '',
 					show: false
 				},
-				number: 1,
 				index: 0
 			}
 		},
@@ -198,11 +197,35 @@
 			expand(item) {
 				this.index = item.eid;
 			},
+			changeBuyNum(type, iid, e) {
+				let value = parseInt(e.target.value);
+				this.$store.commit('items/changeBuyValue', {
+					type,
+					iid,
+					value
+				});
+			},
 			buy(item, key) {
 				if (key) {
-
+					this.number = 1;
+					let price = key.price;
+					if (price > this.gold) {
+						this.openTips('金钱不足');
+					} else {
+						this.$store.commit('player/changeExtraAttributesOrElementsValue', {
+							type: 'extraAttributes',
+							propety: 'gold',
+							value: this.gold - price
+						});
+						this.$store.commit('items/addEquipment', {
+							eid: item.eid,
+							iid: key.iid,
+							amount: this.number
+						});
+						console.log(`购买${key.name} ${this.number}个,花费金钱${price}`);
+					}
 				} else {
-					let price = item.price * this.number;
+					let price = item.price * item.buyNum;
 					if (price > this.gold) {
 						this.openTips('金钱不足');
 					} else {
@@ -214,8 +237,9 @@
 						this.$store.commit('items/addValue', {
 							type: item.itemType,
 							iid: item.iid,
-							amount: this.number
+							amount: item.buyNum
 						});
+						console.log(`购买${item.name} ${item.buyNum}个,花费金钱${price}`);
 					}
 				}
 			},

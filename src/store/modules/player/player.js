@@ -49,7 +49,7 @@ let state = {
 	extraAttributes: {
 		gold: {
 			desc: '金钱',
-			value: 10000
+			value: 0
 		},
 		sp: {
 			desc: '技能点',
@@ -235,8 +235,7 @@ const actions = {
 	},
 	loadData(context, payload) {
 		Object.keys(context.state).forEach(e => {
-			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
-				context.state[e] = payload.data.playerData[e];
+			context.state[e] = payload.data.playerData[e];
 		});
 		Object.keys(context.rootState.playerSkills).forEach(e => {
 			context.rootState.playerSkills[e] = payload.data.skillsData[e];
