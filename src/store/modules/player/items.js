@@ -14,6 +14,7 @@ let state = {
         consumeType: {
             value: 1
         },
+        cureType: '生命',
         effect: {
             cure: {
                 value: 42
@@ -32,6 +33,7 @@ let state = {
         consumeType: {
             value: 1
         },
+        cureType: '生命',
         effect: {
             cure: {
                 value: 42

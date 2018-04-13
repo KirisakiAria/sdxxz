@@ -6,7 +6,8 @@ const state = {
 		inventory: false,
 		my: true
 	},
-	battle: false
+	battle: false,
+	interlocution: false
 }
 
 const mutations = {
@@ -20,6 +21,9 @@ const mutations = {
 	},
 	toggleBattle(state) {
 		state.battle = !state.battle;
+	},
+	toggleInterlocution(state) {
+		state.interlocution = !state.interlocution;
 	}
 }
 

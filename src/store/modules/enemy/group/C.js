@@ -32,7 +32,7 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 45
+			value: 12
 		},
 		gold: {
 			desc: '击杀所得金钱',
@@ -138,15 +138,17 @@ const actions = {
 				}
 				if (!e.round) {
 					//buff剩余回合为0了就把原始值再赋回去
-					e.originalValue.forEach(item => {
-						let [p1, p2] = [item.position[0], item.position[1]];
-						if (item.type === 1) {
-							context.state[p1][p2]['value'] = item.value;
-						} else if (item.type === 2) {
-							let [p3, p4] = [item.position[2], item.position[3]];
-							context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
-						}
-					});
+					if (e.originalValue.lenght) {
+						e.originalValue.forEach(item => {
+							let [p1, p2] = [item.position[0], item.position[1]];
+							if (item.type === 1) {
+								context.state[p1][p2]['value'] = item.value;
+							} else if (item.type === 2) {
+								let [p3, p4] = [item.position[2], item.position[3]];
+								context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
+							}
+						});
+					}
 				}
 			});
 			for (let i = 0; i < length; i++) {
@@ -159,20 +161,9 @@ const actions = {
 			}
 		}
 	},
-	loadData(context, payload) {
-		Object.keys(context.state).forEach(e => {
-			if (e === 'baseAttributes' || e === 'extraAttributes' || e === 'elements')
-				context.state[e] = payload.data.playerData[e];
-		});
-		Object.keys(context.rootState.playerSkills).forEach(e => {
-			context.rootState.playerSkills[e] = payload.data.skillsData[e];
-		});
-		Object.keys(context.rootState.mission).forEach(e => {
-			context.rootState.mission[e] = payload.data.missionData[e];
-		});
-		Object.keys(context.rootState.items).forEach(e => {
-			context.rootState.items[e] = payload.data.itemsData[e];
-		});
+	changeSkillValue(context, payload) {
+		let [p1, p2, p3, p4] = [payload.p1, payload.p2, payload.p3, payload.p4];
+		context.rootState.playerSkills[p1][p2][p3][p4]['value'] = payload.value;
 	}
 }
 

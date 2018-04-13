@@ -40,11 +40,6 @@
 <script>
 	export default {
 		name: 'Tips',
-		data() {
-			return {
-
-			}
-		},
 		props: ['content'],
 		methods: {
 			closeTips: function () {

@@ -2,7 +2,7 @@
     <section class="battle mainSection">
         <section class="control section tac">
             <h5>战斗信息</h5>
-            <p>此模块尚未开发</p>
+            <p>{{battleMessage}}</p>
         </section>
         <section class="enemy section">
             <transition name="scale-fade">
@@ -11,9 +11,13 @@
                 </div>
             </transition>
             <h4 class="tac">
-                <span>等级{{enemy.baseAttributes.level.value}}</span>
                 {{enemy.baseAttributes.name.value}}
             </h4>
+            <div class="info tac">
+                <span>等级:{{enemy.baseAttributes.level.value}}</span>
+                <span>击杀经验:{{enemy.baseAttributes.exp.value}}</span>
+                <span>击杀金钱:{{enemy.baseAttributes.gold.value}}</span>
+            </div>
             <div class="content">
                 <div class="attr">
                     <div class="con card tac">
@@ -46,9 +50,11 @@
                 </div>
             </transition>
             <h4 class="tac">
-                <span>等级{{player.baseAttributes.level.value}}</span>
                 {{player.baseAttributes.name.value}}
             </h4>
+            <div class="info tac">
+                <span>等级{{player.baseAttributes.level.value}}</span>
+            </div>
             <div class="content">
                 <div class="attr">
                     <div class="con card tac">
@@ -80,9 +86,9 @@
                         <button :class="{disabled:round.enemy||disabled.player.slient}" :disabled="round.enemy||disabled.player.slient" class="btn"
                             @click="toggleSkillsPanel">技能</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="toggleInventory">道具</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn">占位</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="anger">怒气</button>
                         <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="escape">逃跑</button>
-                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="auto">自动</button>
+                        <button :class="{disabled:round.enemy}" :disabled="round.enemy" class="btn" @click="skip">跳过</button>
                     </div>
                 </div>
             </div>
@@ -272,6 +278,9 @@
                 margin-bottom: 0.1rem;
                 font-size: 0.16rem;
             }
+            p {
+                height: .15rem;
+            }
         }
         .section {
             border-bottom: 1px solid #666;
@@ -293,9 +302,12 @@
             }
             h4 {
                 padding: 0.1rem;
-                padding-right: .25rem;
+            }
+            .info {
+                margin-bottom: .15rem;
                 span {
                     font-size: 0.12rem;
+                    margin:0 .05rem;
                 }
             }
             h6 {
@@ -385,6 +397,7 @@
                     inventory: false,
                     tips: false
                 },
+                //用来判断是否进入沉默、缴械状态
                 disabled: {
                     player: {
                         disarm: false,
@@ -398,14 +411,18 @@
                 tips: {
                     data: '',
                     close: false //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭tips
-                }
+                },
+                battleMessage: '战斗开始'
             };
         },
         methods: {
             //初始化战斗
             battleStart() {
+                this.deBuff('player', 'slient');
+                this.deBuff('enemy', 'slient');
+                this.deBuff('player', 'disarm');
+                this.deBuff('enemy', 'disarm');
                 this.initSpeed();
-                this.initBuff();
             },
             //初始化双方速度
             initSpeed() {
@@ -415,10 +432,6 @@
                     this.round.player = !this.round.player;
                     this.round.enemy = !this.round.enemy;
                 }
-            },
-            //初始化状态
-            initBuff() {
-
             },
             //回合变化
             roundCount() {
@@ -446,10 +459,12 @@
             deBuff(target, debuffName) {
                 let buffList = this[`${target}BuffList`];
                 let ifDebuff = buffList.findIndex(e => {
-                    return e.type === debuffName;
+                    return e.originalValue === debuffName;
                 });
                 if (ifDebuff !== -1) {
                     this.disabled[target][debuffName] = true;
+                } else {
+                    this.disabled[target][debuffName] = false;
                 }
             },
             //计算伤害
@@ -461,6 +476,9 @@
                 let tarNamespace = this[`${target}Namespace`];
                 let losingValue = 0;
                 let defCache = this.getValue(target, 'extraAttributes', 'def');
+                let [attackerName, targetName] = [this.getValue(attacker, 'baseAttributes', 'name'), this.getValue(
+                    target, 'baseAttributes',
+                    'name')];
                 if (type === 1) {
                     //计算闪避
                     let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
@@ -469,23 +487,28 @@
                     let hitRate = (hitCache + 100) / (spdCache + 100) * .65;
                     let random = Math.random();
                     if (random > hitRate) {
-                        console.log('攻击落空');
+                        this.battleMessage = `${attackerName}对${targetName}的攻击落空`;
                         return false;
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
                         let atkValue = parseInt(this.randomNum(atkCache * 0.85, atkCache * 1.25));
                         let defValue = parseInt(defCache *
                             0.65);
-                        //计算暴击
+                        //是否暴击
                         let crtCache = this.getValue(attacker, 'extraAttributes', 'crt');
                         let mulCache = this.getValue(attacker, 'extraAttributes', 'mul');
-                        let crtRate = crtCache / 350;
+                        let crtRate = crtCache / 300;
                         let random = Math.random();
+                        let ifCrt = false;
                         if (random < crtRate) {
-                            console.log('暴击');
                             atkValue *= mulCache;
+                            ifCrt = true;
                         }
                         losingValue = atkValue - defValue;
+                        this.battleMessage = `${attackerName}对${targetName}发动普攻，造成${losingValue}点伤害`;
+                        if (ifCrt) {
+                            this.battleMessage += '(暴击)'
+                        }
                     }
                 } else {
                     //首先计算是否有足够血量/魔法能发动技能，如果此技能会施加负面状态则在计算状态时已经判断过消耗，如果能计算到此步说明足够消耗。
@@ -550,6 +573,7 @@
                             elementsDamage);
                         let resValue = parseInt(resCache * 0.6);
                         losingValue = mgaValue - resValue;
+                        this.battleMessage = `${attackerName}对${targetName}使用了${object.name}，造成${losingValue}点伤害`;
                     } else {
                         losingValue = parseInt(this.randomNum(damage * 0.88, damage * 1.12)) + parseInt(
                             elementsDamage);
@@ -628,6 +652,9 @@
                                 value: value
                             });
                         });
+                        //如果是沉默、缴械等状态
+                    } else {
+                        originalValue = buff[0].position;
                     }
                     //将buff push进目标的buff数组中
                     this.$store.commit(`${namespace}/pushBuff`, {
@@ -760,6 +787,8 @@
                 let ifEnough = this.consume(skill, regularData, namespace);
                 if (ifEnough) {
                     this.calculateCure(regularData, namespace, skill);
+                    let targetName = this.getValue(target, 'baseAttributes', 'name');
+                    this.battleMessage = `${targetName}使用了${skill.name},恢复${skill.effect.cure.value}点${skill.cureType}`;
                     this.toggleSkillsPanel();
                     this.roundCount();
                 }
@@ -772,6 +801,8 @@
                     regularData, userNamespace);
                 if (ifEnough) {
                     this.calculateBuff(user, skill);
+                    let userName = this.getValue(user, 'baseAttributes', 'name');
+                    this.battleMessage = `${userName}使用了${skill.name}`;
                     this.toggleSkillsPanel();
                     this.roundCount();
                 }
@@ -781,6 +812,8 @@
                     this[`${target}Namespace`]
                 ];
                 this.calculateCure(regularData, namespace, item);
+                let targetName = this.getValue(target, 'baseAttributes', 'name');
+                this.battleMessage = `${targetName}使用了${item.name},恢复${item.effect.cure.value}点${item.cureType}`;
                 this.$store.commit('items/minusValue', {
                     type: 'cureItems',
                     iid: item.iid
@@ -804,6 +837,8 @@
             useBuffItem(user, list, iid) {
                 let item = this.findList(list, iid, 'i');
                 this.calculateBuff(user, item);
+                let userName = this.getValue(user, 'baseAttributes', 'name');
+                this.battleMessage = `${userName}使用了${item.name}`;
                 this.$store.commit('items/minusValue', {
                     type: 'buffItems',
                     iid: item.iid
@@ -828,8 +863,12 @@
                     this.openTips('逃跑成功');
                 }
             },
-            auto() {
-
+            anger() {
+                this.openTips('此功能尚未开发');
+            },
+            skip() {
+                this.battleMessage = '跳过本回合';
+                this.roundCount();
             },
             //展开/收起道具面板 
             toggleInventory() {
@@ -864,11 +903,16 @@
             getValue(target, type, property) {
                 return this[target][type][property].value;
             },
+            //敌方行为
             enemyAction() {
                 let vm = this;
                 setTimeout(function () {
-                    vm.attack('enemy', 'player');
-                }, 1000);
+                    if (!vm.disabled.enemy.disarm) {
+                        vm.attack('enemy', 'player');
+                    } else {
+                        vm.roundCount();
+                    }
+                }, 500);
             },
             //随机数
             randomNum(minNum, maxNum) {
@@ -894,9 +938,12 @@
             closeBattle() {
                 if (this.tips.close) {
                     this.$store.commit('global/toggleBattle');
-                    this.$emit('closeBattle');
+                    this.$emit('closeBattle', {
+                        type: 'battle'
+                    });
                 }
             },
+            //战斗结束后重置状态
             resetStatus(target, maxhp, maxmp) {
                 let namespace = this[`${target}Namespace`];
                 this.$store.commit(`${namespace}/changeBaseAttributesValue`, {
@@ -917,11 +964,11 @@
                     ifNotToZero: false
                 });
             },
+            //奖励
             rewardPlayer(reward) {
-                let gotValue = reward.exp;
                 this.$store.commit('player/changeBaseAttributesValue', {
                     propety: 'exp',
-                    value: this.nowExp + gotValue
+                    value: this.nowExp + reward.exp
                 });
                 if (this.levelUpExp <= this.nowExp) {
                     this.$store.commit('player/levelup');
@@ -938,7 +985,7 @@
                 this.$store.commit('player/changeExtraAttributesOrElementsValue', {
                     type: 'extraAttributes',
                     propety: 'gold',
-                    value: reward.gold
+                    value: this.nowGold + reward.gold
                 });
             }
         },
@@ -958,7 +1005,7 @@
             player() {
                 return this.$store.state.player;
             },
-            // enemy () {
+            // enemy() {
             //     return this.$store.state.groupC;
             // },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
@@ -1011,7 +1058,10 @@
             },
             //当前经验
             nowExp() {
-                return this.player.baseAttributes.exp.value
+                return this.player.baseAttributes.exp.value;
+            },
+            nowGold() {
+                return this.player.extraAttributes.gold.value;
             },
             //升级经验
             levelUpExp() {
@@ -1035,7 +1085,6 @@
                         this.resetStatus('enemy', emaxhp, emaxmp);
                         this.tips.close = true;
                         //经验获取、升级
-                        let gotValue = this.enemy.baseAttributes.exp.value;
                         if (!pHp) {
                             //失败后会掉经验
                             this.$store.commit('player/changeBaseAttributesValue', {
@@ -1053,21 +1102,22 @@
                             }
                             this.openTips('gg');
                         } else {
-                            //获得经验
+                            //击败敌人经验
                             this.$store.commit('player/changeBaseAttributesValue', {
                                 propety: 'exp',
-                                value: this.nowExp + gotValue
+                                value: this.nowExp + this.enemy.baseAttributes.exp.value
                             });
                             //升级
                             if (this.levelUpExp <= this.nowExp) {
                                 this.$store.commit('player/levelup');
                             }
-                            //任务奖励
+                            //击败敌人金钱奖励
                             this.$store.commit('player/changeExtraAttributesOrElementsValue', {
                                 type: 'extraAttributes',
                                 propety: 'gold',
-                                value: this.enemy.baseAttributes.gold.value
+                                value: this.nowGold + this.enemy.baseAttributes.gold.value
                             });
+                            //完成任务奖励
                             if (this.mode === 'mission') {
                                 this.rewardPlayer(this.reward);
                                 this.$emit('done');

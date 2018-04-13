@@ -70,8 +70,8 @@
 					</ul>
 				</section>
 			</section>
-			<Battle mode="mission" :enemy="enemy" :reward="reward" v-if="show.battle" @closeBattle="closeBattle" @done="done"></Battle>
-			<Interlocution :question="question" v-if="show.interlocution"></Interlocution>
+			<Battle mode="mission" :enemy="enemy" :reward="reward" v-if="show.battle" @closeBattle="close" @done="done"></Battle>
+			<Interlocution :questions="questions" :reward="reward" v-if="show.interlocution" @closeInterlocution="close" @done="done"></Interlocution>
 		</transition>
 	</section>
 </template>
@@ -143,7 +143,7 @@
 				},
 				mission: null,
 				enemy: null,
-				question: null,
+				questions: null,
 				reward: null
 			}
 		},
@@ -157,19 +157,20 @@
 				}
 			},
 			take(item) {
+				this.mission = item;
+				this.reward = item.reward;
+				this.show.list = false;
 				if (item.execute === 'battle') {
-					this.mission = item;
-					this.reward = item.reward;
 					this.enemy = this.$store.state[item.enemy.namespace];
-					this.show.list = false;
 					this.show.battle = true;
 				} else {
-
+					this.questions = item.questions;
+					this.show.interlocution = true;
 				}
 			},
-			closeBattle() {
+			close(e) {
 				this.show.list = true;
-				this.show.battle = false;
+				this.show[e.type] = false;
 			},
 			//完成任务
 			done() {

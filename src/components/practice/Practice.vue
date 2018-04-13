@@ -32,6 +32,7 @@
 	@import "../../style/style";
 
 	.practice {
+		padding-bottom: 0;
 		.content {
 			li {
 				margin-bottom: 0;

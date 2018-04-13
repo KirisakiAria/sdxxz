@@ -9,7 +9,9 @@
 				<My v-if="showList[4]"></My>
 			</keep-alive>
 		</transition>
-		<footerView></footerView>
+		<transition name="slideY-fade">
+			<footerView v-if="!ifBattle&&!ifInterlocution"></footerView>
+		</transition>
 	</section>
 </template>
 
@@ -36,6 +38,12 @@
 					arr.push(e);
 				});
 				return arr;
+			},
+			ifBattle() {
+				return this.$store.state.global.battle;
+			},
+			ifInterlocution() {
+				return this.$store.state.global.interlocution;
 			}
 		},
 		components: {

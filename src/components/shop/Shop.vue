@@ -199,6 +199,9 @@
 			},
 			changeBuyNum(type, iid, e) {
 				let value = parseInt(e.target.value);
+				if (Number.isNaN(value)) {
+					value = 0;
+				}
 				this.$store.commit('items/changeBuyValue', {
 					type,
 					iid,

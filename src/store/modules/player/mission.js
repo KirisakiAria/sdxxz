@@ -50,12 +50,57 @@ let state = {
         name: '群主试炼',
         des: '群主在买买买之余，对入群不久的新人做一下考核',
         execute: 'interlocution',
-        level: 1,
+        level: 5,
         acceptable: true,
         ifDone: false,
+        questions: [{
+            qid: 0,
+            desc: '傻屌群最大鸽子是谁',
+            answer: [{
+                index: 0,
+                value: '婷鸽耳'
+            }, {
+                index: 1,
+                value: '哞鸽子'
+            }, {
+                index: 2,
+                value: '大二鸽'
+            }],
+            type: 'radio',
+            correct: 0
+        }, {
+            qid: 1,
+            desc: '傻屌群最壕的是谁',
+            answer: [{
+                index: 0,
+                value: '群主'
+            }, {
+                index: 1,
+                value: '管理员'
+            }, {
+                index: 2,
+                value: '除我皆壕'
+            }],
+            type: 'radio',
+            correct: 2
+        }, {
+            qid: 2,
+            desc: '傻屌群最常见的活动是什么',
+            answer: [{
+                index: 0,
+                value: '薅羊毛'
+            }, {
+                index: 1,
+                value: '复读'
+            }, {
+                index: 2,
+                value: '禁言'
+            }],
+            type: 'radio',
+            correct: 1
+        }],
         reward: {
             exp: 70,
-            title: '',
             gold: 300
         }
     }]

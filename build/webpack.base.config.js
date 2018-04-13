@@ -19,20 +19,14 @@ module.exports = {
 		rules: [{
 			test: /\.vue$/,
 			use: [{
-				loader: 'vue-loader',
-				options: {
-					transformToRequire: {
-						feImage: 'xlink:href',
-						audio: "src"
-					}
-				}
+				loader: 'vue-loader'
 			}]
 		}, {
 			test: /\.mp3(\?.*)?$/,
 			loader: 'url-loader',
 			options: {
 				limit: 1000000,
-				name: 'static/media/[name].[hash].[ext]'
+				name: './static/media/[name].[hash].[ext]'
 			}
 		}, {
 			test: /\.(png|gif|jpg|svg|jpeg)$/i,
@@ -50,9 +44,7 @@ module.exports = {
 				options: {
 					limit: 1000000,
 					mimetype: 'application/font-woff',
-					filename: '[name].[hash].[ext]',
-					outputPath: 'static/fonts/',
-					publicPath: '../'
+					filename: './static/fonts/[name].[hash].[ext]'
 				}
 			}]
 		}]

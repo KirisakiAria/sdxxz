@@ -165,6 +165,7 @@ let state = {
 				name: '魔法',
 				value: 1
 			},
+			cureType: '生命',
 			effect: {
 				cure: {
 					value: 82
@@ -183,6 +184,7 @@ let state = {
 				name: '生命',
 				value: 2
 			},
+			cureType: '魔法',
 			effect: {
 				cure: {
 					value: 140
@@ -202,7 +204,7 @@ let state = {
 			name: 'Steam，登录！',
 			desc: '登录steam，准备+1，物攻、魔攻提升%18，物防、魔防提升%10，命中提升%40，暴击、速度提升%12',
 			buffType: 1,
-			consume: 1,
+			consume: 78,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -310,9 +312,9 @@ let state = {
 			level: 12,
 			point: 3,
 			name: '可惜没如果',
-			desc: '召唤沉默术士，使对方群体沉默',
+			desc: '召唤沉默术士，使对方沉默',
 			buffType: 2,
-			consume: 1,
+			consume: 135,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -335,7 +337,7 @@ let state = {
 			name: 'g胖',
 			desc: '召唤g胖附体，使+1技能恢复效果提升三倍',
 			buffType: 1,
-			consume: 95,
+			consume: 110,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -353,13 +355,13 @@ let state = {
 		},
 		{
 			sid: 4,
-			learned: false,
+			learned: true,
 			level: 12,
 			point: 3,
 			name: '反向剁手',
 			desc: '剁掉敌方双手，在长出来之前不能攻击',
 			buffType: 2,
-			consume: 175,
+			consume: 1,
 			consumeType: {
 				name: '魔法',
 				value: 1
@@ -382,7 +384,7 @@ let state = {
 			name: '传销三连',
 			desc: '71附体，疯狂搞敌方，物攻、物防、魔攻、魔防降低30%',
 			buffType: 1,
-			consume: 128,
+			consume: 136,
 			consumeType: {
 				name: '魔法',
 				value: 1

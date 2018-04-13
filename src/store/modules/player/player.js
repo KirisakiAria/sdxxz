@@ -54,7 +54,7 @@ let state = {
 		sp: {
 			desc: '技能点',
 			value: 0,
-			grow: 1
+			grow: 2
 		},
 		atk: {
 			desc: '物攻',
@@ -87,12 +87,12 @@ let state = {
 		},
 		hit: {
 			desc: '命中',
-			value: 52,
-			grow: 4
+			value: 50,
+			grow: 5
 		},
 		spd: {
 			desc: '速度',
-			value: 5,
+			value: 6,
 			grow: 1
 		},
 		chr: {
@@ -195,7 +195,7 @@ const mutations = {
 		state.buff.splice(state.buff.findIndex(e => {
 			return e.sid === payload.sid;
 		}), 1);
-	},
+	}
 }
 
 const actions = {
@@ -208,15 +208,17 @@ const actions = {
 				}
 				if (!e.round) {
 					//buff剩余回合为0了就把原始值再赋回去
-					e.originalValue.forEach(item => {
-						let [p1, p2] = [item.position[0], item.position[1]];
-						if (item.type === 1) {
-							context.state[p1][p2]['value'] = item.value;
-						} else if (item.type === 2) {
-							let [p3, p4] = [item.position[2], item.position[3]];
-							context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
-						}
-					});
+					if (e.originalValue.lenght) {
+						e.originalValue.forEach(item => {
+							let [p1, p2] = [item.position[0], item.position[1]];
+							if (item.type === 1) {
+								context.state[p1][p2]['value'] = item.value;
+							} else if (item.type === 2) {
+								let [p3, p4] = [item.position[2], item.position[3]];
+								context.rootState.playerSkills[p1][p2][p3][p4]['value'] = item.value;
+							}
+						});
+					}
 				}
 			});
 			for (let i = 0; i < length; i++) {

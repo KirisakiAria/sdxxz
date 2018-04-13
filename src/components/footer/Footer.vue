@@ -1,16 +1,14 @@
 <template>
-	<transition name="slideY-fade">
-		<footer v-if="!ifBattle" class="footer">
-			<ul>
-				<li :key="item.title" v-for="item in footerData">
-					<button :class="{active:item.isActive}" @click="changeClass(item)">
-						<i :class="item.fontClass"></i>
-						<span>{{item.title}}</span>
-					</button>
-				</li>
-			</ul>
-		</footer>
-	</transition>
+	<footer class="footer">
+		<ul>
+			<li :key="item.title" v-for="item in footerData">
+				<button :class="{active:item.isActive}" @click="changeClass(item)">
+					<i :class="item.fontClass"></i>
+					<span>{{item.title}}</span>
+				</button>
+			</li>
+		</ul>
+	</footer>
 </template>
 
 <style scoped lang="less" rel="stylesheet/less">
@@ -98,12 +96,6 @@
 				this.$store.commit('global/show', {
 					property: item.show
 				})
-			}
-		},
-		computed: {
-			//在战斗时限制能够载入的页面
-			ifBattle() {
-				return this.$store.state.global.battle;
 			}
 		}
 	}

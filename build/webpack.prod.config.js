@@ -15,7 +15,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	output: {
 		path: path.resolve(__dirname, '../dist'),
-		filename: 'static/js/[name].[hash].js'
+		filename: './static/js/[name].[hash].js'
 	},
 
 	module: {
@@ -35,8 +35,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	resolve: {
 		alias: {
-			'vue$': 'vue/dist/vue.esm.js',
-			'vue-router': 'vue-router/dist/vue-router.esm.js'
+			'vue$': 'vue/dist/vue.esm.js'
 		}
 	},
 
@@ -45,14 +44,13 @@ const webpackConfig = merge(baseWebpackConfig, {
 			'process.env.NODE_ENV': JSON.stringify('production')
 		}),
 		new webpack.ProvidePlugin({
-			Vue: ['vue', 'default'],
-			VueRouter: ['vue-router', 'default']
+			Vue: ['vue', 'default']
 		}),
 		new CleanWebpackPlugin('dist', {
 			root: path.resolve(__dirname, '../')
 		}),
 		new ExtractTextPlugin({
-			filename: 'static/css/styles.[hash].css',
+			filename: './static/css/styles.[hash].css',
 		}),
 		new UglifyJSPlugin({
 			test: /\.js$/,

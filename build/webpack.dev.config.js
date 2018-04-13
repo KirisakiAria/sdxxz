@@ -29,8 +29,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 
 	resolve: {
 		alias: {
-			'vue$': 'vue/dist/vue.js',
-			'vue-router': 'vue-router/dist/vue-router.js'
+			'vue$': 'vue/dist/vue.js'
 		}
 	},
 
@@ -39,8 +38,7 @@ const webpackConfig = merge(baseWebpackConfig, {
 			'process.env.NODE_ENV': JSON.stringify('development')
 		}),
 		new webpack.ProvidePlugin({
-			Vue: 'vue',
-			VueRouter: 'vue-router'
+			Vue: 'vue'
 		}),
 		new FriendlyErrorsWebpackPlugin()
 	]
