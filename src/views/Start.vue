@@ -37,12 +37,9 @@
 			}
 			padding-bottom: .5rem;
 		}
-
 		.speciality {
-
 			li {
 				margin: .15rem 0;
-
 				button {
 					display: inline-block;
 

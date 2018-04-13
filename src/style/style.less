@@ -131,8 +131,8 @@
 
 .slide-fade-enter,
 .slide-fade-leave-to {
-    transform: translateX(80px);
     opacity: 0;
+    transform: translateX(80px);
 }
 
 .slideY-fade-enter-active,
@@ -142,8 +142,8 @@
 
 .slideY-fade-enter,
 .slideY-fade-leave-to {
-    transform: translateY(40px);
     opacity: 0;
+    transform: translateY(40px);
 }
 
 .scale-fade-enter-active,
@@ -153,8 +153,8 @@
 
 .scale-fade-enter,
 .scale-fade-leave-to {
-    transform: scale(0);
     opacity: 0;
+    transform: scale(0);
 }
 
 .practice,
@@ -174,16 +174,15 @@
         flex-wrap: wrap;
         justify-content: space-around;
         padding: .15rem;
-        
         button {
             display: block;
-            width: 45%;
             margin-top: .075rem;
+            width: 45%;
+            .bor(#ff6b81);
             &:nth-of-type(1),
             &:nth-of-type(2) {
                 margin-top: 0;
             }
-            .bor(#ff6b81);
             &.active {
                 background: #ff6b81;
                 .bor(#ff6b81);
@@ -201,8 +200,8 @@
     .content {
         >p {
             margin-bottom: .15rem;
-            text-align: center;
             color: #ff6348;
+            text-align: center;
         }
         li {
             margin-bottom: .1rem;
@@ -215,8 +214,8 @@
             .name {
                 display: block;
                 margin-bottom: .1rem;
-                font-size: .14rem;
                 font-weight: bold;
+                font-size: .14rem;
             }
             &.no {
                 border-color: #57606f;

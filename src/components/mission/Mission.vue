@@ -80,7 +80,6 @@
 	@import "../../style/style";
 	.mission {
 		padding-bottom: .7rem;
-
 		h4 {
 			padding: .12rem;
 			border-bottom: 1px solid #e1e1e1;
@@ -89,15 +88,12 @@
 			color: #57606f;
 
 		}
-
 		li {
 			padding: .12rem;
 			border-bottom: 1px solid #e1e1e1;
-
 			button {
 				width: .8rem;
 			}
-
 			.ib {
 				width: calc(~'100% - .9rem');
 				width: -webkit-calc(~'100% - .9rem');

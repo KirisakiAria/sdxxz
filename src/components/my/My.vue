@@ -55,13 +55,10 @@
 
 	.my {
 		padding-bottom: .7rem;
-
 		.top {
 			padding: .2rem 0;
-
 			background-image: url(../../assets/images/bg.png);
 			background-size: cover;
-
 			button {
 				position: absolute;
 				top: .15rem;
@@ -80,82 +77,62 @@
 				}
 			}
 		}
-
 		.avatar {
 			width: .8rem;
 			height: .8rem;
 			margin: auto;
 			overflow: hidden;
-
 			background: #fff;
-
 			.br(50%);
 		}
-
 		h4,
 		h5 {
 			margin-top: .15rem;
 			margin-bottom: .15rem;
 		}
-
 		.card,
 		.attributes,
 		.equipments,
 		.elements,
 		.buff {
 			display: flex;
-
 			text-align: center;
 			padding: .1rem .12rem;
 		}
-
 		.card {
 			margin-top: .15rem;
-
 			justify-content: space-around;
-
 			div {
 				position: relative;
-
 				width: 28.5%;
 				padding: .12rem;
 				max-width: 175px;
-
 				.br(15px);
 				.cw;
-
 				span {
 					display: block;
-
 					text-align: center;
-
 					&:last-of-type {
 						font-weight: bold;
-
 						margin-top: .15rem;
 					}
 				}
-
 				&.level {
 					background: #a4b0be;
 				}
-
 				&.hp {
 					background: #ff6b81;
 				}
-
 				&.mp {
 					background: #70a1ff;
 				}
 			}
 		}
-
 		ul {
 			width: 100%;
 			box-shadow: 4px 4px 12px rgba(164, 176, 190, .4);
 			display: flex;
 			flex-wrap: wrap;
-
 			.br;
 			li {
 				text-align: left;
@@ -165,12 +142,10 @@
 				padding-left: .3rem;
 			}
 		}
-
 		.buff {
 			color: #ff6348;
 			justify-content: center;
 		}
-
 		.shop {
 			position: fixed;
 			width: 100vw;

@@ -49,23 +49,18 @@
 			opacity: 0;
 		}
 		.link {
-
 			position: absolute;
 			top: .1rem;
 			right: .05rem;
 			a {
 				margin: 0 .05rem;
-
 				i {
 					font-size: .24rem;
 				}
 			}
 		}
-
 		ul {
-
 			margin-top: .618rem;
-
 			li {
 				margin: .18rem 0;
 				.bor(#ccc);
@@ -82,7 +77,6 @@
 				}
 			}
 		}
-
 		.footer {
 			position: absolute;
 			bottom: .2rem;

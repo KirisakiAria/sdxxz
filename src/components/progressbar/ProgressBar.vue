@@ -10,7 +10,6 @@
 
 	.bar {
 		padding: .15rem;
-
 		progress {
 			width: 60%;
 			.ib;
