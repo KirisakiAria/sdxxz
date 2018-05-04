@@ -34,6 +34,44 @@
 	</main>
 </template>
 
+<script>
+	export default {
+		name: 'App',
+		data() {
+			return {
+				show: {
+					main: true
+				}
+			}
+		},
+		methods: {
+			//读档
+			load() {
+				let vm = this;
+				let file = this.$refs.file.files[0];
+				let reader = new FileReader();
+				reader.readAsText(file, 'utf-8');
+				reader.onload = function () {
+					let data = JSON.parse(this.result);
+					vm.$store.dispatch('player/loadData', {
+						data: data
+					});
+					vm.$router.push('game');
+				}
+			}
+		},
+		watch: {
+			'$route' (to, from) {
+				if (to.path == '/') {
+					this.show.main = true;
+				} else {
+					this.show.main = false;
+				}
+			}
+		}
+	}
+</script>
+
 <style scoped lang="less" rel="stylesheet/less">
 	@import './style/style';
 	.menu {
@@ -83,41 +121,3 @@
 		}
 	}
 </style>
-
-<script>
-	export default {
-		name: 'App',
-		data() {
-			return {
-				show: {
-					main: true
-				}
-			}
-		},
-		methods: {
-			//读档
-			load() {
-				let vm = this;
-				let file = this.$refs.file.files[0];
-				let reader = new FileReader();
-				reader.readAsText(file, 'utf-8');
-				reader.onload = function () {
-					let data = JSON.parse(this.result);
-					vm.$store.dispatch('player/loadData', {
-						data: data
-					});
-					vm.$router.push('game');
-				}
-			}
-		},
-		watch: {
-			'$route' (to, from) {
-				if (to.path == '/') {
-					this.show.main = true;
-				} else {
-					this.show.main = false;
-				}
-			}
-		}
-	}
-</script>

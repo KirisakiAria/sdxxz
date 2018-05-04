@@ -7,6 +7,20 @@
 	</section>
 </template>
 
+<script>
+	export default {
+		name: 'Tips',
+		props: {
+			content: String
+		},
+		methods: {
+			closeTips: function () {
+				this.$emit('closeTips');
+			}
+		},
+	}
+</script>
+
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
 	.tips {
@@ -22,7 +36,8 @@
 		.wrapper {
 			position: fixed;
 			.t50;
-			width: 60%;
+			width: 65%;
+			padding: .15rem;
 			min-height: 1rem;
 			.br;
 			text-align: center;
@@ -33,18 +48,9 @@
 			justify-content: center;
 			align-items: center;
 			.cw;
+			p {
+				line-height: 1.5;
+			}
 		}
 	}
 </style>
-
-<script>
-	export default {
-		name: 'Tips',
-		props: ['content'],
-		methods: {
-			closeTips: function () {
-				this.$emit('closeTips');
-			}
-		},
-	}
-</script>

@@ -10,14 +10,12 @@
 			</keep-alive>
 		</transition>
 		<transition name="slideY-fade">
-			<footerView v-if="!ifBattle&&!ifInterlocution"></footerView>
+			<keep-alive>
+				<footerView v-if="!ifBattle&&!ifInterlocution"></footerView>
+			</keep-alive>
 		</transition>
 	</section>
 </template>
-
-<style scoped lang="less" rel="stylesheet/less">
-	@import '../style/style';
-</style>
 
 <script>
 	import FooterView from '../components/footer/Footer';
@@ -53,6 +51,13 @@
 			Skill,
 			Inventory,
 			My
+		},
+		mounted() {
+
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import '../style/style';
+</style>

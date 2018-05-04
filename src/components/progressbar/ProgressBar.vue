@@ -5,6 +5,16 @@
 	</section>
 </template>
 
+<script>
+	export default {
+		name: 'ProgressBar',
+		props: {
+			value: Number,
+			max: Number
+		}
+	}
+</script>
+
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
 
@@ -25,10 +35,3 @@
 		}
 	}
 </style>
-
-<script>
-	export default {
-		name: 'ProgressBar',
-		props: ['value', 'max']
-	}
-</script>

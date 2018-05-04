@@ -1,14 +1,14 @@
 let state = {
 	baseAttributes: {
 		eid: '0000',
-		namespace: 'groupC',
+		namespace: 'moumou',
 		name: {
 			decs: '姓名',
-			value: '傻屌群小傻屌'
+			value: '老比哞'
 		},
 		description: {
 			decs: '描述',
-			value: '最辣鸡的傻屌，打不过你就退群吧'
+			value: '与13合称神屌侠侣，毒奶粉之王'
 		},
 		level: {
 			decs: '等级',
@@ -32,11 +32,11 @@ let state = {
 		},
 		exp: {
 			desc: '击杀经验',
-			value: 16
+			value: 12
 		},
 		gold: {
 			desc: '击杀所得金钱',
-			value: 20
+			value: 25
 		}
 	},
 	extraAttributes: {

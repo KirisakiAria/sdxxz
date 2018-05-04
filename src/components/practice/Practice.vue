@@ -28,23 +28,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import "../../style/style";
-
-	.practice {
-		padding-bottom: 0;
-		.content {
-			li {
-				margin-bottom: 0;
-				.ib {
-					width: calc(~'100% - 1.08rem');
-					padding-right: .08rem;
-				}
-			}
-		}
-	}
-</style>
-
 <script>
 	import Battle from '../battle/Battle';
 
@@ -81,21 +64,35 @@
 		},
 		computed: {
 			/*获取敌人列表*/
-			level0_5EnemyList() {
+			level00_05EnemyList() {
 				return this.pushArr('groupC');
 			},
-			level6_10EnemyList() {
+			level06_10EnemyList() {
+				//return this.pushArr('groupS', 'groupSS');
+			},
+			level11_15EnemyList() {
+				//return this.pushArr('groupS', 'groupSS'); 
+			},
+			level16_20EnemyList() {
 				//return this.pushArr('groupS', 'groupSS');
 			},
 			enemyList() {
 				return [{
-					id: 1,
+					id: 0,
 					level: '0~5级',
-					list: this.level0_5EnemyList
+					list: this.level00_05EnemyList
+				}, {
+					id: 1,
+					level: '6~10级',
+					list: this.level06_10EnemyList
 				}, {
 					id: 2,
-					level: '6~10级',
-					list: this.level6_10EnemyList
+					level: '11~15级',
+					list: this.level11_15EnemyList
+				}, {
+					id: 3,
+					level: '16~20级',
+					list: this.level16_20EnemyList
 				}]
 			}
 		},
@@ -104,3 +101,20 @@
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import "../../style/style";
+
+	.practice {
+		padding-bottom: 0;
+		.content {
+			li {
+				margin-bottom: 0;
+				.ib {
+					width: calc(~'100% - 1.08rem');
+					padding-right: .08rem;
+				}
+			}
+		}
+	}
+</style>

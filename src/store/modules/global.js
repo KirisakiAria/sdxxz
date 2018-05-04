@@ -1,10 +1,10 @@
 const state = {
 	show: {
-		mission: false,
+		mission: true,
 		practice: false,
 		skill: false,
 		inventory: false,
-		my: true
+		my: false
 	},
 	battle: false,
 	interlocution: false

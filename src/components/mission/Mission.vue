@@ -76,54 +76,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import "../../style/style";
-	.mission {
-		padding-bottom: .7rem;
-		h4 {
-			padding: .12rem;
-			border-bottom: 1px solid #e1e1e1;
-			font-weight: bold;
-			font-size: .16rem;
-			color: #57606f;
-
-		}
-		li {
-			padding: .12rem;
-			border-bottom: 1px solid #e1e1e1;
-			button {
-				width: .8rem;
-			}
-			.ib {
-				width: calc(~'100% - .9rem');
-				width: -webkit-calc(~'100% - .9rem');
-				padding-right: .08rem;
-			}
-			.title {
-				margin-right: .15rem;
-				font-weight: bold;
-			}
-			.level {
-				color: #70a1ff;
-			}
-			.reward {
-				color: #ff7f50;
-				margin-top: .1rem;
-				span {
-					margin-right: .1rem;
-					&.items {
-						margin-right: 0;
-					}
-				}
-			}
-			p {
-				margin-top: .1rem;
-				line-height: 1.5;
-			}
-		}
-	}
-</style>
-
 <script>
 	import Battle from '../battle/Battle';
 	import Interlocution from '../interlocution/Interlocution';
@@ -200,3 +152,51 @@
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import "../../style/style";
+	.mission {
+		padding-bottom: .7rem;
+		h4 {
+			padding: .12rem;
+			border-bottom: 1px solid #e1e1e1;
+			font-weight: bold;
+			font-size: .16rem;
+			color: #57606f;
+
+		}
+		li {
+			padding: .12rem;
+			border-bottom: 1px solid #e1e1e1;
+			button {
+				width: .8rem;
+			}
+			.ib {
+				width: calc(~'100% - .9rem');
+				width: -webkit-calc(~'100% - .9rem');
+				padding-right: .08rem;
+			}
+			.title {
+				margin-right: .15rem;
+				font-weight: bold;
+			}
+			.level {
+				color: #70a1ff;
+			}
+			.reward {
+				color: #ff7f50;
+				margin-top: .1rem;
+				span {
+					margin-right: .1rem;
+					&.items {
+						margin-right: 0;
+					}
+				}
+			}
+			p {
+				margin-top: .1rem;
+				line-height: 1.5;
+			}
+		}
+	}
+</style>

@@ -11,6 +11,54 @@
 	</footer>
 </template>
 
+<script>
+	export default {
+		name: 'Footer',
+		data() {
+			return {
+				footerData: [{
+					isActive: true,
+					title: '任务',
+					fontClass: 'iconfont icon-mission',
+					show: 'mission'
+				}, {
+					isActive: false,
+					title: '修炼场',
+					fontClass: 'iconfont icon-practice',
+					show: 'practice'
+				}, {
+					isActive: false,
+					title: '技能',
+					fontClass: 'iconfont icon-skill',
+					show: 'skill'
+				}, {
+					isActive: false,
+					title: '背包',
+					fontClass: 'iconfont icon-backpack',
+					show: 'inventory'
+				}, {
+					isActive: false,
+					title: '个人',
+					fontClass: 'iconfont icon-my',
+					show: 'my'
+				}]
+			}
+		},
+		methods: {
+			changeClass(item) {
+				this.footerData.forEach(e => {
+					e.isActive = false;
+				});
+				item.isActive = true;
+				//显示页面
+				this.$store.commit('global/show', {
+					property: item.show
+				})
+			}
+		}
+	}
+</script>
+
 <style scoped lang="less" rel="stylesheet/less">
 	@import "../../style/style";
 
@@ -52,51 +100,3 @@
 		}
 	}
 </style>
-
-<script>
-	export default {
-		name: 'Footer',
-		data() {
-			return {
-				footerData: [{
-					isActive: false,
-					title: '任务',
-					fontClass: 'iconfont icon-mission',
-					show: 'mission'
-				}, {
-					isActive: false,
-					title: '修炼场',
-					fontClass: 'iconfont icon-practice',
-					show: 'practice'
-				}, {
-					isActive: false,
-					title: '技能',
-					fontClass: 'iconfont icon-skill',
-					show: 'skill'
-				}, {
-					isActive: false,
-					title: '背包',
-					fontClass: 'iconfont icon-backpack',
-					show: 'inventory'
-				}, {
-					isActive: true,
-					title: '个人',
-					fontClass: 'iconfont icon-my',
-					show: 'my'
-				}]
-			}
-		},
-		methods: {
-			changeClass(item) {
-				this.footerData.forEach(e => {
-					e.isActive = false;
-				});
-				item.isActive = true;
-				//显示页面
-				this.$store.commit('global/show', {
-					property: item.show
-				})
-			}
-		}
-	}
-</script>

@@ -66,7 +66,6 @@ let state = {
                 index: 2,
                 value: '大二鸽'
             }],
-            type: 'radio',
             correct: 0
         }, {
             qid: 1,
@@ -81,7 +80,6 @@ let state = {
                 index: 2,
                 value: '除我皆壕'
             }],
-            type: 'radio',
             correct: 2
         }, {
             qid: 2,
@@ -96,7 +94,6 @@ let state = {
                 index: 2,
                 value: '禁言'
             }],
-            type: 'radio',
             correct: 1
         }],
         reward: {

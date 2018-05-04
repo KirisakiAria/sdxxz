@@ -22,42 +22,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import '../style/style';
-	.start {
-		.col;
-		height: 100vh;
-		.username {
-			input {
-				display: block;
-				width: 100%;
-				.bor(#a4b0be);
-				height: .4rem;
-				padding: .15rem;
-			}
-			padding-bottom: .5rem;
-		}
-		.speciality {
-			li {
-				margin: .15rem 0;
-				button {
-					display: inline-block;
-
-					margin: 0;
-				}
-			}
-		}
-		p {
-			font-size: .18rem;
-
-			margin-bottom: .2rem;
-		}
-		button {
-			margin: 0 .15rem;
-		}
-	}
-</style>
-
 <script>
 	import Tips from '../components/tips/Tips';
 
@@ -128,3 +92,39 @@
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import '../style/style';
+	.start {
+		.col;
+		height: 100vh;
+		.username {
+			input {
+				display: block;
+				width: 100%;
+				.bor(#a4b0be);
+				height: .4rem;
+				padding: .15rem;
+			}
+			padding-bottom: .5rem;
+		}
+		.speciality {
+			li {
+				margin: .15rem 0;
+				button {
+					display: inline-block;
+
+					margin: 0;
+				}
+			}
+		}
+		p {
+			font-size: .18rem;
+
+			margin-bottom: .2rem;
+		}
+		button {
+			margin: 0 .15rem;
+		}
+	}
+</style>

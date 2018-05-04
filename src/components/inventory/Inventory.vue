@@ -82,25 +82,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import "../../style/style";
-
-	.inventory {
-		li {
-			position: relative;
-			.equip {
-				position: absolute;
-				top: 0.1rem;
-				right: 0.05rem;
-				i {
-					font-size: 0.2rem;
-					color: #2ed573;
-				}
-			}
-		}
-	}
-</style>
-
 <script>
 	import Tips from '../tips/Tips';
 
@@ -218,3 +199,22 @@
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import "../../style/style";
+
+	.inventory {
+		li {
+			position: relative;
+			.equip {
+				position: absolute;
+				top: 0.1rem;
+				right: 0.05rem;
+				i {
+					font-size: 0.2rem;
+					color: #2ed573;
+				}
+			}
+		}
+	}
+</style>

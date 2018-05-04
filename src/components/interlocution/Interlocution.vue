@@ -18,35 +18,11 @@
             <button @click="check">提交答案</button>
         </section>
         <transition name="scale-fade">
-            <Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips"></Tips>
+            <Tips :content="tips.data" v-show="tips.show" @closeTips="closeInterlocution" @click.native="closeInterlocution"></Tips>
         </transition>
     </section>
 </template>
-<style scoped lang="less" rel="stylesheet/less">
-    @import "../../style/style";
 
-    .interlocution {
-        .content {
-            padding-top: .15rem;
-            li {
-                margin-bottom: 0;
-                .answer {
-                    margin-top: .1rem;
-                    .ib {
-                        margin-right: .15rem;
-                    }
-                }
-            }
-            button {
-                display: block;
-                width: 45%;
-                margin: auto;
-                margin-top: .2rem;
-                .bor(#ccc);
-            }
-        }
-    }
-</style>
 <script>
     import Tips from '../tips/Tips';
 
@@ -58,14 +34,13 @@
                     show: false,
                     data: ''
                 },
-                count: 0,
-                time: 1
+                count: 0
             }
         },
-        props: [
-            'questions',
-            'reward'
-        ],
+        props: {
+            questions: Array,
+            reward: Object
+        },
         methods: {
             check() {
                 this.correctAnswer.forEach((e, i) => {
@@ -73,9 +48,12 @@
                         this.count++;
                     }
                 });
-                this.times = this.count / this.correctAnswer.length;
-                this.rewardPlayer(this.reward, this.times);
-                this.closeInterlocution();
+                const times = this.count / this.correctAnswer.length;
+                this.rewardPlayer(this.reward, times);
+                this.openTips(
+                    `回答正确${this.count}题，得到${Math.ceil(this.reward.exp * times)}经验${Math.ceil(this.reward.gold * times)}金钱`
+                );
+                this.$store.commit('global/toggleInterlocution');
             },
             rewardPlayer(reward, times) {
                 this.$store.commit('player/changeBaseAttributesValue', {
@@ -91,11 +69,11 @@
                     value: this.nowGold + Math.ceil(reward.gold * times)
                 });
             },
-            closeTips() {
-                this.tips.show = false
+            openTips(content) {
+                this.tips.data = content;
+                this.tips.show = true;
             },
             closeInterlocution() {
-                this.$store.commit('global/toggleInterlocution');
                 this.$emit('closeInterlocution', {
                     type: 'interlocution'
                 });
@@ -134,8 +112,34 @@
         components: {
             Tips
         },
-        mounted() {
+        created() {
             this.$store.commit('global/toggleInterlocution');
         }
     };
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+    @import "../../style/style";
+
+    .interlocution {
+        .content {
+            padding-top: .15rem;
+            li {
+                margin-bottom: 0;
+                .answer {
+                    margin-top: .1rem;
+                    .ib {
+                        margin-right: .15rem;
+                    }
+                }
+            }
+            button {
+                display: block;
+                width: 45%;
+                margin: auto;
+                margin-top: .2rem;
+                .bor(#ccc);
+            }
+        }
+    }
+</style>

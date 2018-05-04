@@ -53,7 +53,7 @@
                 {{player.baseAttributes.name.value}}
             </h4>
             <div class="info tac">
-                <span>等级{{player.baseAttributes.level.value}}</span>
+                <span>等级{{player.baseAttributes.level.value}} {{player.baseAttributes.title.value}}</span>
             </div>
             <div class="content">
                 <div class="attr">
@@ -223,152 +223,11 @@
             </section>
         </transition>
         <transition name="scale-fade">
-            <Tips :content="tips.data" v-show="show.tips" @closeTips="closeTips" @click.native="closeBattle"></Tips>
+            <Tips :content="tips.data" v-show="tips.show" @closeTips="closeTips" @click.native="closeBattle"></Tips>
         </transition>
     </section>
 </template>
-<style scoped lang="less" rel="stylesheet/less">
-    @import "../../style/style";
 
-    .skillPanel,
-    .inventory {
-        position: fixed;
-        width: 100vw;
-        height: 100vh;
-        .bw;
-        top: 0;
-        left: 0;
-        z-index: 100;
-        overflow: auto;
-        .wrapper {
-            padding-bottom: .5rem;
-        }
-        &.inventory {
-            .tab {
-                button {
-                    width: 30%;
-                    margin-top: 0;
-                }
-            }
-        }
-        .content {
-            li {
-                border-bottom: 1px solid #a4b0be;
-            }
-            button {
-                display: block;
-                margin: auto;
-                width: 100%;
-                .bw;
-                left: 0;
-                bottom: 0;
-                width: 100vw;
-                position: fixed;
-                border: none;
-                background: #f1f1f1;
-            }
-        }
-    }
-
-    .battle {
-        .control {
-            font-size: 0.12rem;
-            padding: 0.1rem;
-            h5 {
-                margin-bottom: 0.1rem;
-                font-size: 0.16rem;
-            }
-            p {
-                height: .15rem;
-            }
-        }
-        .section {
-            border-bottom: 1px solid #666;
-            position: relative;
-            &.player {
-                border-bottom: none;
-            }
-            &:last-child {
-                border-bottom: 0;
-            }
-            .round {
-                position: absolute;
-                top: 0.1rem;
-                right: 0.05rem;
-                i {
-                    font-size: 0.2rem;
-                    color: #2ed573;
-                }
-            }
-            h4 {
-                padding: 0.1rem;
-            }
-            .info {
-                margin-bottom: .15rem;
-                span {
-                    font-size: 0.12rem;
-                    margin:0 .05rem;
-                }
-            }
-            h6 {
-                padding: 0.1rem;
-                font-weight: bold;
-            }
-            .con {
-                display: flex;
-                justify-content: space-around;
-                flex-wrap: wrap;
-                padding: 0.1rem;
-                padding-top: 0;
-                button {
-                    margin: 0.1rem 0;
-                    &.disabled {
-                        .cw;
-                        background: #ccc;
-                    }
-                }
-            }
-            .card div {
-                position: relative;
-                width: 40%;
-                max-width: 150px;
-                padding: 0.15rem;
-                background: #70a1ff;
-                border-radius: 15px;
-                color: #fff;
-                .title {
-                    display: block;
-                    margin-bottom: 0.12rem;
-                    &~span {
-                        font-weight: bold;
-                    }
-                }
-                &.level {
-                    background: #a4b0be;
-                }
-                &.hp {
-                    background: #ff6b81;
-                }
-                &.mp {
-                    background: #70a1ff;
-                }
-            }
-        }
-        .buff {
-            .con {
-                min-height: .25rem;
-            }
-            span {
-                font-size: 0.1rem;
-            }
-        }
-        .operation {
-            h6 {
-                padding-top: 0;
-            }
-        }
-    }
-</style>
 <script>
     import Tips from '../tips/Tips';
 
@@ -395,7 +254,7 @@
                     },
                     skillPanel: false,
                     inventory: false,
-                    tips: false
+
                 },
                 //用来判断是否进入沉默、缴械状态
                 disabled: {
@@ -410,6 +269,7 @@
                 },
                 tips: {
                     data: '',
+                    show: false,
                     close: false //此变量用来标志战斗是否已经结束，若为false点击tips模块只是关闭tips
                 },
                 battleMessage: '战斗开始'
@@ -418,10 +278,6 @@
         methods: {
             //初始化战斗
             battleStart() {
-                this.deBuff('player', 'slient');
-                this.deBuff('enemy', 'slient');
-                this.deBuff('player', 'disarm');
-                this.deBuff('enemy', 'disarm');
                 this.initSpeed();
             },
             //初始化双方速度
@@ -484,20 +340,20 @@
                     let hitCache = this.getValue(attacker, 'extraAttributes', 'hit');
                     let spdCache = this.getValue(target, 'extraAttributes',
                         'spd');
-                    let hitRate = (hitCache + 100) / (spdCache + 100) * .65;
+                    let hitRate = (hitCache + 100) / (spdCache + 100) * .62;
                     let random = Math.random();
                     if (random > hitRate) {
                         this.battleMessage = `${attackerName}对${targetName}的攻击落空`;
                         return false;
                     } else {
                         let atkCache = this.getValue(attacker, 'extraAttributes', 'atk');
-                        let atkValue = parseInt(this.randomNum(atkCache * 0.85, atkCache * 1.25));
+                        let atkValue = parseInt(this.randomNum(atkCache * 0.85, atkCache * 1.2));
                         let defValue = parseInt(defCache *
                             0.65);
                         //是否暴击
                         let crtCache = this.getValue(attacker, 'extraAttributes', 'crt');
                         let mulCache = this.getValue(attacker, 'extraAttributes', 'mul');
-                        let crtRate = crtCache / 300;
+                        let crtRate = crtCache / 285;
                         let random = Math.random();
                         let ifCrt = false;
                         if (random < crtRate) {
@@ -706,6 +562,7 @@
                     });
                 }
             },
+            //因为不同列表的id前缀不同，所以需要sign参数判断
             findList(list, id, sign) {
                 let object = null;
                 let objectList = this[list];
@@ -891,9 +748,14 @@
                 });
                 this.show.skillPanleList[tab] = true;
             },
-            //获取技能列表
-            getSkillsArr(origin) {
+            //获取玩家技能列表
+            getPlayerSkills(origin) {
                 return this.$store.state.playerSkills[origin];
+            },
+            //获取BOSS技能列表 
+            getEnemySkills(origin) {
+                let namespace = this.enemyNamespace;
+                return this.$store.state[`${namespace}Skills`][origin];
             },
             //获取道具列表
             getItemsArr(origin) {
@@ -930,10 +792,10 @@
             },
             openTips(content) {
                 this.tips.data = content;
-                this.show.tips = true;
+                this.tips.show = true;
             },
             closeTips() {
-                this.show.tips = false;
+                this.tips.show = false;
             },
             closeBattle() {
                 if (this.tips.close) {
@@ -989,11 +851,11 @@
                 });
             }
         },
-        props: [
-            'enemy', //敌人
-            'mode', //模式
-            'reward', //奖励
-        ],
+        props: {
+            enemy: Object, //敌人
+            mode: String, //模式
+            reward: Object //奖励
+        },
         computed: {
             //取得命名空间用来commit
             playerNamespace() {
@@ -1006,7 +868,7 @@
                 return this.$store.state.player;
             },
             // enemy() {
-            //     return this.$store.state.groupC;
+            //     return this.$store.state.moumou;
             // },
             //玩家生命、魔法信息等几个常用量，设置此对象用来快速获取
             playerRegularData() {
@@ -1026,18 +888,28 @@
                     maxmp: this.getValue('enemy', 'baseAttributes', 'maxmp')
                 };
             },
-            //技能列表
+            //玩家技能列表
             damageSkillsList() {
-                return this.getSkillsArr('damageSkills');
+                return this.getPlayerSkills('damageSkills');
             },
             cureSkillsList() {
-                return this.getSkillsArr('cureSkills');
+                return this.getPlayerSkills('cureSkills');
             },
             buffSkillsList() {
-                return this.getSkillsArr('buffSkills');
+                return this.getPlayerSkills('buffSkills');
             },
             passiveSkillsList() {
-                return this.getSkillsArr('passiveSkills');
+                return this.getPlayerSkills('passiveSkills');
+            },
+            //BOSS技能列表 
+            e_damageSkillsList() {
+                return this.getEnemySkills('damageSkills');
+            },
+            e_cureSkillsList() {
+                return this.getEnemySkills('cureSkills');
+            },
+            e_buffSkillsList() {
+                return this.getEnemySkills('buffSkills');
             },
             //道具列表
             cureItemsList() {
@@ -1134,9 +1006,152 @@
         components: {
             Tips
         },
-        mounted() {
+        created() {
             this.$store.commit('global/toggleBattle');
             this.battleStart();
         }
     };
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+    @import "../../style/style";
+
+    .skillPanel,
+    .inventory {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        .bw;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        overflow: auto;
+        .wrapper {
+            padding-bottom: .5rem;
+        }
+        &.inventory {
+            .tab {
+                button {
+                    width: 30%;
+                    margin-top: 0;
+                }
+            }
+        }
+        .content {
+            li {
+                border-bottom: 1px solid #a4b0be;
+            }
+            button {
+                display: block;
+                margin: auto;
+                width: 100%;
+                .bw;
+                left: 0;
+                bottom: 0;
+                width: 100vw;
+                position: fixed;
+                border: none;
+                background: #f1f1f1;
+            }
+        }
+    }
+
+    .battle {
+        .control {
+            font-size: 0.12rem;
+            padding: 0.1rem;
+            h5 {
+                margin-bottom: 0.1rem;
+                font-size: 0.16rem;
+            }
+            p {
+                height: .15rem;
+            }
+        }
+        .section {
+            border-bottom: 1px solid #666;
+            position: relative;
+            &.player {
+                border-bottom: none;
+            }
+            &:last-child {
+                border-bottom: 0;
+            }
+            .round {
+                position: absolute;
+                top: 0.1rem;
+                right: 0.05rem;
+                i {
+                    font-size: 0.2rem;
+                    color: #2ed573;
+                }
+            }
+            h4 {
+                padding: 0.1rem;
+            }
+            .info {
+                margin-bottom: .15rem;
+                span {
+                    font-size: 0.12rem;
+                    margin: 0 .05rem;
+                }
+            }
+            h6 {
+                padding: 0.1rem;
+                font-weight: bold;
+            }
+            .con {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                padding: 0.1rem;
+                padding-top: 0;
+                button {
+                    margin: 0.1rem 0;
+                    &.disabled {
+                        .cw;
+                        background: #ccc;
+                    }
+                }
+            }
+            .card div {
+                position: relative;
+                width: 40%;
+                max-width: 150px;
+                padding: 0.15rem;
+                background: #70a1ff;
+                border-radius: 15px;
+                color: #fff;
+                .title {
+                    display: block;
+                    margin-bottom: 0.12rem;
+                    &~span {
+                        font-weight: bold;
+                    }
+                }
+                &.level {
+                    background: #a4b0be;
+                }
+                &.hp {
+                    background: #ff6b81;
+                }
+                &.mp {
+                    background: #70a1ff;
+                }
+            }
+        }
+        .buff {
+            .con {
+                min-height: .25rem;
+            }
+            span {
+                font-size: 0.1rem;
+            }
+        }
+        .operation {
+            h6 {
+                padding-top: 0;
+            }
+        }
+    }
+</style>

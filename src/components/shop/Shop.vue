@@ -107,56 +107,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import "../../style/style";
-
-	.shop {
-		li {
-			position: relative;
-			.equip {
-				position: absolute;
-				top: 0.1rem;
-				right: 0.05rem;
-				i {
-					font-size: 0.2rem;
-					color: #2ed573;
-				}
-			}
-			.left {
-				width: calc(~'100% - 0.99rem');
-			}
-			.right {
-				width: 0.94rem;
-				input {
-					text-align: center;
-					width: .3rem;
-					vertical-align: middle;
-					margin-top: .02rem;
-					color: #f6b93b;
-				}
-				button {
-					width: .8rem;
-					height: .25rem;
-					margin-top: .1rem;
-					.br(8px)
-				}
-			}
-		}
-		.return {
-			display: block;
-			margin: auto;
-			width: 100%;
-			.bw;
-			left: 0;
-			bottom: 0;
-			width: 100vw;
-			position: fixed;
-			border: none;
-			background: #f1f1f1;
-		}
-	}
-</style>
-
 <script>
 	import Tips from '../tips/Tips';
 
@@ -272,3 +222,53 @@
 		}
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import "../../style/style";
+
+	.shop {
+		li {
+			position: relative;
+			.equip {
+				position: absolute;
+				top: 0.1rem;
+				right: 0.05rem;
+				i {
+					font-size: 0.2rem;
+					color: #2ed573;
+				}
+			}
+			.left {
+				width: calc(~'100% - 0.99rem');
+			}
+			.right {
+				width: 0.94rem;
+				input {
+					text-align: center;
+					width: .3rem;
+					vertical-align: middle;
+					margin-top: .02rem;
+					color: #f6b93b;
+				}
+				button {
+					width: .8rem;
+					height: .25rem;
+					margin-top: .1rem;
+					.br(8px)
+				}
+			}
+		}
+		.return {
+			display: block;
+			margin: auto;
+			width: 100%;
+			.bw;
+			left: 0;
+			bottom: 0;
+			width: 100vw;
+			position: fixed;
+			border: none;
+			background: #f1f1f1;
+		}
+	}
+</style>

@@ -75,17 +75,6 @@
 	</section>
 </template>
 
-<style scoped lang="less" rel="stylesheet/less">
-	@import "../../style/style";
-	.skill {
-		.content {
-			li {
-				border-bottom: 1px solid #a4b0be;
-			}
-		}
-	}
-</style>
-
 <script>
 	import Tips from '../tips/Tips';
 
@@ -168,3 +157,14 @@
 		},
 	}
 </script>
+
+<style scoped lang="less" rel="stylesheet/less">
+	@import "../../style/style";
+	.skill {
+		.content {
+			li {
+				border-bottom: 1px solid #a4b0be;
+			}
+		}
+	}
+</style>

@@ -50,6 +50,97 @@
 	</section>
 </template>
 
+<script>
+	import Shop from '../shop/Shop'
+	import avatarImg from '../../assets/images/avatar.jpg'
+	import ProgressBar from '../progressbar/ProgressBar'
+	import FileSaver from 'file-saver'
+
+	export default {
+		name: 'My',
+		data() {
+			return {
+				img: {
+					avatar: avatarImg
+				},
+				show: {
+					shop: false
+				}
+			}
+		},
+		methods: {
+			getPlayerArr(origin) {
+				let [arr, attribute] = [
+					[], this.$store.state.player[origin]
+				];
+				Object.values(attribute).forEach(e => {
+					arr.push(e);
+				});
+				return arr;
+			},
+			save() {
+				let profile = {
+					playerData: this.$store.state.player,
+					skillsData: this.$store.state.playerSkills,
+					missionData: this.$store.state.mission,
+					itemsData: this.$store.state.items
+				}
+				let blob = new Blob([JSON.stringify(profile)], {
+					type: ""
+				});
+				FileSaver.saveAs(blob, "save.json");
+			},
+			toggleShop() {
+				this.show.shop = !this.show.shop;
+			}
+		},
+		computed: {
+			baseAttributes() {
+				return this.getPlayerArr('baseAttributes');
+			},
+			extraAttributes() {
+				return this.getPlayerArr('extraAttributes');
+			},
+			equipmentsList() {
+				return this.$store.state.items.equipmentsItems;
+			},
+			equipments() {
+				let arr = [];
+				this.equipmentsList.forEach(e => {
+					let data = {
+						type: e.desc,
+						which: ''
+					};
+					e.list.forEach(k => {
+						if (k.equip) {
+							data.which = k.name;
+						}
+					});
+					arr.push(data);
+				});
+				return arr;
+			},
+			elements() {
+				return this.getPlayerArr('elements');
+			},
+			currentLevelExp() {
+				let prevlevel = this.baseAttributes[2]['value'] - 1;
+				return prevlevel * (prevlevel + 5) * 10;
+			},
+			start() {
+				return this.baseAttributes[3]['value'] - this.currentLevelExp;
+			},
+			end() {
+				return this.$store.getters['player/levelUpExp'] - this.currentLevelExp;
+			}
+		},
+		components: {
+			ProgressBar,
+			Shop
+		}
+	}
+</script>
+
 <style scoped lang="less" rel="stylesheet/less">
 	@import '../../style/style';
 
@@ -157,94 +248,3 @@
 		}
 	}
 </style>
-
-<script>
-	import Shop from '../shop/Shop'
-	import avatarImg from '../../assets/images/avatar.jpg'
-	import ProgressBar from '../progressbar/ProgressBar'
-	import FileSaver from 'file-saver'
-
-	export default {
-		name: 'My',
-		data() {
-			return {
-				img: {
-					avatar: avatarImg
-				},
-				show: {
-					shop: false
-				}
-			}
-		},
-		methods: {
-			getPlayerArr(origin) {
-				let [arr, attribute] = [
-					[], this.$store.state.player[origin]
-				];
-				Object.values(attribute).forEach(e => {
-					arr.push(e);
-				});
-				return arr;
-			},
-			save() {
-				let profile = {
-					playerData: this.$store.state.player,
-					skillsData: this.$store.state.playerSkills,
-					missionData: this.$store.state.mission,
-					itemsData: this.$store.state.items
-				}
-				let blob = new Blob([JSON.stringify(profile)], {
-					type: ""
-				});
-				FileSaver.saveAs(blob, "save.json");
-			},
-			toggleShop() {
-				this.show.shop = !this.show.shop;
-			}
-		},
-		computed: {
-			baseAttributes() {
-				return this.getPlayerArr('baseAttributes');
-			},
-			extraAttributes() {
-				return this.getPlayerArr('extraAttributes');
-			},
-			equipmentsList() {
-				return this.$store.state.items.equipmentsItems;
-			},
-			equipments() {
-				let arr = [];
-				this.equipmentsList.forEach(e => {
-					let data = {
-						type: e.desc,
-						which: ''
-					};
-					e.list.forEach(k => {
-						if (k.equip) {
-							data.which = k.name;
-						}
-					});
-					arr.push(data);
-				});
-				return arr;
-			},
-			elements() {
-				return this.getPlayerArr('elements');
-			},
-			currentLevelExp() {
-				let prevlevel = this.baseAttributes[2]['value'] - 1;
-				return prevlevel * (prevlevel + 5) * 10;
-			},
-			start() {
-				return this.baseAttributes[3]['value'] - this.currentLevelExp;
-			},
-			end() {
-				return this.$store.getters['player/levelUpExp'] - this.currentLevelExp;
-			}
-		},
-		components: {
-			ProgressBar,
-			Shop
-		}
-	}
-</script>

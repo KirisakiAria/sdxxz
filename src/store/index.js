@@ -10,7 +10,8 @@ import groupC from './modules/enemy/group/C';
 // import groupA from './modules/enemy/group/A';
 // import groupS from './modules/enemy/group/S';
 // import groupSS from './modules/enemy/group/SS';
-import enemySkills from './modules/enemy/skills';
+import moumou from './modules/boss/group/moumou';
+import moumouSkills from './modules/boss/group/moumouSkills';
 
 Vue.use(Vuex);
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
 		// groupA,
 		// groupS,
 		// groupSS,
-		enemySkills
+		moumou,
+		moumouSkills
 	}
 });
