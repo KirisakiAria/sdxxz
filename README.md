@@ -11,6 +11,7 @@
 运行dist文件夹中的index.html即可，建议使用chrome浏览器，并将浏览器窗口调整至手机大小。
 
 ## 运行命令
+* npm install 安装依赖
 * npm run dev 使用webpack-dev-server在开发环境下运行项目
 * npm run build 打包
 * npm run start 使用electron运行项目
