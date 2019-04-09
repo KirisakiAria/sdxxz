@@ -1,5 +1,6 @@
 # 傻屌修仙传
 
+[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg)](https://996.icu)
 [![](https://img.shields.io/badge/language-vue-4fc08d.svg)](https://cn.vuejs.org/)
 [![](https://img.shields.io/badge/weibo-@伟大鱼塘-red.svg)](https://weibo.com/KanzakiHAria)
 [![](https://img.shields.io/badge/twitter-@伟大鱼塘-blue.svg)](https://twitter.com/KirisakiAria)
