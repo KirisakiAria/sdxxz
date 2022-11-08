@@ -27,7 +27,7 @@
     "file-loader": "^1.1.11",
     "file-saver": "^1.3.3",
     "friendly-errors-webpack-plugin": "^1.6.1",
-    "html-webpack-plugin": "^3.0.6",
+    "html-webpack-plugin": "^5.5.0",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
     "mocha": "^5.0.4",
